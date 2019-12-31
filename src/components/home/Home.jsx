@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import Modal from './modal/Modal'
 import logo from '../../assets/logo.png'
 import { Grid, Row, Col } from 'react-flexbox-grid'
@@ -17,10 +17,50 @@ import {
   Hidder,
   RetriveButton,
   ScrollArea,
+  SearchSection,
+  NavigationArrows,
+  ArrowLeft,
+  ArrowRight,
+  NumberContainer,
+  MenuSection,
+  Indicator,
+  LinkuButton,
 } from './Home.styles'
 import Select from 'react-select'
+import Table from './table/Table'
+import makeData from '../../library/utils/makeData'
 
 function Home() {
+  const data = React.useMemo(() => makeData(14), [])
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Name',
+      },
+      {
+        Header: 'Info',
+        columns: [
+          {
+            Header: 'Age',
+            accessor: 'age',
+          },
+          {
+            Header: 'Visits',
+            accessor: 'visits',
+          },
+          {
+            Header: 'Status',
+            accessor: 'status',
+          },
+          {
+            Header: 'Profile Progress',
+            accessor: 'progress',
+          },
+        ],
+      },
+    ],
+    [],
+  )
   const [modal, setModal] = useState({
     open: false,
   })
@@ -104,7 +144,55 @@ function Home() {
           </ScrollArea>
         </LeftSideNavigation>
         <ContentArea active={leftSide.active}>
-          <h1>Buscar</h1>
+          <SearchSection>
+            <Row>
+              <Col xs={12} sm={12} md={4} lg={4}>
+                <h1 className="search_title">Buscar</h1>
+                <Select styles={{}} placeholder="Escribe la materia a buscar" options={options} />
+              </Col>
+            </Row>
+          </SearchSection>
+
+          <MenuSection>
+            <Row>
+              <Col xs={12} sm={12} md={12} lg={12}>
+                <Row middle="xs" start="xs">
+                  <Col xs={2} sm={2} sm={2} lg={2}>
+                    <NavigationArrows>
+                      <ArrowLeft>
+                        <i className="fas fa-angle-right"></i>
+                      </ArrowLeft>
+                      <NumberContainer value="1" />
+                      <ArrowRight>
+                        <i className="fas fa-angle-right"></i>
+                      </ArrowRight>
+                    </NavigationArrows>
+                  </Col>
+                  <Col xs={2} sm={2} sm={2} lg={2}>
+                    <Indicator>
+                      <p> 1 de 40 </p>
+                    </Indicator>
+                  </Col>
+                  <Col xs={8} sm={8} sm={8} lg={8}>
+                    <Row end="xs">
+                      <Col xs={12} sm={12} md={12} lg={12}>
+                        <LinkuButton color="#DA8686">Limpiar filtro</LinkuButton>
+                        <LinkuButton color="#114188">
+                          <i className="fas fa-save"></i>
+                          Guardar como pdf
+                        </LinkuButton>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} sm={12} md={12} lg={12}>
+                {/* <Table columns={columns} data={data} /> */}
+              </Col>
+            </Row>
+          </MenuSection>
         </ContentArea>
       </FullWrapper>
     </>
