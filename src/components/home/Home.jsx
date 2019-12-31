@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Modal from './modal/Modal'
+import logo from '../../assets/logo.png'
 import { Grid, Row, Col } from 'react-flexbox-grid'
 import {
   ModalSubtitle,
@@ -7,6 +8,15 @@ import {
   GlobalStyle,
   ModalHeaderContainer,
   ModalBodyContainer,
+  FullWrapper,
+  ContentArea,
+  LeftSideNavigation,
+  RightSide,
+  LeftSideTitle,
+  ShowProfessorButton,
+  Hidder,
+  RetriveButton,
+  ScrollArea,
 } from './Home.styles'
 import Select from 'react-select'
 
@@ -15,9 +25,19 @@ function Home() {
     open: false,
   })
 
+  const [leftSide, setLeftSide] = useState({
+    active: true,
+  })
+
   const toggleModalHandler = () => {
     setModal({
       open: !modal.open,
+    })
+  }
+
+  const toggleLeftSide = () => {
+    setLeftSide({
+      active: !leftSide.active,
     })
   }
 
@@ -51,7 +71,42 @@ function Home() {
         <ModalBodyContainer></ModalBodyContainer>
       </Modal>
 
-      <button onClick={toggleModalHandler}>Abrir modal</button>
+      <FullWrapper>
+        <LeftSideNavigation active={leftSide.active}>
+          <RetriveButton active={leftSide.active} onClick={toggleLeftSide}>
+            <i className="fas fa-angle-right"></i>
+          </RetriveButton>
+          <Row>
+            <span className="with-separator"></span>
+          </Row>
+          <Hidder active={leftSide.active}>
+            <Row>
+              <Col xs={12} sm={12} md={12} lg={12}>
+                <img className="logo-app" src={logo} alt="Logo" />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} sm={12} md={12} lg={12}>
+                <LeftSideTitle>Arma tu horario</LeftSideTitle>
+                <ShowProfessorButton onClick={toggleModalHandler}>
+                  Ver Profesores{' '}
+                </ShowProfessorButton>
+              </Col>
+            </Row>
+          </Hidder>
+
+          <ScrollArea active={leftSide.active}>
+            <Row>
+              <Col xs={12} sm={12} md={12} lg={12}>
+                <p className="unselection">Todavia no has agregado materias</p>
+              </Col>
+            </Row>
+          </ScrollArea>
+        </LeftSideNavigation>
+        <ContentArea active={leftSide.active}>
+          <h1>Buscar</h1>
+        </ContentArea>
+      </FullWrapper>
     </>
   )
 }
