@@ -7,12 +7,14 @@
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <script src="https://kit.fontawesome.com/75c308835f.js" crossorigin="anonymous"></script>
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <link
+      crossorigin="anonymous"
       rel="preload"
       as="font"
       href="%PUBLIC_URL%/fonts/manrope-bold.woff2"
@@ -20,6 +22,7 @@
       crossorigin
     />
     <link
+      crossorigin="anonymous"
       rel="preload"
       as="font"
       href="%PUBLIC_URL%/fonts/manrope-light.woff2"
@@ -27,18 +30,21 @@
       crossorigin
     />
     <link
+      crossorigin="anonymous"
       rel="preload"
       as="font"
       href="%PUBLIC_URL%/fonts/manrope-medium.woff2"
       type="font/woff2"
     />
     <link
+      crossorigin="anonymous"
       rel="preload"
       as="font"
       href="%PUBLIC_URL%/fonts/manrope-regular.woff2"
       type="font/woff2"
     />
     <link
+      crossorigin="anonymous"
       rel="preload"
       as="font"
       href="%PUBLIC_URL%/fonts/manrope-semibold.woff2"
@@ -46,7 +52,6 @@
     />
 
     <style>
-      /* Esta es una gordita provisional hasta pagar la gordita original */
       @font-face {
         font-family: 'Manrope';
         font-style: normal;
@@ -59,21 +64,28 @@
         font-family: 'Manrope';
         font-style: normal;
         font-weight: 400;
-        src: local('Gordita Regular'), url('./fonts/manrope-regular.woff2') format('woff2');
+        src: local('manrope-reuglar'), url('./fonts/manrope-regular.woff2') format('woff2');
         font-display: swap;
       }
       @font-face {
         font-family: 'Manrope';
         font-style: normal;
         font-weight: 500;
-        src: local('Gordita Medium'), url('./fonts/manrope-medium.woff2') format('woff2');
+        src: local('manrope-medium'), url('./fonts/manrope-medium.woff2') format('woff2');
         font-display: swap;
       }
       @font-face {
         font-family: 'Manrope';
         font-style: normal;
         font-weight: 600;
-        src: local('Gordita Bold'), url('./fonts/manrope-semibold.woff2') format('woff2');
+        src: local('manrope-semibold'), url('./fonts/manrope-semibold.woff2') format('woff2');
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Manrope';
+        font-style: normal;
+        font-weight: 700;
+        src: local('manrope-bold'), url('./fonts/manrope-bold.woff2') format('woff2');
         font-display: swap;
       }
     </style>
