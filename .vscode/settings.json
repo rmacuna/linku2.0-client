@@ -1,0 +1,8 @@
+{
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "files.trimFinalNewlines": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
