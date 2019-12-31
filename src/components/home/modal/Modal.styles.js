@@ -20,19 +20,22 @@ export const ModalWrapper = styled.div`
 export const ModalBody = styled.section`
   display: flex;
   flex-direction: column;
-  padding: 61px 29px 24px 29px;
   border-radius: 2px;
   background-color: white;
-  border-top: 8px solid ${colors.modal.modalTopLine};
   margin: 0 auto;
   position: relative;
-  max-width: 520px;
+  max-width: 80%;
+  min-width: 80%;
   z-index: 2000;
+  margin-top: 2%;
+  margin-bottom: 2%;
   transition: all 0.3s ease-out;
 `
 
 export const CloseButton = styled.button`
   display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 100%;
   background-color: white;
   width: 43px;
@@ -43,5 +46,10 @@ export const CloseButton = styled.button`
   top: 0;
   right: 0;
   margin-top: 25px;
+  margin-right: 25px;
   box-shadow: 0 2px 8px rgba(17, 65, 136, 0.13);
+
+  i {
+    color: rgba(10, 57, 126, 0.66);
+  }
 `
