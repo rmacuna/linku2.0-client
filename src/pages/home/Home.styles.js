@@ -2,12 +2,6 @@ import styled, { createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
 
-.logo-app{
-  width: 25%;
-  height: auto;
-  margin-left: auto;
-  margin-right: auto;
-}
 .link2-select {
     margin: 20px auto; 
 }
