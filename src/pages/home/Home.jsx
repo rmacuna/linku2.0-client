@@ -1,7 +1,9 @@
-import React, { useState, useMemo } from 'react'
-import Modal from './modal/Modal'
-import logo from '../../assets/logo.png'
-import { Grid, Row, Col } from 'react-flexbox-grid'
+import React, { useState, useMemo } from 'react';
+import { Grid, Row, Col } from 'react-flexbox-grid';
+import Select from 'react-select';
+import { useQuery } from '@apollo/react-hooks';
+
+import logo from '../../assets/logo.png';
 import {
   ModalSubtitle,
   ModalTitle,
@@ -25,13 +27,60 @@ import {
   MenuSection,
   Indicator,
   LinkuButton,
-} from './Home.styles'
-import Select from 'react-select'
-import Table from './table/Table'
-import makeData from '../../library/utils/makeData'
+} from './Home.styles';
+
+import Modal from '../../components/Modal/Modal';
+import Table from '../../components/Table/Table';
+
+import makeData from '../../library/utils/makeData';
+import { GET_SUBJECTS_QUERY } from '../../graphql/queries';
+
+const SearchSelect = () => {
+  const { loading, error, data, fetchMore } = useQuery(GET_SUBJECTS_QUERY);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
+  const { docs } = data.getSubjects;
+
+  const options = docs.map((subject) => ({
+    label: `${subject.name} (${subject.code}${subject.number})`,
+    value: subject.id,
+  }))
+
+  let delayTimer;
+  const search = (val) => {
+    delayTimer = setTimeout(() => {
+      fetchMore({
+        variables: {
+          search: val,
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          return fetchMoreResult;
+        }
+      })
+    }, 700);
+  }
+
+  return (
+    <Select
+      className="link2-select"
+      placeholder="Escribe la materia a buscar"
+      options={options}
+      onInputChange={(val) => {
+        clearTimeout(delayTimer);
+        if (val && val.length > 3) {
+          search(val);
+        }
+      }}
+      isClearable
+      isSearchable
+    />
+  );
+};
 
 function Home() {
-  const data = React.useMemo(() => makeData(14), [])
+  const data = React.useMemo(() => makeData(14), []);
   const columns = React.useMemo(
     () => [
       {
@@ -60,32 +109,32 @@ function Home() {
       },
     ],
     [],
-  )
+  );
   const [modal, setModal] = useState({
     open: false,
-  })
+  });
 
   const [leftSide, setLeftSide] = useState({
     active: true,
-  })
+  });
 
   const toggleModalHandler = () => {
     setModal({
       open: !modal.open,
-    })
-  }
+    });
+  };
 
   const toggleLeftSide = () => {
     setLeftSide({
       active: !leftSide.active,
-    })
-  }
+    });
+  };
 
   const options = [
     { value: 'chocolate', label: 'Chocolate' },
     { value: 'strawberry', label: 'Strawberry' },
     { value: 'vanilla', label: 'Vanilla' },
-  ]
+  ];
 
   return (
     <>
@@ -148,7 +197,8 @@ function Home() {
             <Row>
               <Col xs={12} sm={12} md={4} lg={4}>
                 <h1 className="search_title">Buscar</h1>
-                <Select styles={{}} placeholder="Escribe la materia a buscar" options={options} />
+                <SearchSelect />
+                {/* <Select styles={{}} placeholder="Escribe la materia a buscar" options={options} /> */}
               </Col>
             </Row>
           </SearchSection>
@@ -196,7 +246,7 @@ function Home() {
         </ContentArea>
       </FullWrapper>
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;
