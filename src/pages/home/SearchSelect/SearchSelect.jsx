@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Select from 'react-select'
 import { useQuery } from '@apollo/react-hooks'
 import { createGlobalStyle } from 'styled-components'
@@ -16,6 +16,13 @@ function SearchSelect(props) {
 
   const { loading, error, data, fetchMore } = useQuery(GET_SUBJECTS_QUERY)
   const getSubjectsQuery = useQuery(GET_SUBJECT_GROUPS, { skip: true })
+  let delayTimer
+
+  useEffect(() => {
+    if (delayTimer) {
+      clearTimeout(delayTimer)
+    }
+  }, [])
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error :(</p>
@@ -27,17 +34,18 @@ function SearchSelect(props) {
     value: subject,
   }))
 
-  let delayTimer
   const search = val => {
     delayTimer = setTimeout(() => {
-      fetchMore({
-        variables: {
-          search: val,
-        },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          return fetchMoreResult
-        },
-      })
+      if (fetchMore) {
+        fetchMore({
+          variables: {
+            search: val,
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            return fetchMoreResult
+          },
+        })
+      }
     }, 700)
   }
 
