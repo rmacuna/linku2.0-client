@@ -20,11 +20,22 @@ export const confirm = keyframes`
 
 export const CheckboxWrapper = styled.div`
   display: flex;
-  margin: 5px 0%;
 `
 export const StyledCheckbox = styled.div`
   position: relative;
 `
+export const Label = styled.label`
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: 2px solid #aaaaaa;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+`
+
 export const InputCheckbox = styled.input`
   position: absolute;
   visibility: visible;
@@ -42,9 +53,9 @@ export const InputCheckbox = styled.input`
   &:checked + label:after {
     content: '\f057';
     font-family: FontAwesome;
-    font-size: 16px;
+    font-size: 20px;
     padding-left: 1px;
-    line-height: 15px;
+    line-height: 18px;
     width: 30px;
     height: 30px;
     background: #da8686;
@@ -53,17 +64,6 @@ export const InputCheckbox = styled.input`
     left: 0px;
     color: #ffffff;
   }
-`
-export const Label = styled.label`
-  position: relative;
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  background: none;
-  border: 2px solid #aaaaaa;
-  border-radius: 2px;
-  cursor: pointer;
-  transition: all 0.3s ease-out;
 `
 
 export const CheckboxTitleWrapper = styled.div`

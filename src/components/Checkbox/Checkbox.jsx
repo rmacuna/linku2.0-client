@@ -4,6 +4,7 @@ import {
   CheckboxWrapper,
   CheckboxTitleWrapper,
   InputCheckbox,
+  Label,
   StyledCheckbox,
 } from './Checkbox.styles'
 
@@ -13,6 +14,7 @@ function Checkbox(props) {
     <CheckboxWrapper>
       <StyledCheckbox>
         <InputCheckbox name="do-checkbox" type="checkbox" {...props} />
+        <Label htmlFor="do-checkbox"></Label>
       </StyledCheckbox>
       {labelTitle ? (
         <CheckboxTitleWrapper>

@@ -12,23 +12,33 @@ export const DetailsCard = styled.section`
   overflow-y: scroll;
   background-color: #fff;
   border-radius: 6px;
-  padding: 16px 9px;
+  /* padding: 16px 9px; */
+  padding-top: 5px;
   border: 1px solid rgba(10, 57, 126, 10%);
 `
 
+export const DetailsHeader = styled.div`
+  padding: 5px 9px;
+  border-bottom: 1px solid rgba(17, 65, 136, 17%);
+`
+
+export const DetailsBody = styled.div`
+  padding: 10px 9px;
+`
 export const CloseIcon = styled.i`
   position: absolute;
   right: 0;
   top: 0;
-  margin: 25px;
+  margin: 15px;
+  cursor: pointer;
   font-size: 14px;
   color: rgba(10, 57, 126, 66%);
 `
 export const SubjectTitle = styled.h1`
-  margin: 0;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: #000;
+  max-width: 90%;
 `
 
 export const ProfessorTitle = styled.h1`
