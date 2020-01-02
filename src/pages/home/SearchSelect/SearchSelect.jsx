@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Select from 'react-select'
 import { useQuery } from '@apollo/react-hooks'
 import { createGlobalStyle } from 'styled-components'
@@ -12,7 +12,7 @@ const GlobalStyles = createGlobalStyle`
 `
 
 function SearchSelect(props) {
-  const { addSubject } = props;
+  const { addSubject } = props
 
   const { loading, error, data, fetchMore } = useQuery(GET_SUBJECTS_QUERY)
   const getSubjectsQuery = useQuery(GET_SUBJECT_GROUPS, { skip: true })
@@ -54,9 +54,9 @@ function SearchSelect(props) {
             search(val)
           }
         }}
-        onChange={async (item) => {
+        onChange={async item => {
           if (item && item.value) {
-            const { id, name, departmentName, mat } = item.value;
+            const { id, name, departmentName, mat } = item.value
             try {
               const { data } = await getSubjectsQuery.refetch({
                 subjectId: id,
@@ -65,7 +65,7 @@ function SearchSelect(props) {
                 name,
                 departmentName,
                 mat,
-                groups: data.getSubjectGroups
+                groups: data.getSubjectGroups,
               })
             } catch (err) {
               console.log('err', err)

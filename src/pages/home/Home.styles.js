@@ -14,6 +14,14 @@ export const GlobalStyle = createGlobalStyle`
   margin-bottom: 5px;
 }
 
+.bg-table-abs {
+  background-color: rgba(193, 208, 230, 11%);
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 60%;
+}
 .unselection {
   color: rgb(255,255,255);
   font-size: 14px;
@@ -36,6 +44,8 @@ export const ModalBodyContainer = styled.section`
   padding: 44px 43px;
   background-color: rgba(14, 65, 136, 4%);
   min-height: 500px;
+  overflow-y: hidden;
+  overflow-x: scroll;
 `
 
 export const ModalTitle = styled.h1`

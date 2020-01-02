@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
     table {
@@ -21,6 +21,7 @@ export const GlobalStyle = createGlobalStyle`
             user-select: all;
              padding: 8px 65px;
              cursor: pointer;
+             font-size: 12px;
           }
         }
       }

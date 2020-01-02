@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { GlobalStyle } from './Table.styles'
 import { dataHeaders, dummyData } from './constants'
 
@@ -15,7 +15,7 @@ const Table = ({ columns, data }) => {
 
   const renderTableData = () => {
     return dummyData.fakeData.map((row, index) => {
-      const { id, hour, name, value } = row //destructuring
+      const { id, hour, name } = row //destructuring
       return (
         <tr key={id}>
           <td>{hour}</td>
