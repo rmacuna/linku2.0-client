@@ -22,10 +22,10 @@ import SearchSelect from './SearchSelect/SearchSelect'
 import Paginator from './Paginator/Paginator'
 
 import { SubjectsContext } from '../../subjects-context'
-
+import SubjectDetails from './SubjectDetails/SubjectDetails'
 
 function Home() {
-  const [localSubjects, setLocalSubjects] = useState([]);
+  const [localSubjects, setLocalSubjects] = useState([])
 
   const [modal, setModal] = useState({
     open: false,
@@ -47,19 +47,15 @@ function Home() {
     })
   }
 
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ]
-
   return (
-    <SubjectsContext.Provider value={{
-      subjects: localSubjects,
-      addSubject: (newSubject) => {
-        setLocalSubjects([...localSubjects, newSubject])
-      },
-    }}>
+    <SubjectsContext.Provider
+      value={{
+        subjects: localSubjects,
+        addSubject: newSubject => {
+          setLocalSubjects([...localSubjects, newSubject])
+        },
+      }}
+    >
       <SubjectsContext.Consumer>
         {({ subjects, addSubject }) => (
           <>
@@ -74,17 +70,20 @@ function Home() {
                     </section>
                   </Col>
                   <Col xs={12} sm={12} md={6} lg={6}>
-                    <Select
-                      className="link2-select"
-                      placeholder="Escribe la materia que estas buscando"
-                      options={options}
-                    />
+                    <SearchSelect />
                   </Col>
                 </Row>
               </ModalHeaderContainer>
-              <ModalBodyContainer></ModalBodyContainer>
+              <ModalBodyContainer>
+                {subjects.map(({ mat, name, departmentName, groups }) => (
+                  <Row key={mat}>
+                    <Col xs={12} sm={4} md={4} lg={4}>
+                      {/* <SubjectDetails nrc={groups.nrc} professor={groups.professor} /> */}
+                    </Col>
+                  </Row>
+                ))}
+              </ModalBodyContainer>
             </Modal>
-
             <FullWrapper>
               <Sidenav
                 show={leftSide.active}
@@ -97,9 +96,7 @@ function Home() {
                   <Row>
                     <Col xs={12} sm={12} md={6} lg={6}>
                       <h1 className="search_title">Buscar</h1>
-                      <SearchSelect
-                        addSubject={addSubject}
-                      />
+                      <SearchSelect addSubject={addSubject} />
                       {/* <Select styles={{}} placeholder="Escribe la materia a buscar" options={options} /> */}
                     </Col>
                   </Row>

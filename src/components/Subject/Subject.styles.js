@@ -25,6 +25,7 @@ export const SubjectName = styled.h1`
 export const ProfessorName = styled.p`
   font-size: 12px;
   font-weight: 400;
+  margin: 1px;
 `
 
 export const Quotas = styled.h6`
