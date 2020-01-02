@@ -29,6 +29,7 @@ export const ScrollArea = styled.div`
   flex-direction: column;
   height: 100%;
 
+  margin-bottom: 15%;
   overflow-y: scroll;
 `
 

@@ -130,7 +130,7 @@ export const LinkuButton = styled.button`
 
   font-weight: 600;
 
-  font-size: 12px;
+  font-size: 14px;
 
   transition: all 0.3s ease-out;
   &:hover {

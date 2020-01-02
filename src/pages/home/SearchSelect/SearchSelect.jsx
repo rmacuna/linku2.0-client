@@ -2,6 +2,13 @@ import React from 'react'
 import Select from 'react-select'
 import { useQuery } from '@apollo/react-hooks'
 import { GET_SUBJECTS_QUERY } from '../../../graphql/queries'
+import { createGlobalStyle } from 'styled-components'
+
+const GlobalStyles = createGlobalStyle`
+  .link2-select {
+    font-size: 14px;
+  }
+`
 
 function SearchSelect() {
   const { loading, error, data, fetchMore } = useQuery(GET_SUBJECTS_QUERY)
@@ -31,19 +38,22 @@ function SearchSelect() {
   }
 
   return (
-    <Select
-      className="link2-select"
-      placeholder="Escribe la materia a buscar"
-      options={options}
-      onInputChange={val => {
-        clearTimeout(delayTimer)
-        if (val && val.length > 3) {
-          search(val)
-        }
-      }}
-      isClearable
-      isSearchable
-    />
+    <>
+      <GlobalStyles />
+      <Select
+        className="link2-select"
+        placeholder="Escribe la materia a buscar"
+        options={options}
+        onInputChange={val => {
+          clearTimeout(delayTimer)
+          if (val && val.length > 3) {
+            search(val)
+          }
+        }}
+        isClearable
+        isSearchable
+      />
+    </>
   )
 }
 export default SearchSelect

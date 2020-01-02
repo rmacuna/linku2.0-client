@@ -7,6 +7,7 @@ export const Card = styled.section`
   background-color: #fff;
   padding: 16px 12px;
   min-height: 90px;
+  margin-bottom: 10px;
 `
 
 export const Nrc = styled.h4`
