@@ -3,7 +3,6 @@ import Select from 'react-select'
 import { useQuery } from '@apollo/react-hooks'
 import { createGlobalStyle } from 'styled-components'
 
-import { GroupContext } from '../../../group-context'
 import { GET_SUBJECTS_QUERY, GET_SUBJECT_GROUPS } from '../../../graphql/queries'
 
 const GlobalStyles = createGlobalStyle`
@@ -13,7 +12,7 @@ const GlobalStyles = createGlobalStyle`
 `
 
 function SearchSelect(props) {
-  const { setGroups } = props;
+  const { addSubject } = props;
 
   const { loading, error, data, fetchMore } = useQuery(GET_SUBJECTS_QUERY)
   const getSubjectsQuery = useQuery(GET_SUBJECT_GROUPS, { skip: true })
@@ -24,8 +23,8 @@ function SearchSelect(props) {
   const { docs } = data.getSubjects
 
   const options = docs.map(subject => ({
-    label: `${subject.name} (${subject.code}${subject.number})`,
-    value: subject.id,
+    label: `${subject.name} (${subject.mat})`,
+    value: subject,
   }))
 
   let delayTimer
@@ -57,11 +56,17 @@ function SearchSelect(props) {
         }}
         onChange={async (item) => {
           if (item && item.value) {
+            const { id, name, departmentName, mat } = item.value;
             try {
               const { data } = await getSubjectsQuery.refetch({
-                subjectId: item.value,
+                subjectId: id,
               })
-              setGroups(data.getSubjectGroups)
+              addSubject({
+                name,
+                departmentName,
+                mat,
+                groups: data.getSubjectGroups
+              })
             } catch (err) {
               console.log('err', err)
             }

@@ -7,8 +7,7 @@ export const GET_SUBJECTS_QUERY = gql`
         id
         name
         departmentName
-        code
-        number
+        mat
       }
       pageInfo {
         totalPages
@@ -24,9 +23,6 @@ export const GET_SUBJECT_GROUPS = gql`
     getSubjectGroups(subjectId: $subjectId) {
       nrc
       group
-      subject {
-        name
-      }
       professors {
         firstname
         lastname

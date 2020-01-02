@@ -21,11 +21,11 @@ import Sidenav from '../../components/Sidenav/Sidenav'
 import SearchSelect from './SearchSelect/SearchSelect'
 import Paginator from './Paginator/Paginator'
 
-import { GroupContext } from '../../group-context'
+import { SubjectsContext } from '../../subjects-context'
 
 
 function Home() {
-  const [localGroups, setLocalGroups] = useState([]);
+  const [localSubjects, setLocalSubjects] = useState([]);
 
   const [modal, setModal] = useState({
     open: false,
@@ -54,14 +54,14 @@ function Home() {
   ]
 
   return (
-    <GroupContext.Provider value={{
-      groups: localGroups,
-      setGroups: (newGroups) => {
-        setLocalGroups([...localGroups, ...newGroups])
+    <SubjectsContext.Provider value={{
+      subjects: localSubjects,
+      addSubject: (newSubject) => {
+        setLocalSubjects([...localSubjects, newSubject])
       },
     }}>
-      <GroupContext.Consumer>
-        {({ groups, setGroups }) => (
+      <SubjectsContext.Consumer>
+        {({ subjects, addSubject }) => (
           <>
             <GlobalStyle />
             <Modal onClose={toggleModalHandler} show={modal.open}>
@@ -90,7 +90,7 @@ function Home() {
                 show={leftSide.active}
                 toggleLeftSide={toggleLeftSide}
                 toggleModalHandler={toggleModalHandler}
-                groups={groups}
+                subjects={subjects}
               />
               <ContentArea active={leftSide.active}>
                 <SearchSection>
@@ -98,7 +98,7 @@ function Home() {
                     <Col xs={12} sm={12} md={6} lg={6}>
                       <h1 className="search_title">Buscar</h1>
                       <SearchSelect
-                        setGroups={setGroups}
+                        addSubject={addSubject}
                       />
                       {/* <Select styles={{}} placeholder="Escribe la materia a buscar" options={options} /> */}
                     </Col>
@@ -141,8 +141,8 @@ function Home() {
             </FullWrapper>
           </>
         )}
-      </GroupContext.Consumer>
-    </GroupContext.Provider>
+      </SubjectsContext.Consumer>
+    </SubjectsContext.Provider>
   )
 }
 

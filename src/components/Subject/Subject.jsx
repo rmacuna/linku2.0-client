@@ -3,23 +3,23 @@ import { Card, Nrc, SubjectName, ProfessorName, Quotas, CloseIcon } from './Subj
 import PropTypes from 'prop-types'
 
 const Subject = props => {
-  const { nrc, subject, name, quotas } = props
+  const { mat, name, departmentName } = props
   return (
     <Card>
       <CloseIcon className="far fa-times-circle"></CloseIcon>
-      <Nrc>{nrc}</Nrc>
-      <SubjectName>{subject}</SubjectName>
-      <ProfessorName>{name}</ProfessorName>
-      <Quotas>{quotas} Cupos</Quotas>
+      <Nrc>{mat}</Nrc>
+      <SubjectName>{name}</SubjectName>
+      <ProfessorName>{departmentName}</ProfessorName>
+      {/* <Quotas>{quotas} Cupos</Quotas> */}
     </Card>
   )
 }
 
 Subject.propTypes = {
-  nrc: PropTypes.number,
-  subject: PropTypes.string,
+  mat: PropTypes.string,
   name: PropTypes.string,
-  quotas: PropTypes.number,
+  departmentName: PropTypes.string,
+  // quotas: PropTypes.number,
 }
 
 export default Subject

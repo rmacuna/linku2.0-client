@@ -15,7 +15,7 @@ import Subject from '../Subject/Subject'
 
 
 function Sidenav(props) {
-  const { show, toggleLeftSide, toggleModalHandler, groups } = props
+  const { show, toggleLeftSide, toggleModalHandler, subjects } = props
 
   return (
     <LeftNavigation active={show}>
@@ -39,14 +39,13 @@ function Sidenav(props) {
         </Row>
       </Hidder>
       <ScrollArea active={show}>
-        {groups.map(({ nrc, subject, quota, professors }) => (
-          <Row key={nrc}>
+        {subjects.map(({ mat, name, departmentName }) => (
+          <Row key={mat}>
             <Col xs={12} sm={12} md={12} lg={12}>
               <Subject
-                nrc={nrc}
-                subject={subject.name}
-                name={professors.reduce((acum, { firstname, lastname }) => acum + `- ${firstname} ${lastname}`, '')}
-                quotas={quota.free}
+                mat={mat}
+                name={name}
+                departmentName={departmentName}
               />
             </Col>
           </Row>
