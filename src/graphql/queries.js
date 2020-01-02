@@ -23,10 +23,7 @@ export const GET_SUBJECT_GROUPS = gql`
     getSubjectGroups(subjectId: $subjectId) {
       nrc
       group
-      professors {
-        firstname
-        lastname
-      }
+      professors
       schedule {
         time {
           start
