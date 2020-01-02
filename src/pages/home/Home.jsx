@@ -90,7 +90,7 @@ function Home() {
                 </Row>
               </ModalHeaderContainer>
               <ModalBodyContainer>
-                <Row>
+                <Row style={{ width: '100%' }}>
                   {subjects.map(({ id, mat, name, departmentName, groups }) => (
                     <Col key={id} xs={12} sm={4} md={4} lg={4}>
                       <SubjectDetails
