@@ -5,6 +5,8 @@ import {
   Group,
   ProfessorTitle,
   CloseIcon,
+  DetailsHeader,
+  DetailsBody,
 } from './SubjectDetails.styles'
 
 import BlockCheckbox from '../../../components/Checkbox/Checkbox'
@@ -20,12 +22,16 @@ const SubjectDetails = props => {
   const { subjectName, nrc, professor, groups } = props
   return (
     <DetailsCard>
-      <CloseIcon className="fas fa-times" />
-      <SubjectTitle>{subjectName}</SubjectTitle>
-      <Group>
-        <BlockCheckbox onChange={handleCheck} />
-        <ProfessorTitle>{professor}</ProfessorTitle>
-      </Group>
+      <DetailsHeader>
+        <CloseIcon className="fas fa-times" />
+        <SubjectTitle>{subjectName}</SubjectTitle>
+      </DetailsHeader>
+      <DetailsBody>
+        <Group>
+          <BlockCheckbox onChange={handleCheck} />
+          <ProfessorTitle>{professor}</ProfessorTitle>
+        </Group>
+      </DetailsBody>
     </DetailsCard>
   )
 }

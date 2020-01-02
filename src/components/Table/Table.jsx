@@ -1,36 +1,42 @@
-import React, { useMemo } from 'react'
+import React, { useState } from 'react'
 import { GlobalStyle } from './Table.styles'
-import { useTable } from 'react-table'
+import { dataHeaders, dummyData } from './constants'
 
 const Table = ({ columns, data }) => {
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
-    columns,
-    data,
-  })
+  // const [day, setday] = useState(initialState)
+
+  const renderTableHeader = () => {
+    let header = Object.values(dataHeaders.headers)
+    console.log(header)
+    return header.map((key, index) => {
+      return <th key={index}>{key.name.toUpperCase()}</th>
+    })
+  }
+
+  const renderTableData = () => {
+    return dummyData.fakeData.map((row, index) => {
+      const { id, hour, name, value } = row //destructuring
+      return (
+        <tr key={id}>
+          <td>{hour}</td>
+          <td>{name}</td>
+          <td>{name}</td>
+          <td>{name}</td>
+          <td>{name}</td>
+          <td>{name}</td>
+          <td>{name}</td>
+        </tr>
+      )
+    })
+  }
+
   return (
     <>
       <GlobalStyle />
-      <table>
-        <thead>
-          {headerGroups.map(headerGroup => (
-            <tr>
-              {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
-            prepareRow(row)
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map(cell => {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                })}
-              </tr>
-            )
-          })}
+      <table id="students">
+        <tbody>
+          <tr>{renderTableHeader()}</tr>
+          {renderTableData()}
         </tbody>
       </table>
     </>

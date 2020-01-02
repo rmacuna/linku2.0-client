@@ -23,6 +23,7 @@ import Paginator from './Paginator/Paginator'
 
 import { SubjectsContext } from '../../subjects-context'
 import SubjectDetails from './SubjectDetails/SubjectDetails'
+import Table from '../../components/Table/Table'
 
 function Home() {
   const [localSubjects, setLocalSubjects] = useState([])
@@ -78,7 +79,11 @@ function Home() {
                 {subjects.map(({ mat, name, departmentName, groups }) => (
                   <Row key={mat}>
                     <Col xs={12} sm={4} md={4} lg={4}>
-                      {/* <SubjectDetails nrc={groups.nrc} professor={groups.professor} /> */}
+                      <SubjectDetails
+                        nrc={groups.nrc}
+                        subjectName={name}
+                        professor={groups.professor}
+                      />
                     </Col>
                   </Row>
                 ))}
@@ -130,7 +135,7 @@ function Home() {
                   </Row>
                   <Row>
                     <Col xs={12} sm={12} md={12} lg={12}>
-                      {/* <Table columns={columns} data={data} /> */}
+                      <Table />
                     </Col>
                   </Row>
                 </MenuSection>
