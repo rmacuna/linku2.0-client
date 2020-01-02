@@ -7,11 +7,11 @@ import {
   Logo,
   LeftSideTitle,
   Hidder,
-  BannerInfo,
 } from './Sidenav.styles'
 import logo from '../../assets/logo.png'
 import { Row, Col } from 'react-flexbox-grid'
 import PropTypes from 'prop-types'
+import Subject from '../Subject/Subject'
 
 function Sidenav(props) {
   const { show, toggleLeftSide, toggleModalHandler, schedules } = props
@@ -40,7 +40,12 @@ function Sidenav(props) {
       <ScrollArea active={show}>
         <Row>
           <Col xs={12} sm={12} md={12} lg={12}>
-            <BannerInfo>Todavia no has agregado materias</BannerInfo>
+            <Subject
+              nrc={3201}
+              subject="Energia Medio Amb Y Soc"
+              name="Gustavo Espitia"
+              quotas={30}
+            />
           </Col>
         </Row>
       </ScrollArea>

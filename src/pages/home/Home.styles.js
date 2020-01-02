@@ -58,20 +58,6 @@ export const FullWrapper = styled.div`
   display: flex;
 `
 
-export const LeftSideNavigation = styled.div`
-  position: fixed;
-  display: flex;
-  left: 0;
-  top: 0;
-  height: 100vh;
-  flex-direction: column;
-  background-color: #114188;
-  width: ${props => (props.active ? '310px' : '0')};
-  max-width: 310px;
-  transition: all 0.3s ease-out;
-  padding: 35px 20px;
-`
-
 export const ScrollArea = styled.div`
   width: 100%;
   margin-top: 30px;
@@ -103,125 +89,8 @@ export const ContentArea = styled.div`
   padding-left: ${props => (props.active ? '360px' : '85px')};
 `
 
-export const LeftSideTitle = styled.h1`
-  font-size: 24px;
-  color: #fff;
-`
-
-export const ShowProfessorButton = styled.button`
-  outline: none;
-  border: none;
-
-  width: 100%;
-  padding: 18px 12px;
-  color: #000;
-  background-color: #eee3ab;
-
-  border-radius: 6px;
-  margin: 2px 0;
-
-  transition: all 0.3s ease-out;
-  font-weight: 600;
-
-  font-size: 12px;
-
-  cursor: pointer;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-  &:active {
-    background-color: #d2c892;
-  }
-`
-
-export const RetriveButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background-color: #eee3ab;
-  width: 44px;
-  height: 44px;
-
-  border-radius: 100%;
-  position: absolute;
-
-  top: 0;
-  right: ${props => (props.active ? '0' : '-80%')};
-
-  border: none;
-
-  outline: none;
-  margin: 22px;
-
-  transition: all 0.3s ease-out;
-
-  cursor: pointer;
-  transform: ${props => (props.active ? 'rotate(-180deg)' : '0')};
-
-  &:hover {
-    transform: ${props => (props.active ? 'rotate(-180deg) scale(1.05)' : 'scale(1.05)')};
-  }
-  &:active {
-    background-color: #d2c892;
-  }
-`
 export const SearchSection = styled.section`
   padding: 20px;
-`
-
-export const NavigationArrows = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex: 1;
-  flex-basis: 100%;
-`
-
-export const ArrowLeft = styled.button`
-  width: 45px;
-  height: 45px;
-  border-radius: 6px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #114188;
-  cursor: pointer;
-
-  /* outline: none; */
-  border: none;
-  i {
-    color: #fff;
-    font-size: 12px;
-    transform: rotate(-180deg);
-  }
-`
-
-export const ArrowRight = styled.button`
-  width: 45px;
-  height: 45px;
-  border-radius: 6px;
-  display: flex;
-  justify-content: center;
-  border: none;
-  cursor: pointer;
-  align-items: center;
-  background-color: #114188;
-
-  i {
-    color: #fff;
-    font-size: 12px;
-  }
-`
-
-export const NumberContainer = styled.input`
-  font-size: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  outline: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 6px;
-  text-align: center;
 `
 
 export const MenuSection = styled.div`
@@ -271,18 +140,3 @@ export const LinkuButton = styled.button`
     margin-right: 10px;
   }
 `
-// export const Searchbox = styled.input`
-//   width: 60%;
-//   padding: 16px 14px;
-//   background-color: rgba(193, 208, 230, 0.27);
-//   border-radius: 6px;
-
-//   font-size: 14px;
-//   outline: none;
-//   color: #5e6876;
-//   border: none;
-
-//   &::placeholder {
-//     color: #a3afc0;
-//   }
-// `
