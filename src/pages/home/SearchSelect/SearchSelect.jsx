@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Select from 'react-select'
 import { useQuery } from '@apollo/react-hooks'
-import { GET_SUBJECTS_QUERY } from '../../../graphql/queries'
 import { createGlobalStyle } from 'styled-components'
+
+import { GroupContext } from '../../../group-context'
+import { GET_SUBJECTS_QUERY, GET_SUBJECT_GROUPS } from '../../../graphql/queries'
 
 const GlobalStyles = createGlobalStyle`
   .link2-select {
@@ -10,8 +12,11 @@ const GlobalStyles = createGlobalStyle`
   }
 `
 
-function SearchSelect() {
+function SearchSelect(props) {
+  const { setGroups } = props;
+
   const { loading, error, data, fetchMore } = useQuery(GET_SUBJECTS_QUERY)
+  const getSubjectsQuery = useQuery(GET_SUBJECT_GROUPS, { skip: true })
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error :(</p>
@@ -46,8 +51,20 @@ function SearchSelect() {
         options={options}
         onInputChange={val => {
           clearTimeout(delayTimer)
-          if (val && val.length > 3) {
+          if (val.length > 3 || val.length === 0) {
             search(val)
+          }
+        }}
+        onChange={async (item) => {
+          if (item && item.value) {
+            try {
+              const { data } = await getSubjectsQuery.refetch({
+                subjectId: item.value,
+              })
+              setGroups(data.getSubjectGroups)
+            } catch (err) {
+              console.log('err', err)
+            }
           }
         }}
         isClearable

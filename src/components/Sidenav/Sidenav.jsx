@@ -13,8 +13,9 @@ import { Row, Col } from 'react-flexbox-grid'
 import PropTypes from 'prop-types'
 import Subject from '../Subject/Subject'
 
+
 function Sidenav(props) {
-  const { show, toggleLeftSide, toggleModalHandler, schedules } = props
+  const { show, toggleLeftSide, toggleModalHandler, groups } = props
 
   return (
     <LeftNavigation active={show}>
@@ -38,16 +39,18 @@ function Sidenav(props) {
         </Row>
       </Hidder>
       <ScrollArea active={show}>
-        <Row>
-          <Col xs={12} sm={12} md={12} lg={12}>
-            <Subject
-              nrc={3201}
-              subject="Energia Medio Amb Y Soc"
-              name="Gustavo Espitia"
-              quotas={30}
-            />
-          </Col>
-        </Row>
+        {groups.map(({ nrc, subject, quota, professors }) => (
+          <Row key={nrc}>
+            <Col xs={12} sm={12} md={12} lg={12}>
+              <Subject
+                nrc={nrc}
+                subject={subject.name}
+                name={professors.reduce((acum, { firstname, lastname }) => acum + `- ${firstname} ${lastname}`, '')}
+                quotas={quota.free}
+              />
+            </Col>
+          </Row>
+        ))}
       </ScrollArea>
     </LeftNavigation>
   )
