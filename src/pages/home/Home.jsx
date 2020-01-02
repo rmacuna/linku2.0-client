@@ -1,6 +1,5 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { Row, Col } from 'react-flexbox-grid'
-import Select from 'react-select'
 
 import {
   ModalSubtitle,
@@ -71,7 +70,7 @@ function Home() {
                     </section>
                   </Col>
                   <Col xs={12} sm={12} md={6} lg={6}>
-                    <SearchSelect />
+                    <SearchSelect addSubject={addSubject} />
                   </Col>
                 </Row>
               </ModalHeaderContainer>
@@ -111,15 +110,15 @@ function Home() {
                   <Row>
                     <Col xs={12} sm={12} md={12} lg={12}>
                       <Row middle="xs" start="xs">
-                        <Col xs={2} sm={2} sm={2} lg={2}>
+                        <Col xs={2} sm={2} md={2} lg={2}>
                           <Paginator value={1} />
                         </Col>
-                        <Col xs={2} sm={2} sm={2} lg={2}>
+                        <Col xs={2} sm={2} md={2} lg={2}>
                           <Indicator>
                             <p> 1 de 40 </p>
                           </Indicator>
                         </Col>
-                        <Col xs={8} sm={8} sm={8} lg={8}>
+                        <Col xs={8} sm={8} md={8} lg={8}>
                           <Row end="xs">
                             <Col xs={12} sm={12} md={12} lg={12}>
                               <LinkuButton color="#DA8686">Limpiar filtro</LinkuButton>
