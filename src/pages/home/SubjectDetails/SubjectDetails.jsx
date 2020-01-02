@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   DetailsCard,
   SubjectTitle,
@@ -7,16 +7,27 @@ import {
   CloseIcon,
   DetailsHeader,
   DetailsBody,
+  ActionLink,
+  ActionsRow,
+  Professors,
+  DetailsFooter,
 } from './SubjectDetails.styles'
 
 import BlockCheckbox from '../../../components/Checkbox/Checkbox'
 import PropTypes from 'prop-types'
 
 import SubjectsContext from '../../../context/subjects-context'
+import { Row, Col } from 'react-flexbox-grid'
 
 const SubjectDetails = props => {
+  const [showProfessors, setshowProfessors] = useState(false)
+
+  const showProfessorsHandler = () => {
+    setshowProfessors(!showProfessors)
+  }
+
   const { subjectId, subjectName, groups } = props
-  console.log('subjectDetails groups', groups);
+  console.log('subjectDetails groups', groups)
   return (
     <SubjectsContext.Consumer>
       {({ updateGroupStatus }) => (
@@ -31,13 +42,35 @@ const SubjectDetails = props => {
                 <BlockCheckbox
                   value={blocked}
                   onChange={({ target }) => {
-                    updateGroupStatus(subjectId, id, target.checked);
+                    updateGroupStatus(subjectId, id, target.checked)
                   }}
                 />
-                <ProfessorTitle>{`${nrc} - ${group}`}</ProfessorTitle>
+                {/* <ProfessorTitle>{`${nrc} - ${group}`}</ProfessorTitle> */}
+                <ActionsRow>
+                  {professors.length > 1 ? (
+                    <ProfessorTitle>{` ${professors[0]}, ${professors[1]} `}</ProfessorTitle>
+                  ) : (
+                    <ProfessorTitle>{` ${professors[0]}`}</ProfessorTitle>
+                  )}
+
+                  <Row>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <ActionLink color="#0A397E">Ver grupos</ActionLink>
+                      {professors.length > 2 ? (
+                        <ActionLink onClick={showProfessorsHandler} color="#3D846A">
+                          {showProfessors ? 'Ocultar profesores' : 'Ver profesores'}
+                        </ActionLink>
+                      ) : null}
+                    </Col>
+                  </Row>
+                </ActionsRow>
               </Group>
             ))}
           </DetailsBody>
+          {/* 
+          <DetailsFooter>
+            <Professors className="professors_sub">{professors.join(',')}</Professors>
+          </DetailsFooter> */}
         </DetailsCard>
       )}
     </SubjectsContext.Consumer>

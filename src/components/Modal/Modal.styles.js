@@ -24,7 +24,7 @@ export const ModalBody = styled.section`
   background-color: white;
   margin: 0 auto;
   position: relative;
-  max-width: 1000px;
+  max-width: 1100px;
   z-index: 2000;
   margin-top: 2%;
   margin-bottom: 2%;
