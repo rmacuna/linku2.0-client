@@ -21,6 +21,7 @@ export const GET_SUBJECTS_QUERY = gql`
 export const GET_SUBJECT_GROUPS = gql`
   query getSubjectGroupsQuery($subjectId: ID!) {
     getSubjectGroups(subjectId: $subjectId) {
+      id
       nrc
       group
       professors
