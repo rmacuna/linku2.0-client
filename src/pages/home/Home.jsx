@@ -25,7 +25,6 @@ import Table from '../../components/Table/Table'
 
 import SubjectsContext from '../../context/subjects-context'
 
-
 function Home() {
   const [localSubjects, setLocalSubjects] = useState([])
 
@@ -57,20 +56,19 @@ function Home() {
           setLocalSubjects([...localSubjects, newSubject])
         },
         updateGroupStatus: (subjectId, groupId, blocked) => {
-          if (!localSubjects) return;
-          console.log('localSubjects', localSubjects);
+          if (!localSubjects) return
+          console.log('localSubjects', localSubjects)
 
-          const subject = localSubjects
-            .find((subject) => subject.id === subjectId)
-          if (!subject) return;
-          console.log('subject', subject);
+          const subject = localSubjects.find(subject => subject.id === subjectId)
+          if (!subject) return
+          console.log('subject', subject)
 
-          const group = subject.groups.find((group) => group.id === groupId)
-          if (!group) return;
-          console.log('group', group);
+          const group = subject.groups.find(group => group.id === groupId)
+          if (!group) return
+          console.log('group', group)
 
-          group.blocked = blocked;
-        }
+          group.blocked = blocked
+        },
       }}
     >
       <SubjectsContext.Consumer>
@@ -92,10 +90,9 @@ function Home() {
                 </Row>
               </ModalHeaderContainer>
               <ModalBodyContainer>
-                {subjects.map(({ id, mat, name, departmentName, groups }) => (
-                  <Row key={id}>
-                    {console.log(mat, name, groups)}
-                    <Col xs={12} sm={4} md={4} lg={4}>
+                <Row>
+                  {subjects.map(({ id, mat, name, departmentName, groups }) => (
+                    <Col key={id} xs={12} sm={4} md={4} lg={4}>
                       <SubjectDetails
                         subjectId={id}
                         nrc={groups.nrc}
@@ -103,8 +100,8 @@ function Home() {
                         groups={groups}
                       />
                     </Col>
-                  </Row>
-                ))}
+                  ))}
+                </Row>
               </ModalBodyContainer>
             </Modal>
             <FullWrapper>

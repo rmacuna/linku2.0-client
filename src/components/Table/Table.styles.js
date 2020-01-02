@@ -30,6 +30,7 @@ export const GlobalStyle = createGlobalStyle`
     td {
       margin: 0;
       padding: 8px 20px;
+      text-align: center;
       border-bottom: 1px solid rgba(17, 65, 136, 10%);
       border-right: 1px solid rgba(17, 65, 136, 10%);;
       :last-child {
