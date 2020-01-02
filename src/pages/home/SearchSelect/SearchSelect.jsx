@@ -5,15 +5,15 @@ import { createGlobalStyle } from 'styled-components'
 
 import { GET_SUBJECTS_QUERY, GET_SUBJECT_GROUPS } from '../../../graphql/queries'
 
+import SubjectsContext from '../../../context/subjects-context'
+
 const GlobalStyles = createGlobalStyle`
   .link2-select {
     font-size: 14px;
   }
 `
 
-function SearchSelect(props) {
-  const { addSubject } = props
-
+function SearchSelect() {
   const { loading, error, data, fetchMore } = useQuery(GET_SUBJECTS_QUERY)
   const getSubjectsQuery = useQuery(GET_SUBJECT_GROUPS, { skip: true })
   let delayTimer
@@ -50,40 +50,47 @@ function SearchSelect(props) {
   }
 
   return (
-    <>
-      <GlobalStyles />
-      <Select
-        className="link2-select"
-        placeholder="Escribe la materia a buscar"
-        options={options}
-        onInputChange={val => {
-          clearTimeout(delayTimer)
-          if (val.length > 3 || val.length === 0) {
-            search(val)
-          }
-        }}
-        onChange={async item => {
-          if (item && item.value) {
-            const { id, name, departmentName, mat } = item.value
-            try {
-              const { data } = await getSubjectsQuery.refetch({
-                subjectId: id,
-              })
-              addSubject({
-                name,
-                departmentName,
-                mat,
-                groups: data.getSubjectGroups,
-              })
-            } catch (err) {
-              console.log('err', err)
-            }
-          }
-        }}
-        isClearable
-        isSearchable
-      />
-    </>
+    <SubjectsContext.Consumer>
+      {({ addSubject }) => (
+        <>
+          <GlobalStyles />
+          <Select
+            className="link2-select"
+            placeholder="Escribe la materia a buscar"
+            options={options}
+            onInputChange={val => {
+              clearTimeout(delayTimer)
+              if (val.length > 3 || val.length === 0) {
+                search(val)
+              }
+            }}
+            onChange={async item => {
+              if (item && item.value) {
+                const { id, name, departmentName, mat } = item.value
+                try {
+                  const { data } = await getSubjectsQuery.refetch({
+                    subjectId: id,
+                  })
+                  addSubject({
+                    id,
+                    name,
+                    departmentName,
+                    mat,
+                    groups: data.getSubjectGroups.map((subject) => Object.assign(subject, {
+                      blocked: false,
+                    })),
+                  })
+                } catch (err) {
+                  console.log('err', err)
+                }
+              }
+            }}
+            isClearable
+            isSearchable
+          />
+        </>
+      )}
+    </SubjectsContext.Consumer>
   )
 }
 export default SearchSelect

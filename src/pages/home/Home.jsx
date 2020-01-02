@@ -20,9 +20,11 @@ import Sidenav from '../../components/Sidenav/Sidenav'
 import SearchSelect from './SearchSelect/SearchSelect'
 import Paginator from './Paginator/Paginator'
 
-import { SubjectsContext } from '../../subjects-context'
 import SubjectDetails from './SubjectDetails/SubjectDetails'
 import Table from '../../components/Table/Table'
+
+import SubjectsContext from '../../context/subjects-context'
+
 
 function Home() {
   const [localSubjects, setLocalSubjects] = useState([])
@@ -54,10 +56,25 @@ function Home() {
         addSubject: newSubject => {
           setLocalSubjects([...localSubjects, newSubject])
         },
+        updateGroupStatus: (subjectId, groupId, blocked) => {
+          if (!localSubjects) return;
+          console.log('localSubjects', localSubjects);
+
+          const subject = localSubjects
+            .find((subject) => subject.id === subjectId)
+          if (!subject) return;
+          console.log('subject', subject);
+
+          const group = subject.groups.find((group) => group.id === groupId)
+          if (!group) return;
+          console.log('group', group);
+
+          group.blocked = blocked;
+        }
       }}
     >
       <SubjectsContext.Consumer>
-        {({ subjects, addSubject }) => (
+        {({ subjects }) => (
           <>
             <GlobalStyle />
             <Modal onClose={toggleModalHandler} show={modal.open}>
@@ -70,18 +87,20 @@ function Home() {
                     </section>
                   </Col>
                   <Col xs={12} sm={12} md={6} lg={6}>
-                    <SearchSelect addSubject={addSubject} />
+                    <SearchSelect />
                   </Col>
                 </Row>
               </ModalHeaderContainer>
               <ModalBodyContainer>
-                {subjects.map(({ mat, name, departmentName, groups }) => (
-                  <Row key={mat}>
+                {subjects.map(({ id, mat, name, departmentName, groups }) => (
+                  <Row key={id}>
+                    {console.log(mat, name, groups)}
                     <Col xs={12} sm={4} md={4} lg={4}>
                       <SubjectDetails
+                        subjectId={id}
                         nrc={groups.nrc}
                         subjectName={name}
-                        professor={groups.professor}
+                        groups={groups}
                       />
                     </Col>
                   </Row>
@@ -93,14 +112,13 @@ function Home() {
                 show={leftSide.active}
                 toggleLeftSide={toggleLeftSide}
                 toggleModalHandler={toggleModalHandler}
-                subjects={subjects}
               />
               <ContentArea active={leftSide.active}>
                 <SearchSection>
                   <Row>
                     <Col xs={12} sm={12} md={6} lg={6}>
                       <h1 className="search_title">Buscar</h1>
-                      <SearchSelect addSubject={addSubject} />
+                      <SearchSelect />
                       {/* <Select styles={{}} placeholder="Escribe la materia a buscar" options={options} /> */}
                     </Col>
                   </Row>
