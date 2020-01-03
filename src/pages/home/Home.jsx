@@ -13,6 +13,7 @@ import {
   MenuSection,
   Indicator,
   LinkuButton,
+  Hint,
 } from './Home.styles'
 
 import Modal from '../../components/Modal/Modal'
@@ -99,6 +100,10 @@ function Home() {
                     <SearchSelect />
                   </Col>
                 </Row>
+                <Hint>
+                  Si no quieres bloquear el profesor pero si un grupo, puedes hacerlo dandole click
+                  a ver grupos y bloqueando el grupo específico que no quieres que te arme
+                </Hint>
               </ModalHeaderContainer>
               <ModalBodyContainer>
                 <Row style={{ width: '100%' }}>

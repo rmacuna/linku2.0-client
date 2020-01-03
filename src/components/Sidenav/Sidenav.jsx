@@ -15,7 +15,6 @@ import Subject from '../Subject/Subject'
 
 import SubjectsContext from '../../context/subjects-context'
 
-
 function Sidenav(props) {
   const { show, toggleLeftSide, toggleModalHandler } = props
 
@@ -38,7 +37,9 @@ function Sidenav(props) {
             <Row>
               <Col xs={12} sm={12} md={12} lg={12}>
                 <LeftSideTitle>Arma tu horario</LeftSideTitle>
-                <ShowProfessorButton onClick={toggleModalHandler}>Ver Profesores </ShowProfessorButton>
+                <ShowProfessorButton onClick={toggleModalHandler}>
+                  Establecer filtros{' '}
+                </ShowProfessorButton>
               </Col>
             </Row>
           </Hidder>
@@ -46,11 +47,7 @@ function Sidenav(props) {
             {subjects.map(({ mat, name, departmentName }) => (
               <Row key={mat}>
                 <Col xs={12} sm={12} md={12} lg={12}>
-                  <Subject
-                    mat={mat}
-                    name={name}
-                    departmentName={departmentName}
-                  />
+                  <Subject mat={mat} name={name} departmentName={departmentName} />
                 </Col>
               </Row>
             ))}

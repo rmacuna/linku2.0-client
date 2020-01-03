@@ -35,6 +35,12 @@ export const GlobalStyle = createGlobalStyle`
 }
 `
 
+export const Hint = styled.p`
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.7);
+  margin: 0;
+`
 export const ModalHeaderContainer = styled.section`
   border-bottom: 1px solid rgba(17, 65, 136, 0.15);
   min-height: 120px;

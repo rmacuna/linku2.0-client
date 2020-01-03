@@ -71,7 +71,7 @@ export const ShowProfessorButton = styled.button`
   border: none;
 
   width: 100%;
-  padding: 18px 12px;
+  padding: 16px 12px;
   color: #000;
   background-color: #eee3ab;
 
@@ -81,7 +81,7 @@ export const ShowProfessorButton = styled.button`
   transition: all 0.3s ease-out;
   font-weight: 600;
 
-  font-size: 12px;
+  font-size: 14px;
 
   cursor: pointer;
 
