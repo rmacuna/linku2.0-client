@@ -10,12 +10,19 @@ import 'jquery-ui/ui/core'
 import 'jquery-ui/ui/widgets/selectable'
 
 const Table = () => {
-  // const [day, setday] = useState(initialState)
-
   useEffect(() => {
     // $('#selectable').addClass('ola')
     $('#selectable').selectable({
       filter: 'td.ui-widget',
+      selected: function(event, ui) {
+        // Logic of conflix matrix goes here.
+      },
+    })
+
+    $('#clean').on('click', () => {
+      $('.ui-selected').map((index, elem) => {
+        elem.classList.remove('ui-selected')
+      })
     })
   }, [])
   const renderTableHeader = () => {
