@@ -101,8 +101,8 @@ const SubjectDetails = props => {
                   {professor.length > 1 ? (
                     <ProfessorTitle>{professor.split(',').slice(0, 2)}</ProfessorTitle>
                   ) : (
-                    <ProfessorTitle>{professor}</ProfessorTitle>
-                  )}
+                      <ProfessorTitle>{professor}</ProfessorTitle>
+                    )}
 
                   <Row className="pd-bottom-10">
                     <Col xs={12} sm={12} md={12} lg={12}>
@@ -153,11 +153,11 @@ const SubjectDetails = props => {
 
 SubjectDetails.propTypes = {
   subjectName: PropTypes.string,
-  groups: PropTypes.shape({
+  groups: PropTypes.arrayOf(PropTypes.shape({
     nrc: PropTypes.string.isRequired,
     group: PropTypes.string.isRequired,
     professors: PropTypes.arrayOf(PropTypes.string),
-  }),
+  })),
 }
 
 export default SubjectDetails

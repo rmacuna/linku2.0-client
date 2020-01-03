@@ -11,16 +11,16 @@ import {
 import logo from '../../assets/logo.png'
 import { Row, Col } from 'react-flexbox-grid'
 import PropTypes from 'prop-types'
-import Subject from '../Subject/Subject'
+import Group from '../Group/Group'
 
-import SubjectsContext from '../../context/subjects-context'
+import SchedulesContext from '../../context/schedules-context'
 
 function Sidenav(props) {
   const { show, toggleLeftSide, toggleModalHandler } = props
 
   return (
-    <SubjectsContext.Consumer>
-      {({ subjects }) => (
+    <SchedulesContext.Consumer>
+      {({ currentSchedule }) => (
         <LeftNavigation active={show}>
           <RetriveButton active={show} onClick={toggleLeftSide}>
             <i className="fas fa-angle-right"></i>
@@ -44,17 +44,26 @@ function Sidenav(props) {
             </Row>
           </Hidder>
           <ScrollArea active={show}>
-            {subjects.map(({ mat, name, departmentName }) => (
-              <Row key={mat}>
-                <Col xs={12} sm={12} md={12} lg={12}>
-                  <Subject mat={mat} name={name} departmentName={departmentName} />
-                </Col>
-              </Row>
-            ))}
+            {currentSchedule.groups.map(({
+              subject,
+              nrc,
+              group,
+              quota,
+            }) => (
+                <Row key={nrc}>
+                  <Col xs={12} sm={12} md={12} lg={12}>
+                    <Group
+                      nrc={`${nrc} - ${group}`}
+                      name={subject.name}
+                      quota={quota}
+                    />
+                  </Col>
+                </Row>
+              ))}
           </ScrollArea>
         </LeftNavigation>
       )}
-    </SubjectsContext.Consumer>
+    </SchedulesContext.Consumer>
   )
 }
 

@@ -25,6 +25,10 @@ export const GET_SUBJECT_GROUPS = gql`
       nrc
       group
       professors
+      subject {
+        id
+        name
+      }
       schedule {
         time {
           start
