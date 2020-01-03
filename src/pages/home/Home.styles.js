@@ -42,6 +42,8 @@ export const ModalHeaderContainer = styled.section`
 `
 export const ModalBodyContainer = styled.section`
   padding: 44px 43px;
+  display: flex;
+  justify-content: flex-start;
   background-color: rgba(14, 65, 136, 4%);
   min-height: 500px;
   overflow-y: hidden;
