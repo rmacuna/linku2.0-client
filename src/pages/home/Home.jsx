@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, createRef } from 'react'
 import { Row, Col } from 'react-flexbox-grid'
 
 import {
@@ -27,6 +27,7 @@ import SubjectsContext from '../../context/subjects-context'
 
 function Home() {
   const [localSubjects, setLocalSubjects] = useState([])
+  const modalRef = createRef()
 
   const [modal, setModal] = useState({
     open: false,
@@ -37,9 +38,12 @@ function Home() {
   })
 
   const toggleModalHandler = () => {
-    setModal({
-      open: !modal.open,
-    })
+    if (modal.open === true) modalRef.current.focus()
+    setTimeout(() => {
+      setModal({
+        open: !modal.open,
+      })
+    }, 50)
   }
 
   const toggleLeftSide = () => {
@@ -76,7 +80,7 @@ function Home() {
           <>
             <GlobalStyle />
             <Modal onClose={toggleModalHandler} show={modal.open}>
-              <ModalHeaderContainer>
+              <ModalHeaderContainer ref={modalRef}>
                 <Row>
                   <Col xs={12} sm={12} md={12} lg={12}>
                     <section>
