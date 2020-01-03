@@ -1,5 +1,11 @@
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes, createGlobalStyle } from 'styled-components'
 import Checkbox from '../../../components/Checkbox/Checkbox'
+
+export const GlobalStyles = createGlobalStyle`
+  .pd-bottom-10 {
+    padding-bottom: 15px;
+  }
+`
 
 const fadeInUp = keyframes`
   0%{
@@ -24,7 +30,7 @@ export const DetailsCard = styled.section`
   width: 100%;
   min-height: 80px;
   height: auto;
-  max-height: 450px;
+  max-height: 550px;
   overflow-y: hidden;
   background-color: #fff;
   border-radius: 6px;
@@ -86,6 +92,8 @@ export const Group = styled.div`
   margin-bottom: 5px;
   height: auto;
 
+  transition: all 0.3s ease-out;
+
   ${Checkbox} {
     flex-basis: 25%;
   }
@@ -109,4 +117,22 @@ export const ActionLink = styled.button`
 export const ActionsRow = styled.div`
   display: flex;
   flex-direction: column;
+`
+
+export const SubjectGroupDetail = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-left: 1px;
+  margin: 2px;
+  border-bottom: 1px solid rgba(8, 35, 75, 0.1);
+  p {
+    font-size: 12px;
+    font-weight: 600;
+    margin: 4px;
+    color: #08234b;
+  }
+  p.day {
+    font-weight: 700;
+    color: #000;
+  }
 `

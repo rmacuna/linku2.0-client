@@ -27,8 +27,8 @@ export const StyledCheckbox = styled.div`
 export const Label = styled.label`
   position: relative;
   display: inline-block;
-  width: 25px;
-  height: 25px;
+  width: ${props => (props.small ? '15px' : '25px')};
+  height: ${props => (props.small ? '15px' : '25px')};
   background: none;
   border: 2px solid #aaaaaa;
   border-radius: 2px;
@@ -41,8 +41,8 @@ export const InputCheckbox = styled.input`
   visibility: visible;
   opacity: 0;
   cursor: pointer;
-  width: 25px;
-  height: 25px;
+  width: ${props => (props.small ? '15px' : '25px')};
+  height: ${props => (props.small ? '15px' : '25px')};
   z-index: 2;
 
   &:checked + label {
@@ -53,10 +53,10 @@ export const InputCheckbox = styled.input`
   &:checked + label:after {
     content: '\f00d';
     font-family: FontAwesome;
-    font-size: 18px;
-    line-height: 23px;
-    width: 25px;
-    height: 25px;
+    font-size: ${props => (props.small ? '15px' : '18px')};
+    line-height: ${props => (props.small ? '13px' : '23px')};
+    width: ${props => (props.small ? '15px' : '25px')};
+    height: ${props => (props.small ? '15px' : '25px')};
     text-align: center;
     background: #da8686;
     position: absolute;
