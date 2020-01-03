@@ -1,4 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+
 import Select from 'react-select'
 import { useQuery } from '@apollo/react-hooks'
 import { createGlobalStyle } from 'styled-components'
@@ -14,15 +16,10 @@ const GlobalStyles = createGlobalStyle`
 `
 
 function SearchSelect() {
+  let delayTimer
   const { loading, error, data, fetchMore } = useQuery(GET_SUBJECTS_QUERY)
   const getSubjectsQuery = useQuery(GET_SUBJECT_GROUPS, { skip: true })
-  let delayTimer
-
-  useEffect(() => {
-    if (delayTimer) {
-      clearTimeout(delayTimer)
-    }
-  }, [])
+  const selectRef = useRef()
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error :(</p>
@@ -36,7 +33,7 @@ function SearchSelect() {
 
   const search = val => {
     delayTimer = setTimeout(() => {
-      if (fetchMore) {
+      if (document.activeElement === ReactDOM.findDOMNode(selectRef.current)) {
         fetchMore({
           variables: {
             search: val,
@@ -55,6 +52,7 @@ function SearchSelect() {
         <>
           <GlobalStyles />
           <Select
+            ref={selectRef}
             className="link2-select"
             placeholder="Escribe la materia a buscar"
             options={options}
@@ -93,4 +91,5 @@ function SearchSelect() {
     </SubjectsContext.Consumer>
   )
 }
+
 export default SearchSelect
