@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Row, Col } from 'react-flexbox-grid'
+import { SelectableGroup } from 'react-selectable-fast'
 
 import {
   ModalSubtitle,
@@ -47,6 +48,12 @@ function Home() {
       active: !leftSide.active,
     })
   }
+
+  const handleSelecting = () => {}
+
+  const handleSelectionClear = () => {}
+
+  const handleSelectionFinish = () => {}
 
   return (
     <SubjectsContext.Provider

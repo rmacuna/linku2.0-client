@@ -1,6 +1,12 @@
 import { createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
+
+
+ #selectable .ui-selecting { background: #FFEDED; }
+  #selectable .ui-selected { background: #DA8686; color: white; }
+  #selectable { list-style-type: none; margin: 0; padding: 0; width: 450px; }
+  #selectable li { margin: 3px; padding: 1px; float: left; width: 100px; height: 80px; font-size: 4em; text-align: center; }
     table {
       width: 100%;
         border-spacing: 0;
