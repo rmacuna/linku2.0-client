@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Row, Col } from 'react-flexbox-grid'
-import { SelectableGroup } from 'react-selectable-fast'
 
 import {
   ModalSubtitle,
@@ -26,6 +25,13 @@ import Table from '../../components/Table/Table'
 
 import SubjectsContext from '../../context/subjects-context'
 
+import $ from 'jquery'
+import 'jquery-ui/themes/base/core.css'
+import 'jquery-ui/themes/base/theme.css'
+import 'jquery-ui/themes/base/selectable.css'
+import 'jquery-ui/ui/core'
+import 'jquery-ui/ui/widgets/selectable'
+
 function Home() {
   const [localSubjects, setLocalSubjects] = useState([])
 
@@ -49,11 +55,9 @@ function Home() {
     })
   }
 
-  const handleSelecting = () => {}
-
-  const handleSelectionClear = () => {}
-
-  const handleSelectionFinish = () => {}
+  const handleCleanFilter = () => {
+    $()
+  }
 
   return (
     <SubjectsContext.Provider
@@ -143,7 +147,9 @@ function Home() {
                         <Col xs={8} sm={8} md={8} lg={8}>
                           <Row end="xs">
                             <Col xs={12} sm={12} md={12} lg={12}>
-                              <LinkuButton color="#DA8686">Limpiar filtro</LinkuButton>
+                              <LinkuButton id="clean" onClick={handleCleanFilter} color="#DA8686">
+                                Limpiar filtro
+                              </LinkuButton>
                               <LinkuButton color="#114188">
                                 <i className="fas fa-save"></i>
                                 Guardar como pdf
