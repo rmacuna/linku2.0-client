@@ -1,10 +1,23 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { GlobalStyle } from './Table.styles'
 import { dataHeaders, dummyData } from './constants'
+// import $ from 'jquery'
+import $ from 'jquery'
+import 'jquery-ui/themes/base/core.css'
+import 'jquery-ui/themes/base/theme.css'
+import 'jquery-ui/themes/base/selectable.css'
+import 'jquery-ui/ui/core'
+import 'jquery-ui/ui/widgets/selectable'
 
-const Table = ({ columns, data }) => {
+const Table = () => {
   // const [day, setday] = useState(initialState)
 
+  useEffect(() => {
+    // $('#selectable').addClass('ola')
+    $('#selectable').selectable({
+      filter: 'td.ui-widget',
+    })
+  }, [])
   const renderTableHeader = () => {
     let header = Object.values(dataHeaders.headers)
     console.log(header)
@@ -19,12 +32,12 @@ const Table = ({ columns, data }) => {
       return (
         <tr key={id}>
           <td>{hour}</td>
-          <td>{name}</td>
-          <td>{name}</td>
-          <td>{name}</td>
-          <td>{name}</td>
-          <td>{name}</td>
-          <td>{name}</td>
+          <td className="ui-widget">{name}</td>
+          <td className="ui-widget">{name}</td>
+          <td className="ui-widget">{name}</td>
+          <td className="ui-widget">{name}</td>
+          <td className="ui-widget">{name}</td>
+          <td className="ui-widget">{name}</td>
         </tr>
       )
     })
@@ -33,8 +46,8 @@ const Table = ({ columns, data }) => {
   return (
     <>
       <GlobalStyle />
-      <table id="students">
-        <tbody>
+      <table>
+        <tbody id="selectable">
           <tr>{renderTableHeader()}</tr>
           {renderTableData()}
         </tbody>
