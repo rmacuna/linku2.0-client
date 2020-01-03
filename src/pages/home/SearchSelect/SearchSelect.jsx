@@ -1,5 +1,4 @@
-import React, { useRef } from 'react'
-import ReactDOM from 'react-dom'
+import React, { useEffect, useState } from 'react'
 
 import Select from 'react-select'
 import { useQuery } from '@apollo/react-hooks'
@@ -19,7 +18,13 @@ function SearchSelect() {
   let delayTimer
   const { loading, error, data, fetchMore } = useQuery(GET_SUBJECTS_QUERY)
   const getSubjectsQuery = useQuery(GET_SUBJECT_GROUPS, { skip: true })
-  const selectRef = useRef()
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(delayTimer)
+      console.log('timeout removed')
+    }
+  }, [])
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error :(</p>
@@ -33,16 +38,15 @@ function SearchSelect() {
 
   const search = val => {
     delayTimer = setTimeout(() => {
-      if (document.activeElement === ReactDOM.findDOMNode(selectRef.current)) {
-        fetchMore({
-          variables: {
-            search: val,
-          },
-          updateQuery: (prev, { fetchMoreResult }) => {
-            return fetchMoreResult
-          },
-        })
-      }
+      // if (document.activeElement.id !===)
+      fetchMore({
+        variables: {
+          search: val,
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          return fetchMoreResult
+        },
+      })
     }, 700)
   }
 
@@ -52,7 +56,6 @@ function SearchSelect() {
         <>
           <GlobalStyles />
           <Select
-            ref={selectRef}
             className="link2-select"
             placeholder="Escribe la materia a buscar"
             options={options}
@@ -83,6 +86,7 @@ function SearchSelect() {
                 }
               }
             }}
+            onBlur={() => clearTimeout(delayTimer)}
             isClearable
             isSearchable
           />
