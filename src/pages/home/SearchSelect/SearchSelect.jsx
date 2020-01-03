@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import debounce from 'debounce-promise'
 
-import Select from 'react-select'
+import AsyncSelect from 'react-select/async';
 import { useQuery } from '@apollo/react-hooks'
 import { createGlobalStyle } from 'styled-components'
 
@@ -15,56 +16,37 @@ const GlobalStyles = createGlobalStyle`
 `
 
 function SearchSelect() {
-  let delayTimer
   const { loading, error, data, fetchMore } = useQuery(GET_SUBJECTS_QUERY)
   const getSubjectsQuery = useQuery(GET_SUBJECT_GROUPS, { skip: true })
-
-  useEffect(() => {
-    return () => {
-      clearTimeout(delayTimer)
-      console.log('timeout removed')
-    }
-  }, [])
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error :(</p>
 
   const { docs } = data.getSubjects
 
-  const options = docs.map(subject => ({
+  const parseOptions = (docs) => docs.map(subject => ({
     label: `${subject.name} (${subject.mat})`,
     value: subject,
   }))
-
-  const search = val => {
-    delayTimer = setTimeout(() => {
-      // if (document.activeElement.id !===)
-      fetchMore({
-        variables: {
-          search: val,
-        },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          return fetchMoreResult
-        },
-      })
-    }, 700)
-  }
 
   return (
     <SubjectsContext.Consumer>
       {({ addSubject }) => (
         <>
           <GlobalStyles />
-          <Select
+          <AsyncSelect
             className="link2-select"
             placeholder="Escribe la materia a buscar"
-            options={options}
-            onInputChange={val => {
-              clearTimeout(delayTimer)
-              if (val.length > 3 || val.length === 0) {
-                search(val)
-              }
-            }}
+            isClearable
+            isSearchable
+            cacheOptions
+            defaultOptions={parseOptions(docs)}
+            loadOptions={debounce(inputValue => fetchMore({
+              variables: {
+                search: inputValue,
+              },
+              updateQuery: (prev, { fetchMoreResult }) => fetchMoreResult,
+            }).then(({ data }) => parseOptions(data.getSubjects.docs)), 700)}
             onChange={async item => {
               if (item && item.value) {
                 const { id, name, departmentName, mat } = item.value
@@ -86,9 +68,6 @@ function SearchSelect() {
                 }
               }
             }}
-            onBlur={() => clearTimeout(delayTimer)}
-            isClearable
-            isSearchable
           />
         </>
       )}
