@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   DetailsCard,
   SubjectTitle,
@@ -23,19 +23,34 @@ import { Row, Col } from 'react-flexbox-grid'
 import { dayInterpreter } from './utils'
 
 const SubjectDetails = props => {
-  const { subjectId, subjectName, groups } = props
+  const { subjectId, subjectName, groups, subjectsCount, nrc } = props
 
   const [showProfessors, setshowProfessors] = useState(false)
 
-  // const [groupPopup, SetGroupPopup] = useState({
-  //   active: false,
-  //   popUp: {
-  //     current: '',
-  //     data: {
+  const [groupPopup, SetGroupPopup] = useState({
+    actives: [],
+  })
 
-  //     }
-  //   }
-  // })
+  useEffect(() => {
+    SetGroupPopup({
+      actives: new Array(subjectsCount).fill({
+        id: nrc,
+        toggledGroups: false,
+        togglesProfessors: false,
+      }),
+    })
+  }, [])
+
+  console.log(groupPopup, 'group')
+  const toggleShowMenu = nrc => {
+    // let currentGroup = groupPopup.actives;
+    // const elementToToggle = currentGroup.filter((element) => {
+    //   return element.target === id
+    // })
+    // SetGroupPopup({
+    //   actives = [...actives, elementToToggle[0].];
+    // })
+  }
 
   const showProfessorsHandler = () => {
     setshowProfessors(!showProfessors)
@@ -53,6 +68,9 @@ const SubjectDetails = props => {
     }
   }
 
+  // SetGroupPopup({
+  //   actives: new Array().fill(false)
+  // })
   const parsedGroups = Array.from(hashMap).map(([professor, groups]) => ({
     professor,
     groups,
@@ -88,7 +106,9 @@ const SubjectDetails = props => {
 
                   <Row className="pd-bottom-10">
                     <Col xs={12} sm={12} md={12} lg={12}>
-                      <ActionLink color="#0A397E">Ver grupos</ActionLink>
+                      <ActionLink onClick={toggleShowMenu(index)} color="#0A397E">
+                        Ver grupos
+                      </ActionLink>
                       {/* {professors.length > 2 ? (
                         <ActionLink onClick={showProfessorsHandler} color="#3D846A">
                           {showProfessors ? 'Ocultar profesores' : 'Ver profesores'}

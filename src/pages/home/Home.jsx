@@ -114,6 +114,7 @@ function Home() {
                         nrc={groups.nrc}
                         subjectName={name}
                         groups={groups}
+                        subjectsCount={subjects.length}
                       />
                     </Col>
                   ))}
