@@ -13,8 +13,8 @@ import 'jquery-ui/themes/base/selectable.css'
 import 'jquery-ui/ui/core'
 import 'jquery-ui/ui/widgets/selectable'
 
-const Table = (props) => {
-  const { onStopSelecting, onClean } = props
+const Table = props => {
+  const { onStopSelecting } = props
 
   useEffect(() => {
     $('#selectable').selectable({
@@ -33,16 +33,17 @@ const Table = (props) => {
           }
         }
         onStopSelecting(newMatrix)
-      }
+      },
     })
 
-    $('#clean').on('click', () => {
-      $('.ui-selected').map((index, elem) => {
-        elem.classList.remove('ui-selected')
-      })
-      onClean()
-    })
-  }, [onStopSelecting, onClean])
+    // $('#clean').on('click', () => {
+    //   $('.ui-selected').map((index, elem) => {
+    //     elem.classList.remove('ui-selected')
+    //   })
+    //   console.log(onClean)
+    //   onClean()
+    // })
+  }, [onStopSelecting])
 
   const renderTableHeader = () => {
     let header = Object.values(dataHeaders.headers)
@@ -58,12 +59,14 @@ const Table = (props) => {
         return (
           <tr key={id}>
             <td>{hour}</td>
-            {(new Array(6).fill(null).map((_, pos) => (
+            {new Array(6).fill(null).map((_, pos) => (
               <td key={pos} className="ui-widget">
-                {(currentSchedule.matrix[pos][index] === null
-                  || currentSchedule.matrix[pos][index] === 'blocked') ? '' : currentSchedule.matrix[pos][index]}
+                {currentSchedule.matrix[pos][index] === null ||
+                currentSchedule.matrix[pos][index] === 'blocked'
+                  ? ''
+                  : currentSchedule.matrix[pos][index]}
               </td>
-            )))}
+            ))}
           </tr>
         )
       })
@@ -73,7 +76,9 @@ const Table = (props) => {
         return (
           <tr key={id}>
             <td>{hour}</td>
-            {(new Array(6).fill(null).map((_, pos) => <td key={pos} className="ui-widget" />))}
+            {new Array(6).fill(null).map((_, pos) => (
+              <td key={pos} className="ui-widget" />
+            ))}
           </tr>
         )
       })
@@ -99,7 +104,6 @@ const Table = (props) => {
 
 Table.propTypes = {
   onStopSelecting: PropTypes.func.isRequired,
-  onClean: PropTypes.func.isRequired,
 }
 
 export default Table
