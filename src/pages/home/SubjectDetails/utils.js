@@ -3,27 +3,27 @@ export const dayInterpreter = day => {
 
   switch (day) {
     case 'M':
-      interpretedDay = 'Monday'
+      interpretedDay = 'Lunes'
       break
 
     case 'T':
-      interpretedDay = 'Tuesday'
+      interpretedDay = 'Martes'
       break
 
     case 'W':
-      interpretedDay = 'Wednesday'
+      interpretedDay = 'Miércoles'
       break
 
     case 'R':
-      interpretedDay = 'Thursday'
+      interpretedDay = 'Jueves'
       break
 
     case 'F':
-      interpretedDay = 'Friday'
+      interpretedDay = 'Viernes'
       break
 
     case 'S':
-      interpretedDay = 'Saturday'
+      interpretedDay = 'Sábado'
       break
     default:
       return 'nn'

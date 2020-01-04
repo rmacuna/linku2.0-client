@@ -42,7 +42,7 @@ function Home() {
     groups: [],
   })
 
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(0)
 
   const [modal, setModal] = useState({
     open: false,
@@ -62,16 +62,6 @@ function Home() {
     setLeftSide({
       active: !leftSide.active,
     })
-  }
-
-  const moveFowardPage = () => {
-    setCurrentPage(currentPage + 1)
-  }
-
-  const moveBackwardPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1)
-    }
   }
 
   const newMatrix = () => {
@@ -197,7 +187,7 @@ function Home() {
         value={{
           schedules: localSchedules,
           currentSchedule: localCurrentSchedule,
-          setCurrentSchedule: index => setLocalCurrentSchedule(localSubjects[index]),
+          setCurrentSchedule: index => setLocalCurrentSchedule(localSchedules[index]),
           // setSchedules: (schedules) => setLocalSchedules(schedules),
           // setCurrentGroups: groups => setLocalCurrentGroups(groups),
         }}
@@ -265,16 +255,15 @@ function Home() {
                             <Row middle="xs" start="xs">
                               <Col xs={2} sm={2} md={2} lg={2}>
                                 <Paginator
-                                  moveFoward={moveFowardPage}
-                                  moveBackward={moveBackwardPage}
-                                  value={currentPage}
-                                  setCurrent={setCurrentSchedule}
+                                  currentPage={currentPage}
+                                  setCurrentPage={setCurrentPage}
+                                  setCurrentSchedule={setCurrentSchedule}
                                   limit={schedules.length}
                                 />
                               </Col>
                               <Col xs={2} sm={2} md={2} lg={2}>
                                 <Indicator>
-                                  <p>{`${currentPage} de ${schedules.length}`}</p>
+                                  <p>{`${schedules.length ? currentPage + 1 : currentPage} de ${schedules.length}`}</p>
                                 </Indicator>
                               </Col>
                               <Col xs={8} sm={8} md={8} lg={8}>
