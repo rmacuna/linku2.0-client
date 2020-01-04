@@ -23,7 +23,7 @@ import { Row, Col } from 'react-flexbox-grid'
 import { dayInterpreter } from './utils'
 
 const SubjectDetails = props => {
-  const { subjectId, subjectName, groups, subjectsCount, nrc } = props
+  const { id, subjectName, groups, subjectsCount, nrc } = props
 
   const [showProfessors, setshowProfessors] = useState(false)
 
@@ -41,7 +41,6 @@ const SubjectDetails = props => {
     })
   }, [])
 
-  console.log(groupPopup, 'group')
   const toggleShowMenu = nrc => {
     // let currentGroup = groupPopup.actives;
     // const elementToToggle = currentGroup.filter((element) => {
@@ -56,7 +55,6 @@ const SubjectDetails = props => {
     setshowProfessors(!showProfessors)
   }
 
-  console.log('subjectDetails groups', groups)
   const hashMap = new Map()
 
   for (let group of groups) {
@@ -76,25 +74,26 @@ const SubjectDetails = props => {
     groups,
   }))
 
-  console.log('parsedGroups', parsedGroups)
+  console.log('GROUPS =>', groups, 'parsedGroups =>', parsedGroups)
 
   return (
     <SubjectsContext.Consumer>
-      {({ updateGroupStatus }) => (
+      {({ removeSubject, updateGroupsStatus }) => (
         <DetailsCard>
           <GlobalStyles />
           <DetailsHeader>
-            <CloseIcon className="fas fa-times" />
+            <CloseIcon
+              className="fas fa-times"
+              onClick={() => removeSubject(id)}
+            />
             <SubjectTitle>{subjectName}</SubjectTitle>
           </DetailsHeader>
           <DetailsBody>
             {parsedGroups.map(({ groups, professor }, index) => (
               <Group key={index}>
                 <BlockCheckbox
-                  // checked={blocked}
-                  onChange={({ target }) => {
-                    updateGroupStatus(subjectId, groups[index].id, target.checked)
-                  }}
+                  checked={groups.every((elem) => elem.blocked)}
+                  onChange={({ target }) => updateGroupsStatus(groups, target.checked)}
                 />
                 {/* <ProfessorTitle>{`${nrc} - ${group}`}</ProfessorTitle> */}
                 <ActionsRow>
@@ -121,7 +120,11 @@ const SubjectDetails = props => {
                       {groups.map((elem, index) => (
                         <Row key={index} start="xs" middle="xs">
                           <Col xs={2} sm={2} md={2} lg={2}>
-                            <BlockCheckbox small={true} />
+                            <BlockCheckbox
+                              small={true}
+                              checked={elem.blocked}
+                              onChange={({ target }) => updateGroupsStatus([elem], target.checked)}
+                            />
                           </Col>
                           <Col xs={10} sm={10} md={10} lg={10}>
                             <SubjectGroupDetail>
@@ -152,6 +155,7 @@ const SubjectDetails = props => {
 }
 
 SubjectDetails.propTypes = {
+  id: PropTypes.string.isRequired,
   subjectName: PropTypes.string,
   groups: PropTypes.arrayOf(PropTypes.shape({
     nrc: PropTypes.string.isRequired,

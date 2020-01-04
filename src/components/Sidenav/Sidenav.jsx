@@ -14,6 +14,7 @@ import PropTypes from 'prop-types'
 import Group from '../Group/Group'
 
 import SchedulesContext from '../../context/schedules-context'
+import SubjectsContext from '../../context/subjects-context'
 
 function Sidenav(props) {
   const { show, toggleLeftSide, toggleModalHandler } = props
@@ -43,24 +44,29 @@ function Sidenav(props) {
               </Col>
             </Row>
           </Hidder>
-          <ScrollArea active={show}>
-            {currentSchedule.groups.map(({
-              subject,
-              nrc,
-              group,
-              quota,
-            }) => (
-                <Row key={nrc}>
-                  <Col xs={12} sm={12} md={12} lg={12}>
-                    <Group
-                      nrc={`${nrc} - ${group}`}
-                      name={subject.name}
-                      quota={quota}
-                    />
-                  </Col>
-                </Row>
-              ))}
-          </ScrollArea>
+          <SubjectsContext.Consumer>
+            {({ updateGroupsStatus }) => (
+              <ScrollArea active={show}>
+                {currentSchedule.groups.map(({
+                  subject,
+                  nrc,
+                  group,
+                  quota,
+                }, index) => (
+                    <Row key={nrc}>
+                      <Col xs={12} sm={12} md={12} lg={12}>
+                        <Group
+                          nrc={`${nrc} - ${group}`}
+                          name={subject.name}
+                          quota={quota.free}
+                          handleRemove={() => updateGroupsStatus([currentSchedule.groups[index]], true)}
+                        />
+                      </Col>
+                    </Row>
+                  ))}
+              </ScrollArea>
+            )}
+          </SubjectsContext.Consumer>
         </LeftNavigation>
       )}
     </SchedulesContext.Consumer>

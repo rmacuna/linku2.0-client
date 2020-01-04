@@ -34,14 +34,15 @@ import 'jquery-ui/themes/base/selectable.css'
 import 'jquery-ui/ui/core'
 import 'jquery-ui/ui/widgets/selectable'
 
+const DEFAULT_EMPTY_SCHEDULE = {
+  matrix: null,
+  groups: [],
+}
+
 function Home() {
   const [localSubjects, setLocalSubjects] = useState([])
   const [localSchedules, setLocalSchedules] = useState([])
-  const [localCurrentSchedule, setLocalCurrentSchedule] = useState({
-    matrix: null,
-    groups: [],
-  })
-
+  const [localCurrentSchedule, setLocalCurrentSchedule] = useState(DEFAULT_EMPTY_SCHEDULE)
   const [currentPage, setCurrentPage] = useState(0)
 
   const [modal, setModal] = useState({
@@ -91,43 +92,40 @@ function Home() {
     }
   }
 
-  const addToScheduleMatrix = (group, matrix, verify = false) => {
-    let days, daysCopy, start, end
+  const addToScheduleMatrix = (group, matrix) => {
+    let days, start, end
+    let newMatrix = [...matrix]
     for (let schedule of group.schedule) {
       days = schedule.day.split('')
-      if (verify) {
-        daysCopy = [...days]
-        while (daysCopy.length) {
-          start = Number(schedule.time.start.substring(0, 2))
-          end = Number(schedule.time.end.substring(0, 2))
-          for (let k = start; k <= end; k++) {
-            // console.log('matrix', matrix, parseDay(daysCopy[0]), k - 6)
-            if (matrix[parseDay(daysCopy[0])][k - 6]) return false
-          }
-          daysCopy.shift()
-        }
-      }
       while (days.length) {
         start = Number(schedule.time.start.substring(0, 2))
         end = Number(schedule.time.end.substring(0, 2))
         for (let k = start; k <= end; k++) {
+          if (matrix[parseDay(days[0])][k - 6]) {
+            return false
+          }
           matrix[parseDay(days[0])][k - 6] = group.subject.name
         }
         days.shift()
       }
-      // console.log('matrix', matrix)
-      return true
     }
+    matrix = newMatrix
+    return true
   }
 
   const generateSchedules = newLocalSubjects => {
-    console.log('newLocalSubjects', newLocalSubjects)
+    setLocalCurrentSchedule(DEFAULT_EMPTY_SCHEDULE)
+    setCurrentPage(0)
+
     let totalGroups = []
     const schedules = []
     for (let subject of newLocalSubjects) {
       totalGroups = totalGroups.concat(subject.groups)
     }
     for (let i = 0; i < totalGroups.length; i++) {
+      if (totalGroups[i].blocked) {
+        continue;
+      }
       let subjectsIdsUsed = []
       let current = schedules.length ? false : true
       let schedule = {
@@ -136,23 +134,28 @@ function Home() {
         groups: [],
       }
       // console.log('schedule.matrix', schedule.matrix)
-      addToScheduleMatrix(totalGroups[i], schedule.matrix)
+      if (!addToScheduleMatrix(totalGroups[i], schedule.matrix)) {
+        continue;
+      }
       schedule.groups.push(totalGroups[i])
       subjectsIdsUsed.push(totalGroups[i].subject.id)
 
       for (let j = i + 1; j < totalGroups.length; j++) {
-        if (
-          !subjectsIdsUsed.includes(totalGroups[j].subject.id) &&
-          addToScheduleMatrix(totalGroups[j], schedule.matrix, true)
-        ) {
+        if (totalGroups[j].blocked || subjectsIdsUsed.includes(totalGroups[j].subject.id)) {
+          continue;
+        }
+        if (addToScheduleMatrix(totalGroups[j], schedule.matrix)) {
           schedule.groups.push(totalGroups[j])
           subjectsIdsUsed.push(totalGroups[j].subject.id)
         }
       }
-      if (current) setLocalCurrentSchedule(schedule)
-      schedules.push(schedule)
+      if (schedule.groups.length === newLocalSubjects.length) {
+        if (current) setLocalCurrentSchedule(schedule)
+        schedules.push(schedule)
+      }
     }
-    console.log('schedules', schedules)
+    console.log('CONFLICT-MATRIX', 'newLocalSubjects', newLocalSubjects)
+    console.log('CONFLICT-MATRIX', 'schedules', schedules)
     setLocalSchedules(schedules)
   }
 
@@ -166,21 +169,15 @@ function Home() {
           generateSchedules(newLocalSubjects)
         },
         removeSubject: id => {
+          console.log('id', id, localSubjects)
           const newLocalSubjects = localSubjects.filter(subject => subject.id !== id)
           setLocalSubjects(newLocalSubjects)
           generateSchedules(newLocalSubjects)
         },
-        updateGroupStatus: (subjectId, groupId, blocked) => {
-          if (!localSubjects) return
-
-          const subject = localSubjects.find(subject => subject.id === subjectId)
-          if (!subject) return
-
-          const group = subject.groups.find(group => group.id === groupId)
-          if (!group) return
-
-          group.blocked = blocked
-        },
+        updateGroupsStatus: (groups, blocked) => {
+          groups.forEach((group) => group.blocked = blocked)
+          generateSchedules(localSubjects)
+        }
       }}
     >
       <SchedulesContext.Provider
@@ -219,7 +216,7 @@ function Home() {
                     {subjects.map(({ id, mat, name, departmentName, groups }) => (
                       <Col key={id} xs={12} sm={4} md={4} lg={4}>
                         <SubjectDetails
-                          subjectId={id}
+                          id={id}
                           nrc={groups.nrc}
                           subjectName={name}
                           groups={groups}
@@ -246,10 +243,9 @@ function Home() {
                       </Col>
                     </Row>
                   </SearchSection>
-
                   <MenuSection>
                     <SchedulesContext.Consumer>
-                      {({ currentSchedule, setCurrentSchedule, schedules }) => (
+                      {({ setCurrentSchedule, schedules }) => (
                         <Row>
                           <Col xs={12} sm={12} md={12} lg={12}>
                             <Row middle="xs" start="xs">
@@ -284,7 +280,6 @@ function Home() {
                         </Row>
                       )}
                     </SchedulesContext.Consumer>
-
                     <Row>
                       <Col xs={12} sm={12} md={12} lg={12}>
                         <Table />

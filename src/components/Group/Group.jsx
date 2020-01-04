@@ -7,16 +7,19 @@ const Group = props => {
     name,
     nrc,
     // professorName,
+    handleRemove,
     quota,
   } = props
-  console.log('name', name, 'nrc', nrc, 'quota', quota)
   return (
     <Card>
-      <CloseIcon className="far fa-times-circle"></CloseIcon>
+      <CloseIcon
+        className="far fa-times-circle"
+        onClick={handleRemove}
+      />
       <Nrc>{nrc}</Nrc>
       <SubjectName>{name}</SubjectName>
       {/* <ProfessorName>{professorName}</ProfessorName> */}
-      <Quotas>{quota.free} Cupos</Quotas>
+      <Quotas>{quota} Cupos</Quotas>
     </Card>
   )
 }
@@ -25,7 +28,8 @@ Group.propTypes = {
   subjectName: PropTypes.string,
   nrc: PropTypes.string,
   // professorName: PropTypes.string,
-  quota: PropTypes.string,
+  quota: PropTypes.number,
+  handleRemove: PropTypes.func.isRequired
 }
 
 export default Group

@@ -16,7 +16,7 @@ const Table = () => {
     // $('#selectable').addClass('ola')
     $('#selectable').selectable({
       filter: 'td.ui-widget',
-      selected: function(event, ui) {
+      selected: function (event, ui) {
         // Logic of conflix matrix goes here.
       },
     })
@@ -36,8 +36,6 @@ const Table = () => {
   }
 
   const renderTableData = currentSchedule => {
-    console.log('currentSchedule', currentSchedule)
-
     if (currentSchedule) {
       return tableRows.data.map((row, index) => {
         const { id, hour } = row

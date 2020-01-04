@@ -4,7 +4,7 @@ const SubjectsContext = React.createContext({
   subjects: [],
   addSubject: () => { },
   removeSubject: () => { },
-  updateGroupStatus: () => { }
+  updateGroupStatus: () => { },
 });
 
 export default SubjectsContext;

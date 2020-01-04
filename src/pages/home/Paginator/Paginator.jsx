@@ -19,7 +19,7 @@ function Paginator(props) {
       <ArrowLeft disabled={currentPage === 0 || limit === 0} onClick={() => handleMove(currentPage - 1)}>
         <i className="fas fa-angle-right"></i>
       </ArrowLeft>
-      <NumberContainer value={currentPage + 1} />
+      <NumberContainer value={currentPage + 1} readOnly />
       <ArrowRight disabled={currentPage === limit - 1 || limit === 0} onClick={() => handleMove(currentPage + 1)}>
         <i className="fas fa-angle-right"></i>
       </ArrowRight>
