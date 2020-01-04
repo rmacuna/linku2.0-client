@@ -41,7 +41,7 @@ function Home() {
   const [currentPage, setCurrentPage] = useState(0)
   const [localSubjects, setLocalSubjects] = useState([])
   const [localSchedules, setLocalSchedules] = useState([])
-  const [localMatrixTemplate, setLocalMatrixTemplate] = useState(null)
+  const [localMatrixTemplate, setLocalMatrixTemplate] = useState(generateEmptyMatrix())
   const [localCurrentSchedule, setLocalCurrentSchedule] = useState(DEFAULT_EMPTY_SCHEDULE)
 
   const [modal, setModal] = useState({
@@ -83,7 +83,7 @@ function Home() {
     }
   }
 
-  const addToScheduleMatrix = (group, matrix) => {
+  const addToScheduleMatrix = (group, matrix, matrixTemplate) => {
     let days, start, end
     let newMatrix = [...matrix]
     for (let schedule of group.schedule) {
@@ -92,7 +92,8 @@ function Home() {
         start = Number(schedule.time.start.substring(0, 2))
         end = Number(schedule.time.end.substring(0, 2))
         for (let hour = start; hour < end; hour++) {
-          if (newMatrix[parseDay(days[0])][hour - 6]) {
+          if (newMatrix[parseDay(days[0])][hour - 6]
+            || (matrixTemplate && matrixTemplate[parseDay(days[0])][hour - 6])) {
             return false
           }
           newMatrix[parseDay(days[0])][hour - 6] = group.subject.name
@@ -126,11 +127,11 @@ function Home() {
       let current = schedules.length ? false : true
       let schedule = {
         current,
-        matrix: generateEmptyMatrix(matrixTemplate),
+        matrix: generateEmptyMatrix(),
         groups: [],
       }
 
-      newMatrix = addToScheduleMatrix(totalGroups[i], schedule.matrix)
+      newMatrix = addToScheduleMatrix(totalGroups[i], schedule.matrix, matrixTemplate)
       if (!newMatrix) {
         continue
       }
@@ -142,7 +143,7 @@ function Home() {
         if (totalGroups[j].blocked || subjectsIdsUsed.includes(totalGroups[j].subject.id)) {
           continue
         }
-        newMatrix = addToScheduleMatrix(totalGroups[j], schedule.matrix)
+        newMatrix = addToScheduleMatrix(totalGroups[j], schedule.matrix, matrixTemplate)
         if (!newMatrix) {
           continue
         }
@@ -273,7 +274,7 @@ function Home() {
                                   <Indicator>
                                     <p>{`${schedules.length ? currentPage + 1 : currentPage} de ${
                                       schedules.length
-                                    }`}</p>
+                                      }`}</p>
                                   </Indicator>
                                 </Col>
                                 <Col xs={8} sm={8} md={8} lg={8}>
