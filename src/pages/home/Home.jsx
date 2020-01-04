@@ -180,9 +180,8 @@ function Home() {
           matrixTemplate: localMatrixTemplate,
           setCurrentSchedule: index => setLocalCurrentSchedule(localSchedules[index]),
           setMatrixTemplate: matrix => {
-            console.log('LOCAL SUBJECTS', localSubjects)
             setLocalMatrixTemplate(matrix)
-            generateSchedules()
+            generateSchedules(localSubjects, matrix)
           },
         }}
       >
@@ -278,10 +277,7 @@ function Home() {
                           <Row>
                             <Col xs={12} sm={12} md={12} lg={12}>
                               <Table
-                                onStopSelecting={(matrix) => {
-                                  console.log('statuses', localCurrentSchedule, currentPage)
-                                  setMatrixTemplate(matrix)
-                                }}
+                                onStopSelecting={(matrix) => setMatrixTemplate(matrix)}
                                 onClean={() => setMatrixTemplate(null)}
                               />
                             </Col>

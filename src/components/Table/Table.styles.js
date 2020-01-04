@@ -8,14 +8,14 @@ export const GlobalStyle = createGlobalStyle`
   #selectable { list-style-type: none; margin: 0; padding: 0; width: 450px; }
   #selectable li { margin: 3px; padding: 1px; float: left; width: 100px; height: 80px; font-size: 4em; text-align: center; }
     table {
-        /* table-layout: fixed; */
+        table-layout: fixed;
         width: 100%;
         border-spacing: 0;
         margin-top: 20px;
         border: 1px solid rgba(17, 65, 136, 10%);
         border-radius: 16px;
     tr {
-      font-size: 14px;
+      font-size: 12px;
       &:last-child {
         td {
           border-bottom: 0;

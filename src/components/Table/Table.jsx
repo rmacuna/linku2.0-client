@@ -17,7 +17,6 @@ const Table = (props) => {
   const { onStopSelecting, onClean } = props
 
   useEffect(() => {
-    // $('#selectable').addClass('ola')
     $('#selectable').selectable({
       filter: 'td.ui-widget',
       stop: (event, ui) => {
@@ -43,7 +42,7 @@ const Table = (props) => {
       })
       onClean()
     })
-  }, [])
+  }, [onStopSelecting, onClean])
 
   const renderTableHeader = () => {
     let header = Object.values(dataHeaders.headers)
