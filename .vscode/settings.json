@@ -1,0 +1,13 @@
+{
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "files.trimFinalNewlines": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.tabSize": 2,
+  "search.exclude": {
+    "**/build": true,
+    "**/node_modules": true
+  }
+}
