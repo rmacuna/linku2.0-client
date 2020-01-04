@@ -292,6 +292,17 @@ function Home() {
           )}
         </SubjectsContext.Consumer>
       </SchedulesContext.Provider>
+      <p style={{
+        position: 'fixed',
+        bottom: 5,
+        right: 5,
+        fontSize: 10,
+      }}>
+        Coded with ❤️ by
+        <a href="https://github.com/sjdonado" target="_blank" aria-label="Información sobre el autor" style={{ textDecoration: 'none' }}> Juan Rodriguez, </a>
+        <a href="https://github.com/rmacuna" target="_blank" aria-label="Información sobre el autor" style={{ textDecoration: 'none' }}>Roberto Acuña, </a>
+        <a href="https://github.com/kthr" target="_blank" aria-label="Información sobre el autor" style={{ textDecoration: 'none' }}>Wilson Tovar </a>
+      </p>
     </SubjectsContext.Provider>
   )
 }
