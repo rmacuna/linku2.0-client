@@ -3,7 +3,7 @@ import {
   Card,
   Nrc,
   SubjectName,
-  // ProfessorName,
+  ProfessorName,
   Quotas,
   CloseIcon
 } from './Group.styles'
@@ -13,19 +13,19 @@ const Group = props => {
   const {
     name,
     nrc,
-    // professorName,
-    handleRemove,
+    professorsNames,
+    // handleRemove,
     quota,
   } = props
   return (
     <Card>
-      <CloseIcon
+      {/* <CloseIcon
         className="far fa-times-circle"
         onClick={handleRemove}
-      />
+      /> */}
       <Nrc>{nrc}</Nrc>
       <SubjectName>{name}</SubjectName>
-      {/* <ProfessorName>{professorName}</ProfessorName> */}
+      <ProfessorName>{professorsNames}</ProfessorName>
       <Quotas>{quota} Cupos</Quotas>
     </Card>
   )
@@ -34,9 +34,9 @@ const Group = props => {
 Group.propTypes = {
   subjectName: PropTypes.string,
   nrc: PropTypes.string,
-  // professorName: PropTypes.string,
+  professorsNames: PropTypes.string,
   quota: PropTypes.number,
-  handleRemove: PropTypes.func.isRequired
+  // handleRemove: PropTypes.func.isRequired
 }
 
 export default Group

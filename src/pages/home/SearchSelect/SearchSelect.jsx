@@ -54,14 +54,35 @@ function SearchSelect() {
                   const { data } = await getSubjectsQuery.refetch({
                     subjectId: id,
                   })
+
+                  const groups = data.getSubjectGroups;
+
+                  // Reduce schedule to first week
+                  let daysSet, parsedSchedule
+                  for (let group of groups) {
+                    daysSet = new Set()
+                    parsedSchedule = []
+                    for (let schedule of group.schedule) {
+                      if (!daysSet.has(schedule.day)) {
+                        parsedSchedule.push(schedule)
+                        daysSet.add(schedule.day)
+                      }
+                      if (parsedSchedule.length === 6) {
+                        break;
+                      }
+                    }
+                    Object.assign(group, {
+                      blocked: false,
+                      schedule: parsedSchedule
+                    })
+                  }
+
                   addSubject({
                     id,
                     name,
                     departmentName,
                     mat,
-                    groups: data.getSubjectGroups.map((subject) => Object.assign(subject, {
-                      blocked: false,
-                    })),
+                    groups,
                   })
                 } catch (err) {
                   console.log('err', err)

@@ -74,8 +74,6 @@ const SubjectDetails = props => {
     groups,
   }))
 
-  console.log('GROUPS =>', groups, 'parsedGroups =>', parsedGroups)
-
   return (
     <SubjectsContext.Consumer>
       {({ removeSubject, updateGroupsStatus }) => (

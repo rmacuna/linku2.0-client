@@ -204,8 +204,7 @@ function Home() {
                     </Col>
                   </Row>
                   <Hint>
-                    Si no quieres bloquear el profesor pero si un grupo, puedes hacerlo dandole
-                    click a ver grupos y bloqueando el grupo específico que no quieres que te arme
+                    Si no quieres bloquear el profesor pero si un grupo dale click a ver grupos
                   </Hint>
                 </ModalHeaderContainer>
                 <ModalBodyContainer>

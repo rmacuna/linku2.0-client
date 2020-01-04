@@ -14,7 +14,6 @@ import PropTypes from 'prop-types'
 import Group from '../Group/Group'
 
 import SchedulesContext from '../../context/schedules-context'
-import SubjectsContext from '../../context/subjects-context'
 
 function Sidenav(props) {
   const { show, toggleLeftSide, toggleModalHandler } = props
@@ -44,29 +43,27 @@ function Sidenav(props) {
               </Col>
             </Row>
           </Hidder>
-          <SubjectsContext.Consumer>
-            {({ updateGroupsStatus }) => (
-              <ScrollArea active={show}>
-                {currentSchedule.groups.map(({
-                  subject,
-                  nrc,
-                  group,
-                  quota,
-                }, index) => (
-                    <Row key={nrc}>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <Group
-                          nrc={`${nrc} - ${group}`}
-                          name={subject.name}
-                          quota={quota.free}
-                          handleRemove={() => updateGroupsStatus([currentSchedule.groups[index]], true)}
-                        />
-                      </Col>
-                    </Row>
-                  ))}
-              </ScrollArea>
-            )}
-          </SubjectsContext.Consumer>
+          <ScrollArea active={show}>
+            {currentSchedule.groups.map(({
+              subject,
+              nrc,
+              group,
+              professors,
+              quota,
+            }, index) => (
+                <Row key={nrc}>
+                  <Col xs={12} sm={12} md={12} lg={12}>
+                    <Group
+                      nrc={`${nrc} - ${group}`}
+                      name={subject.name}
+                      quota={quota.free}
+                      professorsNames={professors.join(', ').substring(0, 40)}
+                    // handleRemove={() => updateGroupsStatus([currentSchedule.groups[index]], true)}
+                    />
+                  </Col>
+                </Row>
+              ))}
+          </ScrollArea>
         </LeftNavigation>
       )}
     </SchedulesContext.Consumer>
