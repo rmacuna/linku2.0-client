@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   DetailsCard,
   SubjectTitle,
@@ -12,6 +12,8 @@ import {
   SubjectGroupDetail,
   GlobalStyles,
   // Hint,
+  Professors,
+  DetailsFooter,
 } from './SubjectDetails.styles'
 
 import BlockCheckbox from '../../../components/Checkbox/Checkbox'
@@ -24,35 +26,20 @@ import { dayInterpreter } from './utils'
 
 const SubjectDetails = props => {
   const { index, subjectName, groups, subjectsCount, nrc } = props
+  // const [showProfessors, setshowProfessors] = useState(false)
+  const [toggleProfessors, setToggleProfessors] = useState(new Array(groups.length).fill(false))
+  const [toggleGroups, setToggleGroups] = useState(new Array(groups.length).fill(false))
 
-  const [showProfessors, setshowProfessors] = useState(false)
-
-  const [groupPopup, SetGroupPopup] = useState({
-    actives: [],
-  })
-
-  useEffect(() => {
-    SetGroupPopup({
-      actives: new Array(subjectsCount).fill({
-        id: nrc,
-        toggledGroups: false,
-        togglesProfessors: false,
-      }),
-    })
-  }, [])
-
-  const toggleShowMenu = nrc => {
-    // let currentGroup = groupPopup.actives;
-    // const elementToToggle = currentGroup.filter((element) => {
-    //   return element.target === id
-    // })
-    // SetGroupPopup({
-    //   actives = [...actives, elementToToggle[0].];
-    // })
+  const handleToggleGroups = (index) => {
+    const newToggleGroups = [...toggleGroups]
+    newToggleGroups[index] = !toggleGroups[index]
+    setToggleGroups(newToggleGroups)
   }
 
-  const showProfessorsHandler = () => {
-    setshowProfessors(!showProfessors)
+  const handleToggleProfessors = (index) => {
+    const newToggleProfessors = [...toggleProfessors]
+    newToggleProfessors[index] = !toggleProfessors[index]
+    setToggleProfessors(newToggleProfessors)
   }
 
   const hashMap = new Map()
@@ -66,9 +53,6 @@ const SubjectDetails = props => {
     }
   }
 
-  // SetGroupPopup({
-  //   actives: new Array().fill(false)
-  // })
   const parsedGroups = Array.from(hashMap).map(([professor, groups]) => ({
     professor,
     groups,
@@ -100,52 +84,61 @@ const SubjectDetails = props => {
                   ) : (
                       <ProfessorTitle>{professor}</ProfessorTitle>
                     )}
-
                   <Row className="pd-bottom-10">
                     <Col xs={12} sm={12} md={12} lg={12}>
-                      <ActionLink onClick={toggleShowMenu(index)} color="#0A397E">
-                        Ver grupos
+                      <ActionLink
+                        color="#0A397E"
+                        onClick={() => handleToggleGroups(index)}
+                      >
+                        {toggleGroups[index] ? 'Ocultar grupos' : 'Ver grupos'}
                       </ActionLink>
-                      {/* {professors.length > 2 ? (
-                        <ActionLink onClick={showProfessorsHandler} color="#3D846A">
-                          {showProfessors ? 'Ocultar profesores' : 'Ver profesores'}
+                      {professor.length > 2 ? (
+                        <ActionLink
+                          color="#3D846A"
+                          onClick={() => handleToggleProfessors(index)}
+                        >
+                          {toggleProfessors[index] ? 'Ocultar todos los profesores' : 'Ver todos los profesores'}
                         </ActionLink>
-                      ) : null} */}
+                      ) : null}
                     </Col>
                   </Row>
                   <Row>
-                    <Col xs={12} sm={12} md={12} lg={12}>
-                      {groups.map((elem, index) => (
-                        <Row key={index} start="xs" middle="xs">
-                          <Col xs={2} sm={2} md={2} lg={2}>
-                            <BlockCheckbox
-                              small={true}
-                              checked={elem.blocked}
-                              onChange={({ target }) => updateGroupsStatus([elem], target.checked)}
-                            />
-                          </Col>
-                          <Col xs={10} sm={10} md={10} lg={10}>
-                            <SubjectGroupDetail>
-                              {elem.schedule.map(({ time, day }, index) => (
-                                <React.Fragment key={index}>
-                                  <p className="day">{dayInterpreter(day)}</p>
-                                  <p>{`${time.start} - ${time.end} `} </p>
-                                </React.Fragment>
-                              ))}
-                            </SubjectGroupDetail>
-                          </Col>
-                        </Row>
-                      ))}
-                    </Col>
+                    {toggleGroups[index] && (
+                      <Col xs={12} sm={12} md={12} lg={12}>
+                        {groups.map((elem, index) => (
+                          <Row key={index} start="xs" middle="xs">
+                            <Col xs={2} sm={2} md={2} lg={2}>
+                              <BlockCheckbox
+                                small={true}
+                                checked={elem.blocked}
+                                onChange={({ target }) => updateGroupsStatus([elem], target.checked)}
+                              />
+                            </Col>
+                            <Col xs={10} sm={10} md={10} lg={10}>
+                              <SubjectGroupDetail>
+                                {/* <p className="day">Grupo: {elem.group}</p> */}
+                                {elem.schedule.map(({ time, day }, index) => (
+                                  <React.Fragment key={index}>
+                                    <p className="day">{dayInterpreter(day)}</p>
+                                    <p>{`${time.start} - ${time.end} `} </p>
+                                  </React.Fragment>
+                                ))}
+                              </SubjectGroupDetail>
+                            </Col>
+                          </Row>
+                        ))}
+                      </Col>
+                    )}
                   </Row>
+                  {toggleProfessors[index] && (
+                    <DetailsFooter>
+                      <Professors className="professors_sub">{professor}</Professors>
+                    </DetailsFooter>
+                  )}
                 </ActionsRow>
               </Group>
             ))}
           </DetailsBody>
-          {/* 
-          <DetailsFooter>
-            <Professors className="professors_sub">{professors.join(',')}</Professors>
-          </DetailsFooter> */}
         </DetailsCard>
       )}
     </SubjectsContext.Consumer>
