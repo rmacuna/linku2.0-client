@@ -1,5 +1,12 @@
 import React from 'react'
-import { Card, Nrc, SubjectName, ProfessorName, Quotas, CloseIcon } from './Group.styles'
+import {
+  Card,
+  Nrc,
+  SubjectName,
+  // ProfessorName,
+  Quotas,
+  CloseIcon
+} from './Group.styles'
 import PropTypes from 'prop-types'
 
 const Group = props => {

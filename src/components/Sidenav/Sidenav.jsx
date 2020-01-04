@@ -39,7 +39,7 @@ function Sidenav(props) {
               <Col xs={12} sm={12} md={12} lg={12}>
                 <LeftSideTitle>Arma tu horario</LeftSideTitle>
                 <ShowProfessorButton onClick={toggleModalHandler}>
-                  Establecer filtros{' '}
+                  Filtrar por grupos o profesores{' '}
                 </ShowProfessorButton>
               </Col>
             </Row>

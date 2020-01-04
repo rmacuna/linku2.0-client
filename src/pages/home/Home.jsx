@@ -24,15 +24,10 @@ import Paginator from './Paginator/Paginator'
 import SubjectDetails from './SubjectDetails/SubjectDetails'
 import Table from '../../components/Table/Table'
 
+import { generateEmptyMatrix } from '../../library/utils'
+
 import SubjectsContext from '../../context/subjects-context'
 import SchedulesContext from '../../context/schedules-context'
-
-import $ from 'jquery'
-import 'jquery-ui/themes/base/core.css'
-import 'jquery-ui/themes/base/theme.css'
-import 'jquery-ui/themes/base/selectable.css'
-import 'jquery-ui/ui/core'
-import 'jquery-ui/ui/widgets/selectable'
 
 const DEFAULT_EMPTY_SCHEDULE = {
   matrix: null,
@@ -40,10 +35,11 @@ const DEFAULT_EMPTY_SCHEDULE = {
 }
 
 function Home() {
+  const [currentPage, setCurrentPage] = useState(0)
   const [localSubjects, setLocalSubjects] = useState([])
   const [localSchedules, setLocalSchedules] = useState([])
+  const [localMatrixTemplate, setLocalMatrixTemplate] = useState(null)
   const [localCurrentSchedule, setLocalCurrentSchedule] = useState(DEFAULT_EMPTY_SCHEDULE)
-  const [currentPage, setCurrentPage] = useState(0)
 
   const [modal, setModal] = useState({
     open: false,
@@ -63,14 +59,6 @@ function Home() {
     setLeftSide({
       active: !leftSide.active,
     })
-  }
-
-  const newMatrix = () => {
-    const m = new Array(6)
-    for (let i = 0; i < 6; i++) {
-      m[i] = new Array(15).fill(null)
-    }
-    return m
   }
 
   const parseDay = day => {
@@ -100,43 +88,46 @@ function Home() {
       while (days.length) {
         start = Number(schedule.time.start.substring(0, 2))
         end = Number(schedule.time.end.substring(0, 2))
-        for (let k = start; k <= end; k++) {
-          if (matrix[parseDay(days[0])][k - 6]) {
+        for (let hour = start; hour < end; hour++) {
+          if (newMatrix[parseDay(days[0])][hour - 6]) {
             return false
           }
-          matrix[parseDay(days[0])][k - 6] = group.subject.name
+          newMatrix[parseDay(days[0])][hour - 6] = group.subject.name
         }
         days.shift()
       }
     }
-    matrix = newMatrix
-    return true
+    return newMatrix
   }
 
-  const generateSchedules = newLocalSubjects => {
+  const generateSchedules = (newLocalSubjects = localSubjects, matrixTemplate = localMatrixTemplate) => {
     setLocalCurrentSchedule(DEFAULT_EMPTY_SCHEDULE)
     setCurrentPage(0)
 
-    let totalGroups = []
+    let totalGroups = [], newMatrix
     const schedules = []
     for (let subject of newLocalSubjects) {
       totalGroups = totalGroups.concat(subject.groups)
     }
+
     for (let i = 0; i < totalGroups.length; i++) {
       if (totalGroups[i].blocked) {
         continue;
       }
+
       let subjectsIdsUsed = []
       let current = schedules.length ? false : true
       let schedule = {
         current,
-        matrix: newMatrix(),
+        matrix: generateEmptyMatrix(matrixTemplate),
         groups: [],
       }
-      // console.log('schedule.matrix', schedule.matrix)
-      if (!addToScheduleMatrix(totalGroups[i], schedule.matrix)) {
+
+      newMatrix = addToScheduleMatrix(totalGroups[i], schedule.matrix)
+      if (!newMatrix) {
         continue;
       }
+      schedule.matrix = newMatrix
       schedule.groups.push(totalGroups[i])
       subjectsIdsUsed.push(totalGroups[i].subject.id)
 
@@ -144,18 +135,22 @@ function Home() {
         if (totalGroups[j].blocked || subjectsIdsUsed.includes(totalGroups[j].subject.id)) {
           continue;
         }
-        if (addToScheduleMatrix(totalGroups[j], schedule.matrix)) {
-          schedule.groups.push(totalGroups[j])
-          subjectsIdsUsed.push(totalGroups[j].subject.id)
+        newMatrix = addToScheduleMatrix(totalGroups[j], schedule.matrix)
+        if (!newMatrix) {
+          continue;
         }
+        schedule.matrix = newMatrix
+        schedule.groups.push(totalGroups[j])
+        subjectsIdsUsed.push(totalGroups[j].subject.id)
       }
+
       if (schedule.groups.length === newLocalSubjects.length) {
         if (current) setLocalCurrentSchedule(schedule)
         schedules.push(schedule)
       }
     }
-    console.log('CONFLICT-MATRIX', 'newLocalSubjects', newLocalSubjects)
-    console.log('CONFLICT-MATRIX', 'schedules', schedules)
+    // console.log('CONFLICT-MATRIX', 'newLocalSubjects', newLocalSubjects)
+    // console.log('CONFLICT-MATRIX', 'schedules', schedules)
     setLocalSchedules(schedules)
   }
 
@@ -168,15 +163,13 @@ function Home() {
           setLocalSubjects(newLocalSubjects)
           generateSchedules(newLocalSubjects)
         },
-        removeSubject: id => {
-          console.log('id', id, localSubjects)
-          const newLocalSubjects = localSubjects.filter(subject => subject.id !== id)
-          setLocalSubjects(newLocalSubjects)
-          generateSchedules(newLocalSubjects)
+        removeSubject: index => {
+          localSubjects.splice(index, 1)
+          generateSchedules()
         },
         updateGroupsStatus: (groups, blocked) => {
-          groups.forEach((group) => group.blocked = blocked)
-          generateSchedules(localSubjects)
+          groups.forEach((group) => { group.blocked = blocked })
+          generateSchedules()
         }
       }}
     >
@@ -184,9 +177,13 @@ function Home() {
         value={{
           schedules: localSchedules,
           currentSchedule: localCurrentSchedule,
+          matrixTemplate: localMatrixTemplate,
           setCurrentSchedule: index => setLocalCurrentSchedule(localSchedules[index]),
-          // setSchedules: (schedules) => setLocalSchedules(schedules),
-          // setCurrentGroups: groups => setLocalCurrentGroups(groups),
+          setMatrixTemplate: matrix => {
+            console.log('LOCAL SUBJECTS', localSubjects)
+            setLocalMatrixTemplate(matrix)
+            generateSchedules()
+          },
         }}
       >
         <SubjectsContext.Consumer>
@@ -213,10 +210,10 @@ function Home() {
                 </ModalHeaderContainer>
                 <ModalBodyContainer>
                   <Row style={{ width: '100%' }}>
-                    {subjects.map(({ id, mat, name, departmentName, groups }) => (
-                      <Col key={id} xs={12} sm={4} md={4} lg={4}>
+                    {subjects.map(({ mat, name, departmentName, groups }, index) => (
+                      <Col key={index} xs={12} sm={4} md={4} lg={4}>
                         <SubjectDetails
-                          id={id}
+                          index={index}
                           nrc={groups.nrc}
                           subjectName={name}
                           groups={groups}
@@ -245,46 +242,54 @@ function Home() {
                   </SearchSection>
                   <MenuSection>
                     <SchedulesContext.Consumer>
-                      {({ setCurrentSchedule, schedules }) => (
-                        <Row>
-                          <Col xs={12} sm={12} md={12} lg={12}>
-                            <Row middle="xs" start="xs">
-                              <Col xs={2} sm={2} md={2} lg={2}>
-                                <Paginator
-                                  currentPage={currentPage}
-                                  setCurrentPage={setCurrentPage}
-                                  setCurrentSchedule={setCurrentSchedule}
-                                  limit={schedules.length}
-                                />
-                              </Col>
-                              <Col xs={2} sm={2} md={2} lg={2}>
-                                <Indicator>
-                                  <p>{`${schedules.length ? currentPage + 1 : currentPage} de ${schedules.length}`}</p>
-                                </Indicator>
-                              </Col>
-                              <Col xs={8} sm={8} md={8} lg={8}>
-                                <Row end="xs">
-                                  <Col xs={12} sm={12} md={12} lg={12}>
-                                    <LinkuButton id="clean" color="#DA8686">
-                                      Limpiar filtro
-                                    </LinkuButton>
-                                    <LinkuButton color="#114188">
-                                      <i className="fas fa-save"></i>
-                                      Guardar como pdf
-                                    </LinkuButton>
-                                  </Col>
-                                </Row>
-                              </Col>
-                            </Row>
-                          </Col>
-                        </Row>
+                      {({ schedules, setCurrentSchedule, setMatrixTemplate }) => (
+                        <React.Fragment key="schedule">
+                          <Row>
+                            <Col xs={12} sm={12} md={12} lg={12}>
+                              <Row middle="xs" start="xs">
+                                <Col xs={2} sm={2} md={2} lg={2}>
+                                  <Paginator
+                                    currentPage={currentPage}
+                                    setCurrentPage={setCurrentPage}
+                                    setCurrentSchedule={setCurrentSchedule}
+                                    limit={schedules.length}
+                                  />
+                                </Col>
+                                <Col xs={2} sm={2} md={2} lg={2}>
+                                  <Indicator>
+                                    <p>{`${schedules.length ? currentPage + 1 : currentPage} de ${schedules.length}`}</p>
+                                  </Indicator>
+                                </Col>
+                                <Col xs={8} sm={8} md={8} lg={8}>
+                                  <Row end="xs">
+                                    <Col xs={12} sm={12} md={12} lg={12}>
+                                      <LinkuButton id="clean" color="#DA8686">
+                                        Limpiar filtro por horas
+                                      </LinkuButton>
+                                      <LinkuButton color="#114188">
+                                        <i className="fas fa-save"></i>
+                                        Guardar como pdf
+                                      </LinkuButton>
+                                    </Col>
+                                  </Row>
+                                </Col>
+                              </Row>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col xs={12} sm={12} md={12} lg={12}>
+                              <Table
+                                onStopSelecting={(matrix) => {
+                                  console.log('statuses', localCurrentSchedule, currentPage)
+                                  setMatrixTemplate(matrix)
+                                }}
+                                onClean={() => setMatrixTemplate(null)}
+                              />
+                            </Col>
+                          </Row>
+                        </React.Fragment>
                       )}
                     </SchedulesContext.Consumer>
-                    <Row>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <Table />
-                      </Col>
-                    </Row>
                   </MenuSection>
                 </ContentArea>
               </FullWrapper>

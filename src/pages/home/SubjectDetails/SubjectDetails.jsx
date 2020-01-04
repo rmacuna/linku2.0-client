@@ -11,7 +11,7 @@ import {
   ActionsRow,
   SubjectGroupDetail,
   GlobalStyles,
-  Hint,
+  // Hint,
 } from './SubjectDetails.styles'
 
 import BlockCheckbox from '../../../components/Checkbox/Checkbox'
@@ -23,7 +23,7 @@ import { Row, Col } from 'react-flexbox-grid'
 import { dayInterpreter } from './utils'
 
 const SubjectDetails = props => {
-  const { id, subjectName, groups, subjectsCount, nrc } = props
+  const { index, subjectName, groups, subjectsCount, nrc } = props
 
   const [showProfessors, setshowProfessors] = useState(false)
 
@@ -84,7 +84,7 @@ const SubjectDetails = props => {
           <DetailsHeader>
             <CloseIcon
               className="fas fa-times"
-              onClick={() => removeSubject(id)}
+              onClick={() => removeSubject(index)}
             />
             <SubjectTitle>{subjectName}</SubjectTitle>
           </DetailsHeader>
@@ -155,7 +155,7 @@ const SubjectDetails = props => {
 }
 
 SubjectDetails.propTypes = {
-  id: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
   subjectName: PropTypes.string,
   groups: PropTypes.arrayOf(PropTypes.shape({
     nrc: PropTypes.string.isRequired,
