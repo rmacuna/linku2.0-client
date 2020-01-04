@@ -39,7 +39,7 @@ function Home() {
   const [localSchedules, setLocalSchedules] = useState([])
   const [localCurrentSchedule, setLocalCurrentSchedule] = useState({
     matrix: null,
-    groups: []
+    groups: [],
   })
 
   const [modal, setModal] = useState({
@@ -67,29 +67,29 @@ function Home() {
   }
 
   const newMatrix = () => {
-    const m = new Array(6);
+    const m = new Array(6)
     for (let i = 0; i < 6; i++) {
-      m[i] = new Array(15).fill(null);
+      m[i] = new Array(15).fill(null)
     }
-    return m;
+    return m
   }
 
-  const parseDay = (day) => {
+  const parseDay = day => {
     switch (day) {
       case 'M':
-        return 0;
+        return 0
       case 'T':
-        return 1;
+        return 1
       case 'W':
-        return 2;
+        return 2
       case 'R':
-        return 3;
+        return 3
       case 'F':
-        return 4;
+        return 4
       case 'S':
-        return 5;
+        return 5
       default:
-        return 6;
+        return 6
     }
   }
 
@@ -122,7 +122,7 @@ function Home() {
     }
   }
 
-  const generateSchedules = (newLocalSubjects) => {
+  const generateSchedules = newLocalSubjects => {
     console.log('newLocalSubjects', newLocalSubjects)
     let totalGroups = []
     const schedules = []
@@ -143,8 +143,10 @@ function Home() {
       subjectsIdsUsed.push(totalGroups[i].subject.id)
 
       for (let j = i + 1; j < totalGroups.length; j++) {
-        if (!subjectsIdsUsed.includes(totalGroups[j].subject.id)
-          && addToScheduleMatrix(totalGroups[j], schedule.matrix, true)) {
+        if (
+          !subjectsIdsUsed.includes(totalGroups[j].subject.id) &&
+          addToScheduleMatrix(totalGroups[j], schedule.matrix, true)
+        ) {
           schedule.groups.push(totalGroups[j])
           subjectsIdsUsed.push(totalGroups[j].subject.id)
         }
@@ -166,7 +168,7 @@ function Home() {
           generateSchedules(newLocalSubjects)
         },
         removeSubject: id => {
-          const newLocalSubjects = localSubjects.filter((subject) => subject.id !== id)
+          const newLocalSubjects = localSubjects.filter(subject => subject.id !== id)
           setLocalSubjects(newLocalSubjects)
           generateSchedules(newLocalSubjects)
         },
@@ -187,7 +189,7 @@ function Home() {
         value={{
           schedules: localSchedules,
           currentSchedule: localCurrentSchedule,
-          setCurrentSchedule: (index) => setLocalCurrentSchedule(localSubjects[index])
+          setCurrentSchedule: index => setLocalCurrentSchedule(localSubjects[index]),
           // setSchedules: (schedules) => setLocalSchedules(schedules),
           // setCurrentGroups: groups => setLocalCurrentGroups(groups),
         }}
@@ -210,8 +212,8 @@ function Home() {
                     </Col>
                   </Row>
                   <Hint>
-                    Si no quieres bloquear el profesor pero si un grupo, puedes hacerlo dandole click
-                    a ver grupos y bloqueando el grupo específico que no quieres que te arme
+                    Si no quieres bloquear el profesor pero si un grupo, puedes hacerlo dandole
+                    click a ver grupos y bloqueando el grupo específico que no quieres que te arme
                   </Hint>
                 </ModalHeaderContainer>
                 <ModalBodyContainer>

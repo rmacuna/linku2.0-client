@@ -8,7 +8,8 @@ export const GlobalStyle = createGlobalStyle`
   #selectable { list-style-type: none; margin: 0; padding: 0; width: 450px; }
   #selectable li { margin: 3px; padding: 1px; float: left; width: 100px; height: 80px; font-size: 4em; text-align: center; }
     table {
-      width: 100%;
+        /* table-layout: fixed; */
+        width: 100%;
         border-spacing: 0;
         margin-top: 20px;
         border: 1px solid rgba(17, 65, 136, 10%);
@@ -25,7 +26,7 @@ export const GlobalStyle = createGlobalStyle`
           user-select: none;
           &:not(:first-child) {
             user-select: all;
-             padding: 8px 65px;
+             padding: 8px 5px;
              cursor: pointer;
              font-size: 12px;
           }

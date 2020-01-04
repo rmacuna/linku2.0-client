@@ -10,22 +10,22 @@ export const dataHeaders = {
   ],
 }
 
-export const dummyData = {
-  fakeData: [
-    { id: 8, value: 0, name: '', hour: '6:30-7:30' },
-    { id: 9, value: 0, name: '', hour: '7:30-8:30' },
-    { id: 10, value: 0, name: '', hour: '8:30-9:30' },
-    { id: 11, value: 0, name: '', hour: '9:30-10:30' },
-    { id: 12, value: 0, name: '', hour: '10:30-11:30' },
-    { id: 13, value: 0, name: '', hour: '11:30-12:30' },
-    { id: 14, value: 0, name: '', hour: '11:30-12:30' },
-    { id: 15, value: 0, name: '', hour: '12:30-13:30' },
-    { id: 16, value: 0, name: '', hour: '13:30-14:30' },
-    { id: 17, value: 0, name: '', hour: '14:30-15:30' },
-    { id: 18, value: 0, name: '', hour: '15:30-16:30' },
-    { id: 19, value: 0, name: '', hour: '16:30-17:30' },
-    { id: 20, value: 0, name: '', hour: '17:30-18:30' },
-    { id: 21, value: 0, name: '', hour: '18:30-19:30' },
-    { id: 22, value: 0, name: '', hour: '19:30-20:30' },
+export const tableRows = {
+  data: [
+    { id: 0, hour: '6:30-7:30' },
+    { id: 1, hour: '7:30-8:30' },
+    { id: 2, hour: '8:30-9:30' },
+    { id: 3, hour: '9:30-10:30' },
+    { id: 4, hour: '10:30-11:30' },
+    { id: 5, hour: '11:30-12:30' },
+    { id: 6, hour: '11:30-12:30' },
+    { id: 7, hour: '12:30-13:30' },
+    { id: 8, hour: '13:30-14:30' },
+    { id: 9, hour: '14:30-15:30' },
+    { id: 10, hour: '15:30-16:30' },
+    { id: 11, hour: '16:30-17:30' },
+    { id: 12, hour: '17:30-18:30' },
+    { id: 13, hour: '18:30-19:30' },
+    { id: 14, hour: '19:30-20:30' },
   ],
 }
