@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Card,
   Nrc,
   SubjectName,
   ProfessorName,
   Quotas,
-  CloseIcon
+  CardBody,
+  CloseIcon,
+  CardHeader,
+  CardFooter,
+  ProfesorsGroup,
+  ActionLink,
 } from './Group.styles'
 import PropTypes from 'prop-types'
 
@@ -17,16 +22,40 @@ const Group = props => {
     // handleRemove,
     quota,
   } = props
+
+  let quotaNumber = parseInt(quota)
+
+  let professorsNamesSplited = professorsNames.split(',')
+
+  const [showProfesors, setShowProfesors] = useState(false)
+
+  const showProfessors = () => {
+    setShowProfesors(!showProfesors)
+  }
+
   return (
     <Card>
-      {/* <CloseIcon
-        className="far fa-times-circle"
-        onClick={handleRemove}
-      /> */}
-      <Nrc>{nrc}</Nrc>
-      <SubjectName>{name}</SubjectName>
-      <ProfessorName>{professorsNames}</ProfessorName>
-      <Quotas>{quota} Cupos</Quotas>
+      <CardHeader>
+        <SubjectName>{name}</SubjectName>
+      </CardHeader>
+      <CardBody>
+        <Nrc>{nrc}</Nrc>
+        {professorsNamesSplited.length > 1 ? (
+          <ProfessorName>{`${professorsNamesSplited[0]}, ${professorsNamesSplited[1]}`}</ProfessorName>
+        ) : (
+          <ProfessorName>{`${professorsNamesSplited[0]}`}</ProfessorName>
+        )}
+        {showProfesors ? <ProfesorsGroup>{professorsNames}</ProfesorsGroup> : null}
+      </CardBody>
+      <CardFooter>
+        {professorsNamesSplited.length > 1 ? (
+          <ActionLink onClick={showProfessors} color="#3D846A">
+            {showProfesors ? 'Ocultar' : 'Ver'} profesores
+          </ActionLink>
+        ) : null}
+
+        <Quotas full={quotaNumber < 10 ? true : false}>{quota} Cupos</Quotas>
+      </CardFooter>
     </Card>
   )
 }
