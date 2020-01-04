@@ -16,6 +16,8 @@ export const ArrowLeft = styled.button`
   background-color: #114188;
   cursor: pointer;
 
+  outline: none;
+
   /* outline: none; */
   border: none;
   i {
@@ -29,6 +31,7 @@ export const ArrowRight = styled.button`
   width: 45px;
   height: 45px;
   border-radius: 6px;
+  outline: none;
   display: flex;
   justify-content: center;
   border: none;
