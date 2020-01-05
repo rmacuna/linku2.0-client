@@ -35,7 +35,6 @@ import Banner from '../../components/Banner/Banner'
 import BlockCheckbox from '../../components/Checkbox/Checkbox'
 
 import generateSchedules from '../../services/generateSchedules'
-import html2canvas from 'html2canvas'
 import * as jsPDF from 'jspdf'
 import 'jspdf-autotable'
 import $ from 'jquery'
@@ -265,22 +264,25 @@ function Home() {
                           limit={localSchedules.length}
                         />
                       </Col>
-                      <Col xs={2} sm={2} md={2} lg={2}>
+                      <Col xs={12} sm={12} md={2} lg={2}>
                         <Indicator>
                           <p>{`${localSchedules.length ? currentPage + 1 : currentPage} de ${
                             localSchedules.length
                           }`}</p>
                         </Indicator>
                       </Col>
-                      <Col xs={8} sm={8} md={8} lg={8}>
+                      <Col xs={12} sm={12} md={8} lg={8}>
                         <Row end="xs">
                           <Col xs={12} sm={12} md={12} lg={12}>
                             <AllowFullGroups>
                               <BlockCheckbox
+                                small={true}
+                                labelColor="rgba(0, 0, 0, .8)"
+                                labelTitle="Permitir cursos sin cupo"
                                 checked={allowFullGroups}
                                 onChange={({ target }) => handleAllowGroups(target.checked)}
                               />
-                              <span>Permitir cursos sin cupo</span>
+                              {/* <span>Permitir cursos sin cupo</span> */}
                             </AllowFullGroups>
                             <LinkuButton onClick={handleReset} color="#DA8686">
                               Limpiar filtro por horas

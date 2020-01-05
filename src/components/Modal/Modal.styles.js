@@ -25,10 +25,12 @@ export const ModalBody = styled.section`
   margin: 0 auto;
   position: relative;
   max-width: 1100px;
+  /* max-height: (=%); */
   z-index: 2000;
+  transition: all 0.3s ease-out;
   margin-top: 2%;
   margin-bottom: 2%;
-  transition: all 0.3s ease-out;
+  overflow-y: scroll;
 `
 
 export const CloseButton = styled.button`

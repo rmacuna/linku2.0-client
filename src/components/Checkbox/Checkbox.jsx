@@ -18,7 +18,7 @@ function Checkbox(props) {
       </StyledCheckbox>
       {labelTitle ? (
         <CheckboxTitleWrapper>
-          <CheckboxTitleMessage>{labelTitle}</CheckboxTitleMessage>
+          <CheckboxTitleMessage labelColor={props.labelColor}>{labelTitle}</CheckboxTitleMessage>
         </CheckboxTitleWrapper>
       ) : null}
     </CheckboxWrapper>
