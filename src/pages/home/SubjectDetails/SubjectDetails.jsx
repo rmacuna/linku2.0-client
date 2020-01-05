@@ -97,7 +97,7 @@ const SubjectDetails = props => {
                           color="#3D846A"
                           onClick={() => handleToggleProfessors(index)}
                         >
-                          {toggleProfessors[index] ? 'Ocultar todos los profesores' : 'Ver todos los profesores'}
+                          {toggleProfessors[index] ? 'Ocultar profesores' : 'Ver profesores'}
                         </ActionLink>
                       ) : null}
                     </Col>

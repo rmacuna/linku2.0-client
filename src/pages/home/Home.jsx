@@ -28,6 +28,9 @@ import { generateEmptyMatrix } from '../../library/utils'
 
 import SubjectsContext from '../../context/subjects-context'
 import SchedulesContext from '../../context/schedules-context'
+import Banner from '../../components/Banner/Banner'
+
+import $ from 'jquery'
 
 const DEFAULT_EMPTY_SCHEDULE = {
   matrix: null,
@@ -38,7 +41,7 @@ function Home() {
   const [currentPage, setCurrentPage] = useState(0)
   const [localSubjects, setLocalSubjects] = useState([])
   const [localSchedules, setLocalSchedules] = useState([])
-  const [localMatrixTemplate, setLocalMatrixTemplate] = useState(null)
+  const [localMatrixTemplate, setLocalMatrixTemplate] = useState(generateEmptyMatrix())
   const [localCurrentSchedule, setLocalCurrentSchedule] = useState(DEFAULT_EMPTY_SCHEDULE)
 
   const [modal, setModal] = useState({
@@ -80,7 +83,7 @@ function Home() {
     }
   }
 
-  const addToScheduleMatrix = (group, matrix) => {
+  const addToScheduleMatrix = (group, matrix, matrixTemplate) => {
     let days, start, end
     let newMatrix = [...matrix]
     for (let schedule of group.schedule) {
@@ -89,7 +92,8 @@ function Home() {
         start = Number(schedule.time.start.substring(0, 2))
         end = Number(schedule.time.end.substring(0, 2))
         for (let hour = start; hour < end; hour++) {
-          if (newMatrix[parseDay(days[0])][hour - 6]) {
+          if (newMatrix[parseDay(days[0])][hour - 6]
+            || (matrixTemplate && matrixTemplate[parseDay(days[0])][hour - 6])) {
             return false
           }
           newMatrix[parseDay(days[0])][hour - 6] = group.subject.name
@@ -100,11 +104,15 @@ function Home() {
     return newMatrix
   }
 
-  const generateSchedules = (newLocalSubjects = localSubjects, matrixTemplate = localMatrixTemplate) => {
+  const generateSchedules = (
+    newLocalSubjects = localSubjects,
+    matrixTemplate = localMatrixTemplate,
+  ) => {
     setLocalCurrentSchedule(DEFAULT_EMPTY_SCHEDULE)
     setCurrentPage(0)
 
-    let totalGroups = [], newMatrix
+    let totalGroups = [],
+      newMatrix
     const schedules = []
     for (let subject of newLocalSubjects) {
       totalGroups = totalGroups.concat(subject.groups)
@@ -112,20 +120,20 @@ function Home() {
 
     for (let i = 0; i < totalGroups.length; i++) {
       if (totalGroups[i].blocked) {
-        continue;
+        continue
       }
 
       let subjectsIdsUsed = []
       let current = schedules.length ? false : true
       let schedule = {
         current,
-        matrix: generateEmptyMatrix(matrixTemplate),
+        matrix: generateEmptyMatrix(),
         groups: [],
       }
 
-      newMatrix = addToScheduleMatrix(totalGroups[i], schedule.matrix)
+      newMatrix = addToScheduleMatrix(totalGroups[i], schedule.matrix, matrixTemplate)
       if (!newMatrix) {
-        continue;
+        continue
       }
       schedule.matrix = newMatrix
       schedule.groups.push(totalGroups[i])
@@ -133,11 +141,11 @@ function Home() {
 
       for (let j = i + 1; j < totalGroups.length; j++) {
         if (totalGroups[j].blocked || subjectsIdsUsed.includes(totalGroups[j].subject.id)) {
-          continue;
+          continue
         }
-        newMatrix = addToScheduleMatrix(totalGroups[j], schedule.matrix)
+        newMatrix = addToScheduleMatrix(totalGroups[j], schedule.matrix, matrixTemplate)
         if (!newMatrix) {
-          continue;
+          continue
         }
         schedule.matrix = newMatrix
         schedule.groups.push(totalGroups[j])
@@ -154,6 +162,13 @@ function Home() {
     setLocalSchedules(schedules)
   }
 
+  const handleReset = onClean => {
+    $('.ui-selected').map((index, elem) => {
+      elem.classList.remove('ui-selected')
+    })
+    onClean(null)
+  }
+
   return (
     <SubjectsContext.Provider
       value={{
@@ -168,9 +183,11 @@ function Home() {
           generateSchedules()
         },
         updateGroupsStatus: (groups, blocked) => {
-          groups.forEach((group) => { group.blocked = blocked })
+          groups.forEach(group => {
+            group.blocked = blocked
+          })
           generateSchedules()
-        }
+        },
       }}
     >
       <SchedulesContext.Provider
@@ -255,13 +272,18 @@ function Home() {
                                 </Col>
                                 <Col xs={2} sm={2} md={2} lg={2}>
                                   <Indicator>
-                                    <p>{`${schedules.length ? currentPage + 1 : currentPage} de ${schedules.length}`}</p>
+                                    <p>{`${schedules.length ? currentPage + 1 : currentPage} de ${
+                                      schedules.length
+                                      }`}</p>
                                   </Indicator>
                                 </Col>
                                 <Col xs={8} sm={8} md={8} lg={8}>
                                   <Row end="xs">
                                     <Col xs={12} sm={12} md={12} lg={12}>
-                                      <LinkuButton id="clean" color="#DA8686">
+                                      <LinkuButton
+                                        onClick={() => handleReset(setMatrixTemplate)}
+                                        color="#DA8686"
+                                      >
                                         Limpiar filtro por horas
                                       </LinkuButton>
                                       <LinkuButton color="#114188">
@@ -276,10 +298,7 @@ function Home() {
                           </Row>
                           <Row>
                             <Col xs={12} sm={12} md={12} lg={12}>
-                              <Table
-                                onStopSelecting={(matrix) => setMatrixTemplate(matrix)}
-                                onClean={() => setMatrixTemplate(null)}
-                              />
+                              <Table onStopSelecting={matrix => setMatrixTemplate(matrix)} />
                             </Col>
                           </Row>
                         </React.Fragment>
@@ -292,17 +311,7 @@ function Home() {
           )}
         </SubjectsContext.Consumer>
       </SchedulesContext.Provider>
-      <p style={{
-        position: 'fixed',
-        bottom: 5,
-        right: 5,
-        fontSize: 10,
-      }}>
-        Coded with ❤️ by
-        <a href="https://github.com/sjdonado" target="_blank" aria-label="Información sobre el autor" style={{ textDecoration: 'none' }}> Juan Rodriguez, </a>
-        <a href="https://github.com/rmacuna" target="_blank" aria-label="Información sobre el autor" style={{ textDecoration: 'none' }}>Roberto Acuña, </a>
-        <a href="https://github.com/kthr" target="_blank" aria-label="Información sobre el autor" style={{ textDecoration: 'none' }}>Wilson Tovar </a>
-      </p>
+      <Banner />
     </SubjectsContext.Provider>
   )
 }

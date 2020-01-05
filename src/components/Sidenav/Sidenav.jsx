@@ -44,25 +44,19 @@ function Sidenav(props) {
             </Row>
           </Hidder>
           <ScrollArea active={show}>
-            {currentSchedule.groups.map(({
-              subject,
-              nrc,
-              group,
-              professors,
-              quota,
-            }, index) => (
-                <Row key={nrc}>
-                  <Col xs={12} sm={12} md={12} lg={12}>
-                    <Group
-                      nrc={`${nrc} - ${group}`}
-                      name={subject.name}
-                      quota={quota.free}
-                      professorsNames={professors.join(', ').substring(0, 40)}
+            {currentSchedule.groups.map(({ subject, nrc, group, professors, quota }, index) => (
+              <Row key={nrc}>
+                <Col xs={12} sm={12} md={12} lg={12}>
+                  <Group
+                    nrc={`NRC: ${nrc} - Grupo ${group}`}
+                    name={subject.name}
+                    quota={quota.free}
+                    professorsNames={professors.join(', ')}
                     // handleRemove={() => updateGroupsStatus([currentSchedule.groups[index]], true)}
-                    />
-                  </Col>
-                </Row>
-              ))}
+                  />
+                </Col>
+              </Row>
+            ))}
           </ScrollArea>
         </LeftNavigation>
       )}
