@@ -34,7 +34,7 @@ function SearchSelect(props) {
 
   return (
     <SubjectsContext.Consumer>
-      {({ addSubject }) => (
+      {({ subjects, addSubject }) => (
         <>
           <GlobalStyles />
           <AsyncSelect
@@ -54,6 +54,10 @@ function SearchSelect(props) {
               if (item && item.value) {
                 setIsLoading(true)
                 const { id, name, departmentName, mat } = item.value
+                if (subjects.some((subject) => subject.id === id)) {
+                  setIsLoading(false)
+                  return;
+                }
                 try {
                   const { data } = await getSubjectsQuery.refetch({
                     subjectId: id,

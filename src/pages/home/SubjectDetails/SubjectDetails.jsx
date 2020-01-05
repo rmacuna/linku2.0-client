@@ -25,8 +25,7 @@ import { Row, Col } from 'react-flexbox-grid'
 import { dayInterpreter } from './utils'
 
 const SubjectDetails = props => {
-  const { index, subjectName, groups, subjectsCount, nrc } = props
-  // const [showProfessors, setshowProfessors] = useState(false)
+  const { index, subjectName, groups } = props
   const [toggleProfessors, setToggleProfessors] = useState(new Array(groups.length).fill(false))
   const [toggleGroups, setToggleGroups] = useState(new Array(groups.length).fill(false))
 
@@ -92,7 +91,7 @@ const SubjectDetails = props => {
                       >
                         {toggleGroups[index] ? 'Ocultar grupos' : 'Ver grupos'}
                       </ActionLink>
-                      {professor.length > 2 ? (
+                      {professor.includes(',') ? (
                         <ActionLink
                           color="#3D846A"
                           onClick={() => handleToggleProfessors(index)}
@@ -116,7 +115,6 @@ const SubjectDetails = props => {
                             </Col>
                             <Col xs={10} sm={10} md={10} lg={10}>
                               <SubjectGroupDetail>
-                                {/* <p className="day">Grupo: {elem.group}</p> */}
                                 {elem.schedule.map(({ time, day }, index) => (
                                   <React.Fragment key={index}>
                                     <p className="day">{dayInterpreter(day)}</p>

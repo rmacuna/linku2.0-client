@@ -17,6 +17,8 @@ import {
   Indicator,
   LinkuButton,
   Hint,
+  ProgressBar,
+  AllowFullGroups,
 } from './Home.styles'
 
 import Modal from '../../components/Modal/Modal'
@@ -32,6 +34,7 @@ import { generateEmptyMatrix } from '../../library/utils'
 import SubjectsContext from '../../context/subjects-context'
 import SchedulesContext from '../../context/schedules-context'
 import Banner from '../../components/Banner/Banner'
+import BlockCheckbox from '../../components/Checkbox/Checkbox'
 
 import $ from 'jquery'
 
@@ -45,6 +48,7 @@ function Home() {
   const [isLoading, setIsLoading] = useState(false)
   const [localSubjects, setLocalSubjects] = useState([])
   const [localSchedules, setLocalSchedules] = useState([])
+  const [allowFullGroups, setAllowFullGroups] = useState(false)
   const [localMatrixTemplate, setLocalMatrixTemplate] = useState(generateEmptyMatrix())
   const [localCurrentSchedule, setLocalCurrentSchedule] = useState(DEFAULT_EMPTY_SCHEDULE)
 
@@ -54,7 +58,7 @@ function Home() {
 
     const { totalGroups, updatedAt } = data.getServerStatus;
     return (
-      <span className="search_subtitle server_status">
+      <span className="server_status">
         Última actualización: {new Date(updatedAt).toLocaleString()} - Grupos obtenidos: {totalGroups}
       </span>
     )
@@ -127,19 +131,22 @@ function Home() {
     setLocalCurrentSchedule(DEFAULT_EMPTY_SCHEDULE)
     setCurrentPage(0)
 
-    let totalGroups = [],
-      newMatrix
-    const schedules = []
-    for (let subject of newLocalSubjects) {
+    // console.log('newLocalSubjects', newLocalSubjects)
+    let totalGroups = []
+    const subjects = newLocalSubjects.sort((a, b) => b.groups.length - a.groups.length)
+    for (let subject of subjects) {
       totalGroups = totalGroups.concat(subject.groups)
     }
 
+    // console.log('totalGroups', totalGroups)
+    const schedules = []
+    let newMatrix
     for (let i = 0; i < totalGroups.length; i++) {
-      if (totalGroups[i].blocked) {
+      if (totalGroups[i].blocked || (!allowFullGroups && totalGroups[i].quota.free === 0)) {
         continue
       }
 
-      let subjectsIdsUsed = []
+      let subjectsIdsUsed = new Set()
       let current = schedules.length ? false : true
       let schedule = {
         current,
@@ -153,10 +160,12 @@ function Home() {
       }
       schedule.matrix = newMatrix
       schedule.groups.push(totalGroups[i])
-      subjectsIdsUsed.push(totalGroups[i].subject.id)
+      subjectsIdsUsed.add(totalGroups[i].subject.id)
 
       for (let j = i + 1; j < totalGroups.length; j++) {
-        if (totalGroups[j].blocked || subjectsIdsUsed.includes(totalGroups[j].subject.id)) {
+        if (totalGroups[j].blocked
+          || subjectsIdsUsed.has(totalGroups[j].subject.id)
+          || (!allowFullGroups && totalGroups[i].quota.free === 0)) {
           continue
         }
         newMatrix = addToScheduleMatrix(totalGroups[j], schedule.matrix, matrixTemplate)
@@ -165,7 +174,7 @@ function Home() {
         }
         schedule.matrix = newMatrix
         schedule.groups.push(totalGroups[j])
-        subjectsIdsUsed.push(totalGroups[j].subject.id)
+        subjectsIdsUsed.add(totalGroups[j].subject.id)
       }
 
       if (schedule.groups.length === newLocalSubjects.length) {
@@ -180,9 +189,7 @@ function Home() {
   }
 
   const handleReset = onClean => {
-    $('.ui-selected').map((index, elem) => {
-      elem.classList.remove('ui-selected')
-    })
+    $('.ui-selected').map((_, elem) => elem.classList.remove('ui-selected'))
     onClean(null)
   }
 
@@ -223,6 +230,7 @@ function Home() {
           {({ subjects }) => (
             <>
               <GlobalStyle />
+              {isLoading && <ProgressBar><div className="indeterminate" /></ProgressBar>}
               <Modal onClose={toggleModalHandler} show={modal.open}>
                 <ModalHeaderContainer>
                   <Row>
@@ -268,7 +276,6 @@ function Home() {
                       <Col xs={12} sm={12} md={6} lg={6}>
                         <h1 className="search_title">Buscar</h1>
                         <SearchSelect setIsLoading={setIsLoading} />
-                        {isLoading && <span className="search_subtitle">Generando horarios...</span>}
                       </Col>
                     </Row>
                   </SearchSection>
@@ -297,6 +304,16 @@ function Home() {
                                 <Col xs={8} sm={8} md={8} lg={8}>
                                   <Row end="xs">
                                     <Col xs={12} sm={12} md={12} lg={12}>
+                                      <AllowFullGroups>
+                                        <BlockCheckbox
+                                          checked={allowFullGroups}
+                                          onChange={({ target }) => {
+                                            setAllowFullGroups(target.checked)
+                                            generateSchedules()
+                                          }}
+                                        />
+                                        <span>Permitir cursos sin cupo</span>
+                                      </AllowFullGroups>
                                       <LinkuButton
                                         onClick={() => handleReset(setMatrixTemplate)}
                                         color="#DA8686"

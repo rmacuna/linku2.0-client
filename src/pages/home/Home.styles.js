@@ -33,11 +33,9 @@ export const GlobalStyle = createGlobalStyle`
   margin-bottom: 10px;
   color: #082147;
 }
-.search_subtitle {
+.server_status {
   font-size: 12px;
   color: #082147;
-}
-.server_status {
   margin-top: 14px;
   float: right;
 }
@@ -164,5 +162,105 @@ export const LinkuButton = styled.button`
   }
   i {
     margin-right: 10px;
+  }
+`
+
+export const ServerStatus = styled.div`
+
+`
+
+export const ProgressBar = styled.div`
+  position: absolute;
+  top: 0;
+  height: 4px;
+  display: block;
+  width: 100%;
+  background-color: white;
+  border-radius: 2px;
+  background-clip: padding-box;
+  overflow: hidden; }
+  .indeterminate {
+    background-color: #114188; }
+    .indeterminate:before {
+      content: '';
+      position: absolute;
+      background-color: inherit;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      will-change: left, right;
+      -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+              animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite; }
+    .indeterminate:after {
+      content: '';
+      position: absolute;
+      background-color: inherit;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      will-change: left, right;
+      -webkit-animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+              animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+      -webkit-animation-delay: 1.15s;
+              animation-delay: 1.15s;
+
+  @-webkit-keyframes indeterminate {
+    0% {
+      left: -35%;
+      right: 100%; }
+    60% {
+      left: 100%;
+      right: -90%; }
+    100% {
+      left: 100%;
+      right: -90%; } }
+  @keyframes indeterminate {
+    0% {
+      left: -35%;
+      right: 100%; }
+    60% {
+      left: 100%;
+      right: -90%; }
+    100% {
+      left: 100%;
+      right: -90%; } }
+  @-webkit-keyframes indeterminate-short {
+    0% {
+      left: -200%;
+      right: 100%; }
+    60% {
+      left: 107%;
+      right: -8%; }
+    100% {
+      left: 107%;
+      right: -8%; } }
+  @keyframes indeterminate-short {
+    0% {
+      left: -200%;
+      right: 100%; }
+    60% {
+      left: 107%;
+      right: -8%; }
+    100% {
+      left: 107%;
+      right: -8%; } }
+`
+
+export const AllowFullGroups = styled.div`
+  margin: 0px 10px;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 17px 17px;
+
+  transition: all 0.3s ease-out;
+
+  span {
+    margin-left: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #082147;
   }
 `
