@@ -120,7 +120,7 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
       }
 
       // Search groups until complete a schedule
-      while (groupsToCompare.length && schedule.groups.length <= minSubjectsLength) {
+      while (groupsToCompare.length && schedule.groups.length < minSubjectsLength) {
         if (groupsToCompare[0].nrc !== group.nrc
           && !groupsToCompare[0].blocked
           && !subjectsIdsUsed.has(groupsToCompare[0].subject.id)
