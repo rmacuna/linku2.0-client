@@ -70,17 +70,20 @@ const addToScheduleMatrix = (group, matrix, matrixTemplate) => {
 
 /**
  * Generate schedules by subjects groups
+ * @description Using at least one group of the supplied subjects and filtering by 
+ * each group restrictions will generate all possibles conflict matrices
  * @param {{ groups: Group }} subjects
  * @param {string[][]} matrixTemplate
  * @param {boolean} allowFullGroups 
  * @returns {{ matrix: string[][], groups: Group }}
- * @description Using at least one group of the supplied subjects and filtering by
- * each group restrictions is generated all possibles conflict matrices and returned
- * as schedules
  */
 const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
-  let groups = []
+  let groups = [], minSubjectsLength = subjects.length
   for (let subject of subjects) {
+    if (subject.groups.every(({ blocked }) => blocked)) {
+      minSubjectsLength -= 1
+      continue
+    }
     groups = groups.concat(subject.groups)
   }
 
@@ -112,12 +115,12 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
         groupsToCompare.shift()
       }
 
-      if (schedule.groups.length === subjects.length) {
+      if (schedule.groups.length === minSubjectsLength) {
         groupsToCompare = []
       }
 
       // Search groups until complete a schedule
-      while (groupsToCompare.length && schedule.groups.length < subjects.length) {
+      while (groupsToCompare.length && schedule.groups.length <= minSubjectsLength) {
         if (groupsToCompare[0].nrc !== group.nrc
           && !groupsToCompare[0].blocked
           && !subjectsIdsUsed.has(groupsToCompare[0].subject.id)
@@ -132,7 +135,7 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
         groupsToCompare.shift()
       }
 
-      if (schedule.groups.length < subjects.length) {
+      if (schedule.groups.length < minSubjectsLength) {
         break
       }
 
@@ -145,8 +148,7 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
       }
     }
   }
-
-  console.log('schedules', schedules.length)
+  // console.log('schedules', schedules.length)
   return schedules
 }
 

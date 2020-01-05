@@ -74,7 +74,7 @@ const SubjectDetails = props => {
               <Group key={index}>
                 <BlockCheckbox
                   checked={groups.every((elem) => elem.blocked)}
-                  onChange={({ target }) => updateGroupsStatus(groups, target.checked)}
+                  onChange={({ target }) => updateGroupsStatus(groups.map(({ nrc }) => nrc), target.checked)}
                 />
                 {/* <ProfessorTitle>{`${nrc} - ${group}`}</ProfessorTitle> */}
                 <ActionsRow>
@@ -110,7 +110,7 @@ const SubjectDetails = props => {
                               <BlockCheckbox
                                 small={true}
                                 checked={elem.blocked}
-                                onChange={({ target }) => updateGroupsStatus([elem], target.checked)}
+                                onChange={({ target }) => updateGroupsStatus([elem.nrc], target.checked)}
                               />
                             </Col>
                             <Col xs={10} sm={10} md={10} lg={10}>

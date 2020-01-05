@@ -55,23 +55,23 @@ function Home() {
   const [localMatrixTemplate, setLocalMatrixTemplate] = useState(EMPTY_MATRIX)
   const [localCurrentSchedule, setLocalCurrentSchedule] = useState(DEFAULT_EMPTY_SCHEDULE)
 
-  // const schedules = useMemo(() => generateSchedules(localSubjects, localMatrixTemplate, allowFullGroups),
-  //   [generateSchedules, localSubjects, localMatrixTemplate, allowFullGroups])
+  const schedules = useMemo(() => generateSchedules(localSubjects, localMatrixTemplate, allowFullGroups),
+    [generateSchedules, localSubjects, localMatrixTemplate, allowFullGroups])
 
-  // useEffect(() => {
-  //   loadSchedules()
-  // })
+  useEffect(() => {
+    loadSchedules()
+  })
 
-  const loadSchedules = (subjects = localSubjects, matrixTemplate = localMatrixTemplate) => {
-    const schedules = generateSchedules(subjects, matrixTemplate, allowFullGroups)
-    if (schedules.length) {
+  const loadSchedules = () => {
+    if (schedules.length && schedules !== localSchedules) {
       setLocalCurrentSchedule(schedules[0])
       setLocalSchedules(schedules)
-    } else {
+      setIsLoading(false)
+    }
+    if (!schedules.length && localCurrentSchedule.matrix !== null) {
       setLocalCurrentSchedule(DEFAULT_EMPTY_SCHEDULE)
       setCurrentPage(0)
     }
-    setIsLoading(false)
   }
 
   const [modal, setModal] = useState({
@@ -97,17 +97,14 @@ function Home() {
   const handleReset = () => {
     $('.ui-selected').map((_, elem) => elem.classList.remove('ui-selected'))
     setLocalMatrixTemplate(EMPTY_MATRIX)
-    loadSchedules(localSubjects, null)
   }
 
   const handleAllowGroups = (value) => {
     setAllowFullGroups(value)
-    loadSchedules()
   }
 
   const handleOnStopSelecting = (matrix) => {
     setLocalMatrixTemplate(matrix)
-    loadSchedules(localSubjects, matrix)
   }
 
   return (
@@ -117,17 +114,26 @@ function Home() {
         addSubject: newSubject => {
           const newLocalSubjects = [...localSubjects, newSubject]
           setLocalSubjects(newLocalSubjects)
-          loadSchedules(newLocalSubjects)
         },
         removeSubject: index => {
-          localSubjects.splice(index, 1)
-          loadSchedules()
+          const newLocalSubjects = [...localSubjects]
+          newLocalSubjects.splice(index, 1)
+          setLocalSubjects(newLocalSubjects)
         },
-        updateGroupsStatus: (groups, blocked) => {
-          groups.forEach(group => {
-            group.blocked = blocked
-          })
-          loadSchedules()
+        updateGroupsStatus: (groupsNrcs, blocked) => {
+          const newLocalSubjects = [...localSubjects]
+          const subject = newLocalSubjects.find((subject) => subject.groups.some(({ nrc }) => nrc === groupsNrcs[0]))
+          if (subject) {
+            Object.assign(subject, {
+              groups: subject.groups.map(group => {
+                if (groupsNrcs.includes(group.nrc)) {
+                  return Object.assign(group, { blocked })
+                }
+                return group
+              })
+            })
+          }
+          setLocalSubjects(newLocalSubjects)
         },
       }}
     >
