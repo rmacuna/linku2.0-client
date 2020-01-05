@@ -109,7 +109,6 @@ function Home() {
     newLocalSubjects = localSubjects,
     matrixTemplate = localMatrixTemplate,
   ) => {
-    setIsLoading(true)
     setLocalCurrentSchedule(DEFAULT_EMPTY_SCHEDULE)
     setCurrentPage(0)
 
@@ -219,7 +218,7 @@ function Home() {
                       </section>
                     </Col>
                     <Col xs={12} sm={12} md={6} lg={6}>
-                      <SearchSelect />
+                      <SearchSelect setIsLoading={setIsLoading} />
                     </Col>
                   </Row>
                   <Hint>
@@ -253,8 +252,7 @@ function Home() {
                     <Row>
                       <Col xs={12} sm={12} md={6} lg={6}>
                         <h1 className="search_title">Buscar</h1>
-                        <SearchSelect />
-                        {console.log(isLoading)}
+                        <SearchSelect setIsLoading={setIsLoading} />
                         {isLoading && <span className="search_subtitle">Generando horarios...</span>}
                       </Col>
                     </Row>
