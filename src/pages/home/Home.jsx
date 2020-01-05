@@ -79,6 +79,7 @@ function Home() {
     if (!schedules.length && localCurrentSchedule.matrix !== null) {
       handleSetLocalCurrentSchedule(DEFAULT_EMPTY_SCHEDULE)
       setLocalSchedules([])
+      setIsLoading(false)
     }
   }
 
