@@ -10,7 +10,7 @@ export const Card = styled.section`
 `
 
 export const CardHeader = styled.div`
-  padding: 13px 12px;
+  padding: 12px;
   border-bottom: 1px solid rgba(17, 65, 136, 11%);
 `
 
@@ -25,7 +25,7 @@ export const CardFooter = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 13px 12px;
+  padding: 12px;
 `
 export const Nrc = styled.h4`
   font-size: 14px;

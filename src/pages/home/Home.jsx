@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import { Row, Col } from 'react-flexbox-grid'
+import { useQuery } from '@apollo/react-hooks'
+
+import { GET_SERVER_STATUS_QUERY } from '../../graphql/queries'
 
 import {
   ModalSubtitle,
@@ -44,6 +47,18 @@ function Home() {
   const [localSchedules, setLocalSchedules] = useState([])
   const [localMatrixTemplate, setLocalMatrixTemplate] = useState(generateEmptyMatrix())
   const [localCurrentSchedule, setLocalCurrentSchedule] = useState(DEFAULT_EMPTY_SCHEDULE)
+
+  const ServerStatus = () => {
+    const { loading, error, data } = useQuery(GET_SERVER_STATUS_QUERY)
+    if (loading || error) return null
+
+    const { totalGroups, updatedAt } = data.getServerStatus;
+    return (
+      <span className="search_subtitle server_status">
+        Última actualización: {new Date(updatedAt).toLocaleString()} - Grupos obtenidos: {totalGroups}
+      </span>
+    )
+  }
 
   const [modal, setModal] = useState({
     open: false,
@@ -93,11 +108,11 @@ function Home() {
         start = Number(schedule.time.start.substring(0, 2))
         end = Number(schedule.time.end.substring(0, 2))
         for (let hour = start; hour < end; hour++) {
-          if (newMatrix[parseDay(days[0])][hour - 6]
-            || (matrixTemplate && matrixTemplate[parseDay(days[0])][hour - 6])) {
+          if (newMatrix[parseDay(days[0])][hour - 5]
+            || (matrixTemplate && matrixTemplate[parseDay(days[0])][hour - 5])) {
             return false
           }
-          newMatrix[parseDay(days[0])][hour - 6] = group.subject.name
+          newMatrix[parseDay(days[0])][hour - 5] = group.subject.name
         }
         days.shift()
       }
@@ -301,6 +316,7 @@ function Home() {
                           <Row>
                             <Col xs={12} sm={12} md={12} lg={12}>
                               <Table onStopSelecting={matrix => setMatrixTemplate(matrix)} />
+                              <ServerStatus />
                             </Col>
                           </Row>
                         </React.Fragment>

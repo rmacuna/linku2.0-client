@@ -51,8 +51,8 @@ function SearchSelect(props) {
               updateQuery: (prev, { fetchMoreResult }) => fetchMoreResult,
             }).then(({ data }) => parseOptions(data.getSubjects.docs)), 700)}
             onChange={async item => {
-              setIsLoading(true)
               if (item && item.value) {
+                setIsLoading(true)
                 const { id, name, departmentName, mat } = item.value
                 try {
                   const { data } = await getSubjectsQuery.refetch({
