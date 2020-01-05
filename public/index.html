@@ -1,98 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Web site created using create-react-app" />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <script src="https://kit.fontawesome.com/75c308835f.js" crossorigin="anonymous" async></script>
-    <!--
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <script src="https://kit.fontawesome.com/75c308835f.js" crossorigin="anonymous" async></script>
+  <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <link
-      crossorigin="anonymous"
-      rel="preload"
-      as="font"
-      href="%PUBLIC_URL%/fonts/manrope-bold.woff2"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      crossorigin="anonymous"
-      rel="preload"
-      as="font"
-      href="%PUBLIC_URL%/fonts/manrope-light.woff2"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      crossorigin="anonymous"
-      rel="preload"
-      as="font"
-      href="%PUBLIC_URL%/fonts/manrope-medium.woff2"
-      type="font/woff2"
-    />
-    <link
-      crossorigin="anonymous"
-      rel="preload"
-      as="font"
-      href="%PUBLIC_URL%/fonts/manrope-regular.woff2"
-      type="font/woff2"
-    />
-    <link
-      crossorigin="anonymous"
-      rel="preload"
-      as="font"
-      href="%PUBLIC_URL%/fonts/manrope-semibold.woff2"
-      type="font/woff2"
-    />
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <link crossorigin="anonymous" rel="preload" as="font" href="%PUBLIC_URL%/fonts/manrope-bold.woff2" type="font/woff2"
+    crossorigin />
+  <link crossorigin="anonymous" rel="preload" as="font" href="%PUBLIC_URL%/fonts/manrope-light.woff2" type="font/woff2"
+    crossorigin />
+  <link crossorigin="anonymous" rel="preload" as="font" href="%PUBLIC_URL%/fonts/manrope-medium.woff2"
+    type="font/woff2" />
+  <link crossorigin="anonymous" rel="preload" as="font" href="%PUBLIC_URL%/fonts/manrope-regular.woff2"
+    type="font/woff2" />
+  <link crossorigin="anonymous" rel="preload" as="font" href="%PUBLIC_URL%/fonts/manrope-semibold.woff2"
+    type="font/woff2" />
 
-    <style>
-      @font-face {
-        font-family: 'Manrope';
-        font-style: normal;
-        font-weight: 200;
-        src: url('./fonts/manrope-light.woff2') format('woff2');
-        font-display: swap;
-      }
+  <style>
+    @font-face {
+      font-family: 'Manrope';
+      font-style: normal;
+      font-weight: 200;
+      src: url('./fonts/manrope-light.woff2') format('woff2');
+      font-display: swap;
+    }
 
-      @font-face {
-        font-family: 'Manrope';
-        font-style: normal;
-        font-weight: 400;
-        src: local('manrope-reuglar'), url('./fonts/manrope-regular.woff2') format('woff2');
-        font-display: swap;
-      }
+    @font-face {
+      font-family: 'Manrope';
+      font-style: normal;
+      font-weight: 400;
+      src: local('manrope-reuglar'), url('./fonts/manrope-regular.woff2') format('woff2');
+      font-display: swap;
+    }
 
-      @font-face {
-        font-family: 'Manrope';
-        font-style: normal;
-        font-weight: 500;
-        src: local('manrope-medium'), url('./fonts/manrope-medium.woff2') format('woff2');
-        font-display: swap;
-      }
+    @font-face {
+      font-family: 'Manrope';
+      font-style: normal;
+      font-weight: 500;
+      src: local('manrope-medium'), url('./fonts/manrope-medium.woff2') format('woff2');
+      font-display: swap;
+    }
 
-      @font-face {
-        font-family: 'Manrope';
-        font-style: normal;
-        font-weight: 600;
-        src: local('manrope-semibold'), url('./fonts/manrope-semibold.woff2') format('woff2');
-        font-display: swap;
-      }
+    @font-face {
+      font-family: 'Manrope';
+      font-style: normal;
+      font-weight: 600;
+      src: local('manrope-semibold'), url('./fonts/manrope-semibold.woff2') format('woff2');
+      font-display: swap;
+    }
 
-      @font-face {
-        font-family: 'Manrope';
-        font-style: normal;
-        font-weight: 700;
-        src: local('manrope-bold'), url('./fonts/manrope-bold.woff2') format('woff2');
-        font-display: swap;
-      }
-    </style>
-    <!--
+    @font-face {
+      font-family: 'Manrope';
+      font-style: normal;
+      font-weight: 700;
+      src: local('manrope-bold'), url('./fonts/manrope-bold.woff2') format('woff2');
+      font-display: swap;
+    }
+  </style>
+  <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -101,14 +75,25 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Linku2.0</title>
-  </head>
+  <title>Linku2.0</title>
 
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-100587277-4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-    <div id="root"></div>
-    <!--
+    gtag('config', 'UA-100587277-4');
+  </script>
+
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+
+  <div id="root"></div>
+  <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -118,8 +103,9 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-    <!-- 
+  <!-- 
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
-  </body>
+</body>
+
 </html>

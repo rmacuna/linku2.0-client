@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import debounce from 'debounce-promise'
 
 import AsyncSelect from 'react-select/async';
@@ -15,7 +16,9 @@ const GlobalStyles = createGlobalStyle`
   }
 `
 
-function SearchSelect() {
+function SearchSelect(props) {
+  const { setIsLoading } = props
+
   const { loading, error, data, fetchMore } = useQuery(GET_SUBJECTS_QUERY)
   const getSubjectsQuery = useQuery(GET_SUBJECT_GROUPS, { skip: true })
 
@@ -48,6 +51,7 @@ function SearchSelect() {
               updateQuery: (prev, { fetchMoreResult }) => fetchMoreResult,
             }).then(({ data }) => parseOptions(data.getSubjects.docs)), 700)}
             onChange={async item => {
+              setIsLoading(true)
               if (item && item.value) {
                 const { id, name, departmentName, mat } = item.value
                 try {
@@ -94,6 +98,10 @@ function SearchSelect() {
       )}
     </SubjectsContext.Consumer>
   )
+}
+
+SearchSelect.propTypes = {
+  setIsLoading: PropTypes.func.isRequired
 }
 
 export default SearchSelect
