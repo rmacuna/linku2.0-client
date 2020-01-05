@@ -33,12 +33,6 @@ export const GlobalStyle = createGlobalStyle`
   margin-bottom: 10px;
   color: #082147;
 }
-.server_status {
-  font-size: 12px;
-  color: #082147;
-  margin-top: 14px;
-  float: right;
-}
 `
 
 export const Hint = styled.p`
