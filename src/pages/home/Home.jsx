@@ -105,18 +105,18 @@ function Home() {
 
   const addToScheduleMatrix = (group, matrix, matrixTemplate) => {
     let days, start, end
-    let newMatrix = [...matrix]
+    let newMatrix = [...matrix.map(elem => [...elem])]
     for (let schedule of group.schedule) {
       days = schedule.day.split('')
       while (days.length) {
         start = Number(schedule.time.start.substring(0, 2))
         end = Number(schedule.time.end.substring(0, 2))
         for (let hour = start; hour < end; hour++) {
-          if (newMatrix[parseDay(days[0])][hour - 5]
-            || (matrixTemplate && matrixTemplate[parseDay(days[0])][hour - 5])) {
+          if (newMatrix[parseDay(days[0])][hour - 6]
+            || (matrixTemplate && matrixTemplate[parseDay(days[0])][hour - 6])) {
             return false
           }
-          newMatrix[parseDay(days[0])][hour - 5] = group.subject.name
+          newMatrix[parseDay(days[0])][hour - 6] = group.subject.name
         }
         days.shift()
       }
@@ -131,59 +131,60 @@ function Home() {
     setLocalCurrentSchedule(DEFAULT_EMPTY_SCHEDULE)
     setCurrentPage(0)
 
-    // console.log('newLocalSubjects', newLocalSubjects)
     let totalGroups = []
-    const subjects = newLocalSubjects.sort((a, b) => b.groups.length - a.groups.length)
-    for (let subject of subjects) {
+    for (let subject of newLocalSubjects) {
       totalGroups = totalGroups.concat(subject.groups)
     }
 
-    // console.log('totalGroups', totalGroups)
     const schedules = []
-    let newMatrix
-    for (let i = 0; i < totalGroups.length; i++) {
-      if (totalGroups[i].blocked || (!allowFullGroups && totalGroups[i].quota.free === 0)) {
+    const groupKeys = new Set()
+    let newMatrix, groupKey
+
+    for (let mainGroup of totalGroups) {
+      if (mainGroup.blocked || (!allowFullGroups && mainGroup.quota.free === 0)) {
         continue
       }
 
       let subjectsIdsUsed = new Set()
-      let current = schedules.length ? false : true
       let schedule = {
-        current,
         matrix: generateEmptyMatrix(),
         groups: [],
       }
 
-      newMatrix = addToScheduleMatrix(totalGroups[i], schedule.matrix, matrixTemplate)
+      newMatrix = addToScheduleMatrix(mainGroup, schedule.matrix, matrixTemplate)
       if (!newMatrix) {
         continue
       }
       schedule.matrix = newMatrix
-      schedule.groups.push(totalGroups[i])
-      subjectsIdsUsed.add(totalGroups[i].subject.id)
+      schedule.groups.push(mainGroup)
+      subjectsIdsUsed.add(mainGroup.subject.id)
 
-      for (let j = i + 1; j < totalGroups.length; j++) {
-        if (totalGroups[j].blocked
-          || subjectsIdsUsed.has(totalGroups[j].subject.id)
-          || (!allowFullGroups && totalGroups[i].quota.free === 0)) {
+      for (let groupToCompare of totalGroups) {
+        if (groupToCompare.nrc === mainGroup.nrc
+          || groupToCompare.blocked
+          || subjectsIdsUsed.has(groupToCompare.subject.id)
+          || (!allowFullGroups && groupToCompare.quota.free === 0)) {
           continue
         }
-        newMatrix = addToScheduleMatrix(totalGroups[j], schedule.matrix, matrixTemplate)
+        newMatrix = addToScheduleMatrix(groupToCompare, schedule.matrix, matrixTemplate)
         if (!newMatrix) {
           continue
         }
         schedule.matrix = newMatrix
-        schedule.groups.push(totalGroups[j])
-        subjectsIdsUsed.add(totalGroups[j].subject.id)
+        schedule.groups.push(groupToCompare)
+        subjectsIdsUsed.add(groupToCompare.subject.id)
       }
 
-      if (schedule.groups.length === newLocalSubjects.length) {
-        if (current) setLocalCurrentSchedule(schedule)
+      schedule.groups.sort((a, b) => Number(b.nrc) - Number(a.nrc))
+      groupKey = schedule.groups.reduce((a, b) => a.nrc + b.nrc)
+
+      if (schedule.groups.length === newLocalSubjects.length
+        && !groupKeys.has(groupKey)) {
+        if (!schedules.length) setLocalCurrentSchedule(schedule)
         schedules.push(schedule)
+        groupKeys.add(groupKey)
       }
     }
-    // console.log('CONFLICT-MATRIX', 'newLocalSubjects', newLocalSubjects)
-    // console.log('CONFLICT-MATRIX', 'schedules', schedules)
     setLocalSchedules(schedules)
     setIsLoading(false)
   }
