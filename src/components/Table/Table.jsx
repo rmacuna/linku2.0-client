@@ -21,7 +21,7 @@ const Table = props => {
   useEffect(() => {
     $('#selectable').selectable({
       filter: 'td.ui-widget',
-      stop: (event, ui) => {
+      stop: () => {
         const matrix = EMPTY_MATRIX
         let rows, cells
         rows = $('#selectable')[0].rows
@@ -34,14 +34,6 @@ const Table = props => {
         onStopSelecting(matrix)
       },
     })
-
-    // $('#clean').on('click', () => {
-    //   $('.ui-selected').map((index, elem) => {
-    //     elem.classList.remove('ui-selected')
-    //   })
-    //   console.log(onClean)
-    //   onClean()
-    // })
   }, [onStopSelecting])
 
   const renderTableHeader = () => {

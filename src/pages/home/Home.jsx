@@ -39,6 +39,7 @@ const DEFAULT_EMPTY_SCHEDULE = {
 
 function Home() {
   const [currentPage, setCurrentPage] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
   const [localSubjects, setLocalSubjects] = useState([])
   const [localSchedules, setLocalSchedules] = useState([])
   const [localMatrixTemplate, setLocalMatrixTemplate] = useState(generateEmptyMatrix())
@@ -108,6 +109,7 @@ function Home() {
     newLocalSubjects = localSubjects,
     matrixTemplate = localMatrixTemplate,
   ) => {
+    setIsLoading(true)
     setLocalCurrentSchedule(DEFAULT_EMPTY_SCHEDULE)
     setCurrentPage(0)
 
@@ -160,6 +162,7 @@ function Home() {
     // console.log('CONFLICT-MATRIX', 'newLocalSubjects', newLocalSubjects)
     // console.log('CONFLICT-MATRIX', 'schedules', schedules)
     setLocalSchedules(schedules)
+    setIsLoading(false)
   }
 
   const handleReset = onClean => {
@@ -251,7 +254,8 @@ function Home() {
                       <Col xs={12} sm={12} md={6} lg={6}>
                         <h1 className="search_title">Buscar</h1>
                         <SearchSelect />
-                        {/* <Select styles={{}} placeholder="Escribe la materia a buscar" options={options} /> */}
+                        {console.log(isLoading)}
+                        {isLoading && <span className="search_subtitle">Generando horarios...</span>}
                       </Col>
                     </Row>
                   </SearchSection>

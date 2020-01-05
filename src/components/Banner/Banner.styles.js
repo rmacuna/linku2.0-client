@@ -16,7 +16,7 @@ export const BannerWrapper = styled.div`
 
   a {
     font-size: 10px;
-    padding: 0 5px;
+    padding: 0 2px;
     color: rgba(17, 65, 136, 100%);
     text-decoration: none;
   }

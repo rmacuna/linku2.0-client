@@ -33,6 +33,10 @@ export const GlobalStyle = createGlobalStyle`
   margin-bottom: 10px;
   color: #082147;
 }
+.search_subtitle {
+  font-size: 12px;
+  color: #082147;
+}
 `
 
 export const Hint = styled.p`
