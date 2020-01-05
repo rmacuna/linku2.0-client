@@ -159,9 +159,7 @@ export const LinkuButton = styled.button`
   }
 `
 
-export const ServerStatus = styled.div`
-
-`
+export const ServerStatus = styled.div``
 
 export const ProgressBar = styled.div`
   position: absolute;

@@ -87,7 +87,7 @@ function Home() {
   })
 
   const [leftSide, setLeftSide] = useState({
-    active: true,
+    active: false,
   })
 
   const toggleModalHandler = () => {
