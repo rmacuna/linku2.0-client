@@ -79,6 +79,7 @@ const addToScheduleMatrix = (group, matrix, matrixTemplate) => {
  */
 const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
   let groups = [], minSubjectsLength = subjects.length
+
   for (let subject of subjects) {
     if (subject.groups.every(({ blocked }) => blocked)) {
       minSubjectsLength -= 1
@@ -140,7 +141,7 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
       }
 
       schedule.groups.sort((a, b) => Number(b.nrc) - Number(a.nrc))
-      groupKey = schedule.groups.reduce((a, b) => a.nrc + b.nrc)
+      groupKey = schedule.groups.reduce((a, b) => (a.nrc ? a.nrc : a) + b.nrc)
 
       if (!groupKeys.has(groupKey)) {
         schedules.push(schedule)
