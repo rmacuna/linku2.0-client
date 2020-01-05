@@ -56,21 +56,26 @@ function Home() {
   const [localCurrentSchedule, setLocalCurrentSchedule] = useState(DEFAULT_EMPTY_SCHEDULE)
 
   const schedules = useMemo(() => generateSchedules(localSubjects, localMatrixTemplate, allowFullGroups),
-    [generateSchedules, localSubjects, localMatrixTemplate, allowFullGroups])
+    [localSubjects, localMatrixTemplate, allowFullGroups])
 
   useEffect(() => {
     loadSchedules()
   })
 
+  const handleSetLocalCurrentSchedule = (schedule) => {
+    setLocalCurrentSchedule(schedule)
+    setCurrentPage(0)
+  }
+
   const loadSchedules = () => {
     if (schedules.length && schedules !== localSchedules) {
-      setLocalCurrentSchedule(schedules[0])
+      handleSetLocalCurrentSchedule(schedules[0])
       setLocalSchedules(schedules)
       setIsLoading(false)
     }
     if (!schedules.length && localCurrentSchedule.matrix !== null) {
-      setLocalCurrentSchedule(DEFAULT_EMPTY_SCHEDULE)
-      setCurrentPage(0)
+      handleSetLocalCurrentSchedule(DEFAULT_EMPTY_SCHEDULE)
+      setLocalSchedules([])
     }
   }
 
@@ -107,6 +112,10 @@ function Home() {
     setLocalMatrixTemplate(matrix)
   }
 
+  const handleSetCurrentSchedule = (index) => {
+    setLocalCurrentSchedule(localSchedules[index])
+  }
+
   return (
     <SubjectsContext.Provider
       value={{
@@ -139,127 +148,117 @@ function Home() {
     >
       <SchedulesContext.Provider
         value={{
-          schedules: localSchedules,
           currentSchedule: localCurrentSchedule,
-          setCurrentSchedule: index => setLocalCurrentSchedule(localSchedules[index]),
+          setCurrentSchedule: index => handleSetCurrentSchedule(index),
         }}
       >
-        <SubjectsContext.Consumer>
-          {({ subjects }) => (
-            <>
-              <GlobalStyle />
-              {isLoading && <ProgressBar><div className="indeterminate" /></ProgressBar>}
-              <Modal onClose={toggleModalHandler} show={modal.open}>
-                <ModalHeaderContainer>
-                  <Row>
-                    <Col xs={12} sm={12} md={12} lg={12}>
-                      <section>
-                        <ModalTitle>Estas son las materias que ingresaste</ModalTitle>
-                        <ModalSubtitle>¿Faltó alguna?</ModalSubtitle>
-                      </section>
-                    </Col>
-                    <Col xs={12} sm={12} md={6} lg={6}>
-                      <SearchSelect setIsLoading={setIsLoading} />
-                    </Col>
-                  </Row>
-                  <Hint>
-                    Si no quieres bloquear el profesor pero si un grupo dale click a ver grupos
+        <>
+          <GlobalStyle />
+          {isLoading && <ProgressBar><div className="indeterminate" /></ProgressBar>}
+          <Modal onClose={toggleModalHandler} show={modal.open}>
+            <ModalHeaderContainer>
+              <Row>
+                <Col xs={12} sm={12} md={12} lg={12}>
+                  <section>
+                    <ModalTitle>Estas son las materias que ingresaste</ModalTitle>
+                    <ModalSubtitle>¿Faltó alguna?</ModalSubtitle>
+                  </section>
+                </Col>
+                <Col xs={12} sm={12} md={6} lg={6}>
+                  <SearchSelect setIsLoading={setIsLoading} />
+                </Col>
+              </Row>
+              <Hint>
+                Si no quieres bloquear el profesor pero si un grupo dale click a ver grupos
                   </Hint>
-                </ModalHeaderContainer>
-                <ModalBodyContainer>
-                  <Row style={{ width: '100%' }}>
-                    {subjects.map(({ mat, name, departmentName, groups }, index) => (
-                      <Col key={index} xs={12} sm={4} md={4} lg={4}>
-                        <SubjectDetails
-                          index={index}
-                          nrc={groups.nrc}
-                          subjectName={name}
-                          groups={groups}
-                          subjectsCount={subjects.length}
+            </ModalHeaderContainer>
+            <ModalBodyContainer>
+              <Row style={{ width: '100%' }}>
+                {localSubjects.map(({ mat, name, departmentName, groups }, index) => (
+                  <Col key={index} xs={12} sm={4} md={4} lg={4}>
+                    <SubjectDetails
+                      index={index}
+                      nrc={groups.nrc}
+                      subjectName={name}
+                      groups={groups}
+                      subjectsCount={localSubjects.length}
+                    />
+                  </Col>
+                ))}
+              </Row>
+            </ModalBodyContainer>
+          </Modal>
+          <FullWrapper>
+            <Sidenav
+              show={leftSide.active}
+              toggleLeftSide={toggleLeftSide}
+              toggleModalHandler={toggleModalHandler}
+            />
+            <ContentArea active={leftSide.active}>
+              <SearchSection>
+                <Row>
+                  <Col xs={12} sm={12} md={6} lg={6}>
+                    <h1 className="search_title">Buscar</h1>
+                    <SearchSelect setIsLoading={setIsLoading} />
+                  </Col>
+                </Row>
+              </SearchSection>
+              <MenuSection>
+                <Row>
+                  <Col xs={12} sm={12} md={12} lg={12}>
+                    <Row middle="xs" start="xs">
+                      <Col xs={2} sm={2} md={2} lg={2}>
+                        <Paginator
+                          currentPage={currentPage}
+                          setCurrentPage={setCurrentPage}
+                          setCurrentSchedule={handleSetCurrentSchedule}
+                          limit={localSchedules.length}
                         />
                       </Col>
-                    ))}
-                  </Row>
-                </ModalBodyContainer>
-              </Modal>
-              <FullWrapper>
-                <Sidenav
-                  show={leftSide.active}
-                  toggleLeftSide={toggleLeftSide}
-                  toggleModalHandler={toggleModalHandler}
-                />
-                <ContentArea active={leftSide.active}>
-                  <SearchSection>
-                    <Row>
-                      <Col xs={12} sm={12} md={6} lg={6}>
-                        <h1 className="search_title">Buscar</h1>
-                        <SearchSelect setIsLoading={setIsLoading} />
+                      <Col xs={2} sm={2} md={2} lg={2}>
+                        <Indicator>
+                          <p>{`${localSchedules.length ? currentPage + 1 : currentPage} de ${
+                            localSchedules.length
+                            }`}</p>
+                        </Indicator>
+                      </Col>
+                      <Col xs={8} sm={8} md={8} lg={8}>
+                        <Row end="xs">
+                          <Col xs={12} sm={12} md={12} lg={12}>
+                            <AllowFullGroups>
+                              <BlockCheckbox
+                                checked={allowFullGroups}
+                                onChange={({ target }) => handleAllowGroups(target.checked)}
+                              />
+                              <span>Permitir cursos sin cupo</span>
+                            </AllowFullGroups>
+                            <LinkuButton
+                              onClick={handleReset}
+                              color="#DA8686"
+                            >
+                              Limpiar filtro por horas
+                            </LinkuButton>
+                            <LinkuButton color="#114188">
+                              <i className="fas fa-save"></i>
+                              Guardar como pdf
+                            </LinkuButton>
+                          </Col>
+                        </Row>
                       </Col>
                     </Row>
-                  </SearchSection>
-                  <MenuSection>
-                    <SchedulesContext.Consumer>
-                      {({ schedules, setCurrentSchedule }) => (
-                        <React.Fragment key="schedule">
-                          <Row>
-                            <Col xs={12} sm={12} md={12} lg={12}>
-                              <Row middle="xs" start="xs">
-                                <Col xs={2} sm={2} md={2} lg={2}>
-                                  <Paginator
-                                    currentPage={currentPage}
-                                    setCurrentPage={setCurrentPage}
-                                    setCurrentSchedule={setCurrentSchedule}
-                                    limit={schedules.length}
-                                  />
-                                </Col>
-                                <Col xs={2} sm={2} md={2} lg={2}>
-                                  <Indicator>
-                                    <p>{`${schedules.length ? currentPage + 1 : currentPage} de ${
-                                      schedules.length
-                                      }`}</p>
-                                  </Indicator>
-                                </Col>
-                                <Col xs={8} sm={8} md={8} lg={8}>
-                                  <Row end="xs">
-                                    <Col xs={12} sm={12} md={12} lg={12}>
-                                      <AllowFullGroups>
-                                        <BlockCheckbox
-                                          checked={allowFullGroups}
-                                          onChange={({ target }) => handleAllowGroups(target.checked)}
-                                        />
-                                        <span>Permitir cursos sin cupo</span>
-                                      </AllowFullGroups>
-                                      <LinkuButton
-                                        onClick={handleReset}
-                                        color="#DA8686"
-                                      >
-                                        Limpiar filtro por horas
-                                      </LinkuButton>
-                                      <LinkuButton color="#114188">
-                                        <i className="fas fa-save"></i>
-                                        Guardar como pdf
-                                      </LinkuButton>
-                                    </Col>
-                                  </Row>
-                                </Col>
-                              </Row>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col xs={12} sm={12} md={12} lg={12}>
-                              <Table onStopSelecting={handleOnStopSelecting} />
-                              <ServerStatus />
-                            </Col>
-                          </Row>
-                        </React.Fragment>
-                      )}
-                    </SchedulesContext.Consumer>
-                  </MenuSection>
-                </ContentArea>
-              </FullWrapper>
-            </>
-          )}
-        </SubjectsContext.Consumer>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12} sm={12} md={12} lg={12}>
+                    <Table onStopSelecting={handleOnStopSelecting} />
+                    <ServerStatus />
+                  </Col>
+                </Row>
+              </MenuSection>
+            </ContentArea>
+          </FullWrapper>
+        </>
+        )}
       </SchedulesContext.Provider>
       <Banner />
     </SubjectsContext.Provider>
