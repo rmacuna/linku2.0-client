@@ -131,60 +131,75 @@ function Home() {
     setLocalCurrentSchedule(DEFAULT_EMPTY_SCHEDULE)
     setCurrentPage(0)
 
-    let totalGroups = []
+    let groups = []
     for (let subject of newLocalSubjects) {
-      totalGroups = totalGroups.concat(subject.groups)
+      groups = groups.concat(subject.groups)
     }
 
     const schedules = []
     const groupKeys = new Set()
-    let newMatrix, groupKey
+    let newMatrix, groupKey, groupsToCompare
 
-    for (let mainGroup of totalGroups) {
-      if (mainGroup.blocked || (!allowFullGroups && mainGroup.quota.free === 0)) {
+    for (let group of groups) {
+      if (group.blocked || (!allowFullGroups && group.quota.free === 0)) {
         continue
       }
-
-      let subjectsIdsUsed = new Set()
-      let schedule = {
-        matrix: generateEmptyMatrix(),
-        groups: [],
-      }
-
-      newMatrix = addToScheduleMatrix(mainGroup, schedule.matrix, matrixTemplate)
-      if (!newMatrix) {
-        continue
-      }
-      schedule.matrix = newMatrix
-      schedule.groups.push(mainGroup)
-      subjectsIdsUsed.add(mainGroup.subject.id)
-
-      for (let groupToCompare of totalGroups) {
-        if (groupToCompare.nrc === mainGroup.nrc
-          || groupToCompare.blocked
-          || subjectsIdsUsed.has(groupToCompare.subject.id)
-          || (!allowFullGroups && groupToCompare.quota.free === 0)) {
-          continue
+      groupsToCompare = [...groups]
+      while (groupsToCompare.length) {
+        let subjectsIdsUsed = new Set()
+        let schedule = {
+          matrix: generateEmptyMatrix(),
+          groups: [],
         }
-        newMatrix = addToScheduleMatrix(groupToCompare, schedule.matrix, matrixTemplate)
+
+        newMatrix = addToScheduleMatrix(group, schedule.matrix, matrixTemplate)
         if (!newMatrix) {
-          continue
+          break
         }
         schedule.matrix = newMatrix
-        schedule.groups.push(groupToCompare)
-        subjectsIdsUsed.add(groupToCompare.subject.id)
-      }
+        schedule.groups.push(group)
+        subjectsIdsUsed.add(group.subject.id)
 
-      schedule.groups.sort((a, b) => Number(b.nrc) - Number(a.nrc))
-      groupKey = schedule.groups.reduce((a, b) => a.nrc + b.nrc)
+        if (groupsToCompare[0].nrc === group.nrc) {
+          groupsToCompare.shift()
+        }
 
-      if (schedule.groups.length === newLocalSubjects.length
-        && !groupKeys.has(groupKey)) {
-        if (!schedules.length) setLocalCurrentSchedule(schedule)
-        schedules.push(schedule)
-        groupKeys.add(groupKey)
+        if (schedule.groups.length === newLocalSubjects.length) {
+          groupsToCompare = []
+        }
+
+        // Search groups until complete a schedule
+        while (groupsToCompare.length && schedule.groups.length < newLocalSubjects.length) {
+          if (groupsToCompare[0].nrc !== group.nrc
+            && !groupsToCompare[0].blocked
+            && !subjectsIdsUsed.has(groupsToCompare[0].subject.id)
+            && (allowFullGroups || groupsToCompare[0].quota.free > 0)) {
+            newMatrix = addToScheduleMatrix(groupsToCompare[0], schedule.matrix, matrixTemplate)
+            if (newMatrix) {
+              schedule.matrix = newMatrix
+              schedule.groups.push(groupsToCompare[0])
+              subjectsIdsUsed.add(groupsToCompare[0].subject.id)
+            }
+          }
+          groupsToCompare.shift()
+        }
+
+        if (schedule.groups.length < newLocalSubjects.length) {
+          break
+        }
+
+        schedule.groups.sort((a, b) => Number(b.nrc) - Number(a.nrc))
+        groupKey = schedule.groups.reduce((a, b) => a.nrc + b.nrc)
+
+        if (!groupKeys.has(groupKey)) {
+          schedules.push(schedule)
+          groupKeys.add(groupKey)
+        }
       }
     }
+
+    console.log('schedules', schedules.length)
+    if (schedules.length) setLocalCurrentSchedule(schedules[0])
     setLocalSchedules(schedules)
     setIsLoading(false)
   }
