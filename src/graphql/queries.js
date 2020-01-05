@@ -46,3 +46,13 @@ export const GET_SUBJECT_GROUPS = gql`
     }
   }
 `;
+
+export const GET_SERVER_STATUS_QUERY = gql`
+  {
+    getServerStatus {
+      updatedAt
+      totalGroups
+      totalSubjects
+    }
+  }
+`;

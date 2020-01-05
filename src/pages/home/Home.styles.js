@@ -37,6 +37,10 @@ export const GlobalStyle = createGlobalStyle`
   font-size: 12px;
   color: #082147;
 }
+.server_status {
+  margin-top: 14px;
+  float: right;
+}
 `
 
 export const Hint = styled.p`
@@ -112,7 +116,7 @@ export const ContentArea = styled.div`
 `
 
 export const SearchSection = styled.section`
-  padding: 20px;
+  padding: 14px;
 `
 
 export const MenuSection = styled.div`
