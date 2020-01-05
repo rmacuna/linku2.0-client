@@ -119,15 +119,44 @@ function Home() {
     setLocalCurrentSchedule(localSchedules[index])
   }
 
-  const handlePDFSave = () => {
+  const handlePDFSave = schedules => {
     // const input = document.getElementById('tablePrint')
     // html2canvas(input, {}).then(canvas => {
     // const imgData = canvas.toDataURL('image/png')
+    console.log(localCurrentSchedule)
+    const pdf = new jsPDF('l', 'pt', [1000, 750])
 
-    const pdf = new jsPDF('l', 'pt')
-    pdf.autoTable({ html: '#tablePrint', theme: 'grid' })
+    pdf.autoTable({
+      html: '#tablePrint',
+      theme: 'grid',
+      pageBreak: 'avoid',
+      tableWidth: 'wrap',
+      styles: {
+        overflow: 'linebreak',
+        columnWidth: 'wrap',
+        halign: 'center',
+        cellWidth: 125,
+        fontSize: 7,
+        columnStyles: {
+          fontSize: 6,
+        },
+      },
+    })
+    // pdf.addHTML
     // pdf.addImage(imgData, 'PNG', 50, 20)
+    const finalY = pdf.lastAutoTable.finalY
+    pdf.setFontSize(14)
+    localCurrentSchedule.groups.map((elem, index) => {
+      pdf.text(
+        40,
+        finalY + (30 + 30 * index),
+        `NRC: ${elem.nrc}, Profesor: ${elem.professors.join(',').substring(0, 40)}`,
+      )
+    })
+
+    // localCurrentSchedule.groups[0].
     pdf.save('Schedule.pdf')
+
     // })
   }
 
@@ -256,7 +285,10 @@ function Home() {
                             <LinkuButton onClick={handleReset} color="#DA8686">
                               Limpiar filtro por horas
                             </LinkuButton>
-                            <LinkuButton onClick={handlePDFSave} color="#114188">
+                            <LinkuButton
+                              onClick={() => handlePDFSave(localSchedules)}
+                              color="#114188"
+                            >
                               <i className="fas fa-save"></i>
                               Guardar como pdf
                             </LinkuButton>

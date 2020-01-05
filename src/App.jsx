@@ -31,10 +31,9 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Switch>
-        <Route component={Home} path="/schedules" exact />
-        <Route component={Conversor} path="/exportpdf" />
+        <Route component={Home} exact />
         <Route exact path="/">
-          <Redirect to="/schedules" />
+          <Redirect to="/home" />
         </Route>
       </Switch>
     </ApolloProvider>
