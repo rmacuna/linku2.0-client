@@ -1,8 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { Row, Col } from 'react-flexbox-grid'
-import { useQuery } from '@apollo/react-hooks'
 
-import { GET_SERVER_STATUS_QUERY } from '../../graphql/queries'
 
 import {
   ModalSubtitle,
@@ -17,11 +15,14 @@ import {
   Indicator,
   LinkuButton,
   Hint,
+  ProgressBar,
+  AllowFullGroups,
 } from './Home.styles'
 
 import Modal from '../../components/Modal/Modal'
 import Sidenav from '../../components/Sidenav/Sidenav'
 import SearchSelect from './SearchSelect/SearchSelect'
+import ServerStatus from './ServerStatus/ServerStatus'
 import Paginator from './Paginator/Paginator'
 
 import SubjectDetails from './SubjectDetails/SubjectDetails'
@@ -32,8 +33,13 @@ import { generateEmptyMatrix } from '../../library/utils'
 import SubjectsContext from '../../context/subjects-context'
 import SchedulesContext from '../../context/schedules-context'
 import Banner from '../../components/Banner/Banner'
+import BlockCheckbox from '../../components/Checkbox/Checkbox'
+
+import generateSchedules from '../../services/generateSchedules'
 
 import $ from 'jquery'
+
+const EMPTY_MATRIX = generateEmptyMatrix()
 
 const DEFAULT_EMPTY_SCHEDULE = {
   matrix: null,
@@ -45,19 +51,27 @@ function Home() {
   const [isLoading, setIsLoading] = useState(false)
   const [localSubjects, setLocalSubjects] = useState([])
   const [localSchedules, setLocalSchedules] = useState([])
-  const [localMatrixTemplate, setLocalMatrixTemplate] = useState(generateEmptyMatrix())
+  const [allowFullGroups, setAllowFullGroups] = useState(false)
+  const [localMatrixTemplate, setLocalMatrixTemplate] = useState(EMPTY_MATRIX)
   const [localCurrentSchedule, setLocalCurrentSchedule] = useState(DEFAULT_EMPTY_SCHEDULE)
 
-  const ServerStatus = () => {
-    const { loading, error, data } = useQuery(GET_SERVER_STATUS_QUERY)
-    if (loading || error) return null
+  const schedules = useMemo(() => generateSchedules(localSubjects, localMatrixTemplate, allowFullGroups),
+    [generateSchedules, localSubjects, localMatrixTemplate, allowFullGroups])
 
-    const { totalGroups, updatedAt } = data.getServerStatus;
-    return (
-      <span className="search_subtitle server_status">
-        Última actualización: {new Date(updatedAt).toLocaleString()} - Grupos obtenidos: {totalGroups}
-      </span>
-    )
+  useEffect(() => {
+    loadSchedules()
+  })
+
+  const loadSchedules = () => {
+    if (schedules.length && schedules !== localSchedules) {
+      setLocalCurrentSchedule(schedules[0])
+      setLocalSchedules(schedules)
+      setIsLoading(false)
+    }
+    if (!schedules.length && localCurrentSchedule.matrix !== null) {
+      setLocalCurrentSchedule(DEFAULT_EMPTY_SCHEDULE)
+      setCurrentPage(0)
+    }
   }
 
   const [modal, setModal] = useState({
@@ -80,110 +94,17 @@ function Home() {
     })
   }
 
-  const parseDay = day => {
-    switch (day) {
-      case 'M':
-        return 0
-      case 'T':
-        return 1
-      case 'W':
-        return 2
-      case 'R':
-        return 3
-      case 'F':
-        return 4
-      case 'S':
-        return 5
-      default:
-        return 6
-    }
+  const handleReset = () => {
+    $('.ui-selected').map((_, elem) => elem.classList.remove('ui-selected'))
+    setLocalMatrixTemplate(EMPTY_MATRIX)
   }
 
-  const addToScheduleMatrix = (group, matrix, matrixTemplate) => {
-    let days, start, end
-    let newMatrix = [...matrix]
-    for (let schedule of group.schedule) {
-      days = schedule.day.split('')
-      while (days.length) {
-        start = Number(schedule.time.start.substring(0, 2))
-        end = Number(schedule.time.end.substring(0, 2))
-        for (let hour = start; hour < end; hour++) {
-          if (newMatrix[parseDay(days[0])][hour - 5]
-            || (matrixTemplate && matrixTemplate[parseDay(days[0])][hour - 5])) {
-            return false
-          }
-          newMatrix[parseDay(days[0])][hour - 5] = group.subject.name
-        }
-        days.shift()
-      }
-    }
-    return newMatrix
+  const handleAllowGroups = (value) => {
+    setAllowFullGroups(value)
   }
 
-  const generateSchedules = (
-    newLocalSubjects = localSubjects,
-    matrixTemplate = localMatrixTemplate,
-  ) => {
-    setLocalCurrentSchedule(DEFAULT_EMPTY_SCHEDULE)
-    setCurrentPage(0)
-
-    let totalGroups = [],
-      newMatrix
-    const schedules = []
-    for (let subject of newLocalSubjects) {
-      totalGroups = totalGroups.concat(subject.groups)
-    }
-
-    for (let i = 0; i < totalGroups.length; i++) {
-      if (totalGroups[i].blocked) {
-        continue
-      }
-
-      let subjectsIdsUsed = []
-      let current = schedules.length ? false : true
-      let schedule = {
-        current,
-        matrix: generateEmptyMatrix(),
-        groups: [],
-      }
-
-      newMatrix = addToScheduleMatrix(totalGroups[i], schedule.matrix, matrixTemplate)
-      if (!newMatrix) {
-        continue
-      }
-      schedule.matrix = newMatrix
-      schedule.groups.push(totalGroups[i])
-      subjectsIdsUsed.push(totalGroups[i].subject.id)
-
-      for (let j = i + 1; j < totalGroups.length; j++) {
-        if (totalGroups[j].blocked || subjectsIdsUsed.includes(totalGroups[j].subject.id)) {
-          continue
-        }
-        newMatrix = addToScheduleMatrix(totalGroups[j], schedule.matrix, matrixTemplate)
-        if (!newMatrix) {
-          continue
-        }
-        schedule.matrix = newMatrix
-        schedule.groups.push(totalGroups[j])
-        subjectsIdsUsed.push(totalGroups[j].subject.id)
-      }
-
-      if (schedule.groups.length === newLocalSubjects.length) {
-        if (current) setLocalCurrentSchedule(schedule)
-        schedules.push(schedule)
-      }
-    }
-    // console.log('CONFLICT-MATRIX', 'newLocalSubjects', newLocalSubjects)
-    // console.log('CONFLICT-MATRIX', 'schedules', schedules)
-    setLocalSchedules(schedules)
-    setIsLoading(false)
-  }
-
-  const handleReset = onClean => {
-    $('.ui-selected').map((index, elem) => {
-      elem.classList.remove('ui-selected')
-    })
-    onClean(null)
+  const handleOnStopSelecting = (matrix) => {
+    setLocalMatrixTemplate(matrix)
   }
 
   return (
@@ -193,17 +114,26 @@ function Home() {
         addSubject: newSubject => {
           const newLocalSubjects = [...localSubjects, newSubject]
           setLocalSubjects(newLocalSubjects)
-          generateSchedules(newLocalSubjects)
         },
         removeSubject: index => {
-          localSubjects.splice(index, 1)
-          generateSchedules()
+          const newLocalSubjects = [...localSubjects]
+          newLocalSubjects.splice(index, 1)
+          setLocalSubjects(newLocalSubjects)
         },
-        updateGroupsStatus: (groups, blocked) => {
-          groups.forEach(group => {
-            group.blocked = blocked
-          })
-          generateSchedules()
+        updateGroupsStatus: (groupsNrcs, blocked) => {
+          const newLocalSubjects = [...localSubjects]
+          const subject = newLocalSubjects.find((subject) => subject.groups.some(({ nrc }) => nrc === groupsNrcs[0]))
+          if (subject) {
+            Object.assign(subject, {
+              groups: subject.groups.map(group => {
+                if (groupsNrcs.includes(group.nrc)) {
+                  return Object.assign(group, { blocked })
+                }
+                return group
+              })
+            })
+          }
+          setLocalSubjects(newLocalSubjects)
         },
       }}
     >
@@ -211,18 +141,14 @@ function Home() {
         value={{
           schedules: localSchedules,
           currentSchedule: localCurrentSchedule,
-          matrixTemplate: localMatrixTemplate,
           setCurrentSchedule: index => setLocalCurrentSchedule(localSchedules[index]),
-          setMatrixTemplate: matrix => {
-            setLocalMatrixTemplate(matrix)
-            generateSchedules(localSubjects, matrix)
-          },
         }}
       >
         <SubjectsContext.Consumer>
           {({ subjects }) => (
             <>
               <GlobalStyle />
+              {isLoading && <ProgressBar><div className="indeterminate" /></ProgressBar>}
               <Modal onClose={toggleModalHandler} show={modal.open}>
                 <ModalHeaderContainer>
                   <Row>
@@ -268,13 +194,12 @@ function Home() {
                       <Col xs={12} sm={12} md={6} lg={6}>
                         <h1 className="search_title">Buscar</h1>
                         <SearchSelect setIsLoading={setIsLoading} />
-                        {isLoading && <span className="search_subtitle">Generando horarios...</span>}
                       </Col>
                     </Row>
                   </SearchSection>
                   <MenuSection>
                     <SchedulesContext.Consumer>
-                      {({ schedules, setCurrentSchedule, setMatrixTemplate }) => (
+                      {({ schedules, setCurrentSchedule }) => (
                         <React.Fragment key="schedule">
                           <Row>
                             <Col xs={12} sm={12} md={12} lg={12}>
@@ -297,8 +222,15 @@ function Home() {
                                 <Col xs={8} sm={8} md={8} lg={8}>
                                   <Row end="xs">
                                     <Col xs={12} sm={12} md={12} lg={12}>
+                                      <AllowFullGroups>
+                                        <BlockCheckbox
+                                          checked={allowFullGroups}
+                                          onChange={({ target }) => handleAllowGroups(target.checked)}
+                                        />
+                                        <span>Permitir cursos sin cupo</span>
+                                      </AllowFullGroups>
                                       <LinkuButton
-                                        onClick={() => handleReset(setMatrixTemplate)}
+                                        onClick={handleReset}
                                         color="#DA8686"
                                       >
                                         Limpiar filtro por horas
@@ -315,7 +247,7 @@ function Home() {
                           </Row>
                           <Row>
                             <Col xs={12} sm={12} md={12} lg={12}>
-                              <Table onStopSelecting={matrix => setMatrixTemplate(matrix)} />
+                              <Table onStopSelecting={handleOnStopSelecting} />
                               <ServerStatus />
                             </Col>
                           </Row>

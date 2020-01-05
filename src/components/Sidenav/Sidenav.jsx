@@ -52,7 +52,6 @@ function Sidenav(props) {
                     name={subject.name}
                     quota={quota.free}
                     professorsNames={professors.join(', ')}
-                    // handleRemove={() => updateGroupsStatus([currentSchedule.groups[index]], true)}
                   />
                 </Col>
               </Row>

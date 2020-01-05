@@ -6,7 +6,6 @@ import {
   ProfessorName,
   Quotas,
   CardBody,
-  CloseIcon,
   CardHeader,
   CardFooter,
   ProfesorsGroup,
@@ -43,8 +42,8 @@ const Group = props => {
         {professorsNamesSplited.length > 1 ? (
           <ProfessorName>{`${professorsNamesSplited[0]}, ${professorsNamesSplited[1]}`}</ProfessorName>
         ) : (
-          <ProfessorName>{`${professorsNamesSplited[0]}`}</ProfessorName>
-        )}
+            <ProfessorName>{`${professorsNamesSplited[0]}`}</ProfessorName>
+          )}
         {showProfesors ? <ProfesorsGroup>{professorsNames}</ProfesorsGroup> : null}
       </CardBody>
       <CardFooter>
@@ -53,7 +52,6 @@ const Group = props => {
             {showProfesors ? 'Ocultar' : 'Ver'} profesores
           </ActionLink>
         ) : null}
-
         <Quotas full={quotaNumber < 10 ? true : false}>{quota} Cupos</Quotas>
       </CardFooter>
     </Card>
@@ -65,7 +63,6 @@ Group.propTypes = {
   nrc: PropTypes.string,
   professorsNames: PropTypes.string,
   quota: PropTypes.number,
-  // handleRemove: PropTypes.func.isRequired
 }
 
 export default Group
