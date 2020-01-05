@@ -13,8 +13,6 @@ import 'jquery-ui/themes/base/selectable.css'
 import 'jquery-ui/ui/core'
 import 'jquery-ui/ui/widgets/selectable'
 
-const EMPTY_MATRIX = generateEmptyMatrix()
-
 const Table = props => {
   const { onStopSelecting } = props
 
@@ -22,7 +20,7 @@ const Table = props => {
     $('#selectable').selectable({
       filter: 'td.ui-widget',
       stop: () => {
-        const matrix = EMPTY_MATRIX
+        const matrix = generateEmptyMatrix()
         let rows, cells
         rows = $('#selectable')[0].rows
         for (let i = 1; i < rows.length; i++) {
