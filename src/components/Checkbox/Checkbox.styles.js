@@ -45,12 +45,12 @@ export const InputCheckbox = styled.input`
   height: ${props => (props.small ? '15px' : '25px')};
   z-index: 2;
 
-  &:checked + label {
+  &:checked + ${Label} {
     border: 2px solid #da8686;
     animation: ${confirm} 0.15s linear;
   }
 
-  &:checked + label:after {
+  &:checked + ${Label}:after {
     content: '\f00d';
     font-weight: 900;
     font-family: 'Font Awesome\ 5 Free';

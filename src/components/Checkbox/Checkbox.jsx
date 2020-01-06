@@ -8,13 +8,13 @@ import {
   StyledCheckbox,
 } from './Checkbox.styles'
 
-function Checkbox(props) {
-  const { labelTitle, small, labelColor } = props
+const Checkbox = props => {
+  const { labelTitle, small, labelColor, checked, onChange } = props
   return (
     <CheckboxWrapper>
       <StyledCheckbox>
-        <InputCheckbox name="do-checkbox" type="checkbox" {...props} />
-        <Label small={small} htmlFor="do-checkbox"></Label>
+        <InputCheckbox type="checkbox" checked={checked} onChange={onChange} {...props} />
+        <Label small={small}></Label>
       </StyledCheckbox>
       {labelTitle ? (
         <CheckboxTitleWrapper>
