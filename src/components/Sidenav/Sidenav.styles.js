@@ -1,4 +1,13 @@
-import styled from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
+
+export const GlobalStyles = createGlobalStyle`
+  /* .scroll_nav::-webkit-scrollbar {
+    width: 10px;
+  }
+  .scroll_nav {
+    -ms-overflow-style: none;
+  } */
+`
 
 export const LeftNavigation = styled.div`
   position: fixed;
@@ -31,6 +40,7 @@ export const ScrollArea = styled.div`
 
   margin-bottom: 15%;
   overflow-y: scroll;
+  overflow-x: hidden;
 `
 
 export const RetriveButton = styled.button`

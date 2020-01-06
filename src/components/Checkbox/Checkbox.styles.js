@@ -52,7 +52,8 @@ export const InputCheckbox = styled.input`
 
   &:checked + label:after {
     content: '\f00d';
-    font-family: FontAwesome;
+    font-weight: 900;
+    font-family: 'Font Awesome\ 5 Free';
     font-size: ${props => (props.small ? '15px' : '18px')};
     line-height: ${props => (props.small ? '13px' : '23px')};
     width: ${props => (props.small ? '15px' : '25px')};

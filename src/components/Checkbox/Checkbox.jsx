@@ -9,16 +9,16 @@ import {
 } from './Checkbox.styles'
 
 function Checkbox(props) {
-  const { labelTitle } = props
+  const { labelTitle, small, labelColor } = props
   return (
     <CheckboxWrapper>
       <StyledCheckbox>
         <InputCheckbox name="do-checkbox" type="checkbox" {...props} />
-        <Label small={props.small} htmlFor="do-checkbox"></Label>
+        <Label small={small} htmlFor="do-checkbox"></Label>
       </StyledCheckbox>
       {labelTitle ? (
         <CheckboxTitleWrapper>
-          <CheckboxTitleMessage labelColor={props.labelColor}>{labelTitle}</CheckboxTitleMessage>
+          <CheckboxTitleMessage labelColor={labelColor}>{labelTitle}</CheckboxTitleMessage>
         </CheckboxTitleWrapper>
       ) : null}
     </CheckboxWrapper>

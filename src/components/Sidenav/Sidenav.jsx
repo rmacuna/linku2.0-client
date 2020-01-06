@@ -7,6 +7,7 @@ import {
   Logo,
   LeftSideTitle,
   Hidder,
+  GlobalStyles,
 } from './Sidenav.styles'
 import logo from '../../assets/logo.png'
 import { Row, Col } from 'react-flexbox-grid'
@@ -19,47 +20,50 @@ function Sidenav(props) {
   const { show, toggleLeftSide, toggleModalHandler } = props
 
   return (
-    <SchedulesContext.Consumer>
-      {({ currentSchedule }) => (
-        <LeftNavigation active={show}>
-          <RetriveButton active={show} onClick={toggleLeftSide}>
-            <i className="fas fa-angle-right"></i>
-          </RetriveButton>
-          <Row>
-            <span className="with-separator"></span>
-          </Row>
-          <Hidder active={show}>
+    <>
+      <GlobalStyles />
+      <SchedulesContext.Consumer>
+        {({ currentSchedule }) => (
+          <LeftNavigation active={show}>
+            <RetriveButton active={show} onClick={toggleLeftSide}>
+              <i className="fas fa-angle-right"></i>
+            </RetriveButton>
             <Row>
-              <Col xs={12} sm={12} md={12} lg={12}>
-                <Logo src={logo} alt="Logo" />
-              </Col>
+              <span className="with-separator"></span>
             </Row>
-            <Row>
-              <Col xs={12} sm={12} md={12} lg={12}>
-                <LeftSideTitle>Arma tu horario</LeftSideTitle>
-                <ShowProfessorButton onClick={toggleModalHandler}>
-                  Filtrar por grupos o profesores{' '}
-                </ShowProfessorButton>
-              </Col>
-            </Row>
-          </Hidder>
-          <ScrollArea active={show}>
-            {currentSchedule.groups.map(({ subject, nrc, group, professors, quota }, index) => (
-              <Row key={nrc}>
+            <Hidder active={show}>
+              <Row>
                 <Col xs={12} sm={12} md={12} lg={12}>
-                  <Group
-                    nrc={`NRC: ${nrc} - Grupo ${group}`}
-                    name={subject.name}
-                    quota={quota.free}
-                    professorsNames={professors.join(', ')}
-                  />
+                  <Logo src={logo} alt="Logo" />
                 </Col>
               </Row>
-            ))}
-          </ScrollArea>
-        </LeftNavigation>
-      )}
-    </SchedulesContext.Consumer>
+              <Row>
+                <Col xs={12} sm={12} md={12} lg={12}>
+                  <LeftSideTitle>Arma tu horario</LeftSideTitle>
+                  <ShowProfessorButton onClick={toggleModalHandler}>
+                    Filtrar por grupos o profesores{' '}
+                  </ShowProfessorButton>
+                </Col>
+              </Row>
+            </Hidder>
+            <ScrollArea className="scroll_nav" active={show}>
+              {currentSchedule.groups.map(({ subject, nrc, group, professors, quota }, index) => (
+                <Row key={nrc}>
+                  <Col xs={12} sm={12} md={12} lg={12}>
+                    <Group
+                      nrc={`NRC: ${nrc} - Grupo ${group}`}
+                      name={subject.name}
+                      quota={quota.free}
+                      professorsNames={professors.join(', ')}
+                    />
+                  </Col>
+                </Row>
+              ))}
+            </ScrollArea>
+          </LeftNavigation>
+        )}
+      </SchedulesContext.Consumer>
+    </>
   )
 }
 
