@@ -149,7 +149,7 @@ function Home() {
     // pdf.addImage(imgData, 'PNG', 50, 20)
     const finalY = pdf.lastAutoTable.finalY
     pdf.setFontSize(14)
-    localCurrentSchedule.groups.map((elem, index) => {
+    localCurrentSchedule.groups.forEach((elem, index) => {
       pdf.text(
         40,
         finalY + (30 + 30 * index),

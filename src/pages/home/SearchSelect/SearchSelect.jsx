@@ -68,7 +68,7 @@ function SearchSelect(props) {
                     subjectId: id,
                   })
                   // Temp fix parse NRC
-                  const groups = groups = data.getSubjectGroups.map(group =>
+                  const groups = data.getSubjectGroups.map(group =>
                     Object.assign(group, { nrc: group.nrc.substr(1) }),
                   )
 
