@@ -1,0 +1,183 @@
+.Hint {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.7);
+  margin: 0;
+}
+
+.ModalHeaderContainer {
+  border-bottom: 1px solid rgba(17, 65, 136, 0.15);
+  min-height: 120px;
+  padding: 44px 43px;
+}
+
+.ModalBodyContainer {
+  padding: 44px 43px;
+  display: flex;
+  justify-content: flex-start;
+  min-height: 500px;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+
+.ModalTitle {
+  margin: 0;
+  color: #0a397e;
+  font-size: 24px;
+  font-weight: 700;
+  max-width: 60%;
+  padding-bottom: 10px;
+}
+
+.ModalSubtitle {
+  font-weight: 700;
+  color: #a3afc0;
+  font-size: 16px;
+  margin: 0;
+}
+
+.FullWrapper {
+  min-height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+.ScrollArea {
+  width: 100%;
+  margin-top: 30px;
+  display: none;
+  flex-direction: column;
+  height: 100%;
+
+  overflow-y: scroll;
+}
+.ScrollAreaActive {
+  width: 100%;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  overflow-y: scroll;
+}
+
+.Hidder {
+  width: 100%;
+  height: auto;
+  transition: opacity 0.3s ease-out;
+  opacity: '0';
+  display: 'none';
+}
+.HidderActive {
+  width: 100%;
+  height: auto;
+  transition: opacity 0.3s ease-out;
+  opacity: '1';
+  display: 'unset';
+}
+
+.RightSide {
+  display: flex;
+  flex-basis: 70%;
+  overflow-y: scroll;
+}
+
+.SearchSection {
+  padding: 14px;
+}
+
+.MenuSection {
+  position: relative;
+  padding: 10px 20px;
+}
+
+.Indicator {
+  display: flex;
+  justify-content: center;
+  width: 102px;
+  height: 45px;
+  align-items: center;
+  border-radius: 6px;
+  background-color: #f6f6f6;
+  p {
+    color: #5b79a6;
+  }
+}
+
+.LinkuButtonCancel {
+  margin: 0px 10px;
+  border: none;
+
+  background-color: #da8686;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+
+  color: #fff;
+
+  padding: 17px 17px;
+
+  border-radius: 6px;
+
+  font-weight: 600;
+
+  font-size: 14px;
+
+  transition: all 0.3s ease-out;
+  &:hover {
+    transform: scale(1.05);
+  }
+  i {
+    margin-right: 10px;
+  }
+}
+.LinkuButtonSave {
+  margin: 0px 10px;
+  border: none;
+
+  background-color: #114188;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+
+  color: #fff;
+
+  padding: 17px 17px;
+
+  border-radius: 6px;
+
+  font-weight: 600;
+
+  font-size: 14px;
+
+  transition: all 0.3s ease-out;
+  &:hover {
+    transform: scale(1.05);
+  }
+  i {
+    margin-right: 10px;
+  }
+}
+
+.AllowFullGroups {
+  margin: 0px 10px;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 17px 17px;
+
+  transition: all 0.3s ease-out;
+
+  span {
+    margin-left: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #082147;
+  }
+}

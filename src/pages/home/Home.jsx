@@ -1,22 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { Row, Col } from 'react-flexbox-grid'
 
-import {
-  ModalSubtitle,
-  ModalTitle,
-  GlobalStyle,
-  ModalHeaderContainer,
-  ModalBodyContainer,
-  FullWrapper,
-  ContentArea,
-  SearchSection,
-  MenuSection,
-  Indicator,
-  LinkuButton,
-  Hint,
-  ProgressBar,
-  AllowFullGroups,
-} from './Home.styles'
+/* TODO: remove these styles with material ui components */
+import { GlobalStyle, ContentArea, ProgressBar } from './Home.styles'
+
+import classes from './Home.module.scss'
 
 import Modal from '../../components/Modal/Modal'
 import Sidenav from '../../components/Sidenav/Sidenav'
@@ -208,23 +196,23 @@ function Home() {
             </ProgressBar>
           )}
           <Modal onClose={toggleModalHandler} show={modal.open}>
-            <ModalHeaderContainer>
+            <div className={classes.ModalHeaderContainer}>
               <Row>
                 <Col xs={12} sm={12} md={12} lg={12}>
                   <section>
-                    <ModalTitle>Estas son las materias que ingresaste</ModalTitle>
-                    <ModalSubtitle>¿Faltó alguna?</ModalSubtitle>
+                    <div className={classes.ModalTitle}>Estas son las materias que ingresaste</div>
+                    <div className={classes.ModalSubtitle}>¿Faltó alguna?</div>
                   </section>
                 </Col>
                 <Col xs={12} sm={12} md={6} lg={6}>
                   <SearchSelect setIsLoading={setIsLoading} />
                 </Col>
               </Row>
-              <Hint>
+              <div className={classes.Hint}>
                 Si no quieres bloquear el profesor pero si un grupo dale click a ver grupos
-              </Hint>
-            </ModalHeaderContainer>
-            <ModalBodyContainer>
+              </div>
+            </div>
+            <div className={classes.ModalBodyContainer}>
               <Row style={{ width: '100%' }}>
                 {localSubjects.map(({ mat, name, departmentName, groups }, index) => (
                   <Col key={index} xs={12} sm={4} md={4} lg={4}>
@@ -238,24 +226,24 @@ function Home() {
                   </Col>
                 ))}
               </Row>
-            </ModalBodyContainer>
+            </div>
           </Modal>
-          <FullWrapper>
+          <div className={classes.FullWrapper}>
             <Sidenav
               show={leftSide.active}
               toggleLeftSide={toggleLeftSide}
               toggleModalHandler={toggleModalHandler}
             />
             <ContentArea active={leftSide.active}>
-              <SearchSection>
+              <div className={classes.SearchSection}>
                 <Row>
                   <Col xs={12} sm={12} md={6} lg={6}>
                     <h1 className="search_title">Buscar</h1>
                     <SearchSelect setIsLoading={setIsLoading} />
                   </Col>
                 </Row>
-              </SearchSection>
-              <MenuSection>
+              </div>
+              <div className={classes.MenuSection}>
                 <Row>
                   <Col xs={12} sm={12} md={12} lg={12}>
                     <Row middle="xs" start="xs">
@@ -268,16 +256,16 @@ function Home() {
                         />
                       </Col>
                       <Col xs={12} sm={12} md={2} lg={2}>
-                        <Indicator>
+                        <div className={classes.Indicator}>
                           <p>{`${localSchedules.length ? currentPage + 1 : currentPage} de ${
                             localSchedules.length
-                            }`}</p>
-                        </Indicator>
+                          }`}</p>
+                        </div>
                       </Col>
                       <Col xs={12} sm={12} md={8} lg={8}>
                         <Row end="xs">
                           <Col xs={12} sm={12} md={12} lg={12}>
-                            <AllowFullGroups>
+                            <div className={classes.AllowFullGroups}>
                               <BlockCheckbox
                                 small={true}
                                 labelColor="rgba(0, 0, 0, .8)"
@@ -286,17 +274,14 @@ function Home() {
                                 onChange={({ target }) => handleAllowGroups(target.checked)}
                               />
                               {/* <span>Permitir cursos sin cupo</span> */}
-                            </AllowFullGroups>
-                            <LinkuButton onClick={handleReset} color="#DA8686">
+                            </div>
+                            <div className={classes.LinkuButtonCancel} onClick={handleReset}>
                               Limpiar filtro por horas
-                            </LinkuButton>
-                            <LinkuButton
-                              onClick={handleSavePDF}
-                              color="#114188"
-                            >
+                            </div>
+                            <div className={classes.LinkuButtonSave} onClick={handleSavePDF}>
                               <i className="fas fa-save"></i>
                               Guardar como pdf
-                            </LinkuButton>
+                            </div>
                           </Col>
                         </Row>
                       </Col>
@@ -309,9 +294,9 @@ function Home() {
                     <ServerStatus />
                   </Col>
                 </Row>
-              </MenuSection>
+              </div>
             </ContentArea>
-          </FullWrapper>
+          </div>
         </>
         )}
       </SchedulesContext.Provider>
