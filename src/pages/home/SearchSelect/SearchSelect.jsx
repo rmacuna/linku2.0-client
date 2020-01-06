@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import debounce from 'debounce-promise'
 
-import AsyncSelect from 'react-select/async';
+import AsyncSelect from 'react-select/async'
 import { useQuery } from '@apollo/react-hooks'
 import { createGlobalStyle } from 'styled-components'
 
@@ -27,10 +27,11 @@ function SearchSelect(props) {
 
   const { docs } = data.getSubjects
 
-  const parseOptions = (docs) => docs.map(subject => ({
-    label: `${subject.name} (${subject.mat})`,
-    value: subject,
-  }))
+  const parseOptions = docs =>
+    docs.map(subject => ({
+      label: `${subject.name} (${subject.mat})`,
+      value: subject,
+    }))
 
   return (
     <SubjectsContext.Consumer>
@@ -44,26 +45,32 @@ function SearchSelect(props) {
             isSearchable
             cacheOptions
             defaultOptions={parseOptions(docs)}
-            loadOptions={debounce(inputValue => fetchMore({
-              variables: {
-                search: inputValue,
-              },
-              updateQuery: (prev, { fetchMoreResult }) => fetchMoreResult,
-            }).then(({ data }) => parseOptions(data.getSubjects.docs)), 700)}
+            loadOptions={debounce(
+              inputValue =>
+                fetchMore({
+                  variables: {
+                    search: inputValue,
+                  },
+                  updateQuery: (prev, { fetchMoreResult }) => fetchMoreResult,
+                }).then(({ data }) => parseOptions(data.getSubjects.docs)),
+              700,
+            )}
             onChange={async item => {
               if (item && item.value) {
                 setIsLoading(true)
                 const { id, name, departmentName, mat } = item.value
-                if (subjects.some((subject) => subject.id === id)) {
+                if (subjects.some(subject => subject.id === id)) {
                   setIsLoading(false)
-                  return;
+                  return
                 }
                 try {
                   const { data } = await getSubjectsQuery.refetch({
                     subjectId: id,
                   })
-
-                  const groups = data.getSubjectGroups;
+                  // Temp fix parse NRC
+                  const groups = groups = data.getSubjectGroups.map(group =>
+                    Object.assign(group, { nrc: group.nrc.substr(1) }),
+                  )
 
                   // Reduce schedule to first week
                   let daysSet, parsedSchedule
@@ -76,12 +83,12 @@ function SearchSelect(props) {
                         daysSet.add(schedule.day)
                       }
                       if (parsedSchedule.length === 6) {
-                        break;
+                        break
                       }
                     }
                     Object.assign(group, {
                       blocked: false,
-                      schedule: parsedSchedule
+                      schedule: parsedSchedule,
                     })
                   }
 
@@ -105,7 +112,7 @@ function SearchSelect(props) {
 }
 
 SearchSelect.propTypes = {
-  setIsLoading: PropTypes.func.isRequired
+  setIsLoading: PropTypes.func.isRequired,
 }
 
 export default SearchSelect

@@ -30,7 +30,7 @@ export const DetailsCard = styled.section`
   width: 100%;
   min-height: 80px;
   height: auto;
-  max-height: 550px;
+  /* max-height: 550px; */
   overflow-y: hidden;
   background-color: #fff;
   border-radius: 6px;
@@ -49,7 +49,7 @@ export const DetailsHeader = styled.div`
 
 export const DetailsBody = styled.div`
   padding: 10px 20px;
-  overflow-y: auto;
+  overflow-y: scroll;
 `
 
 export const DetailsFooter = styled.div`

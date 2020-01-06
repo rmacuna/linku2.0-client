@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { Row, Col } from 'react-flexbox-grid'
 
-
 import {
   ModalSubtitle,
   ModalTitle,
@@ -36,7 +35,8 @@ import Banner from '../../components/Banner/Banner'
 import BlockCheckbox from '../../components/Checkbox/Checkbox'
 
 import generateSchedules from '../../services/generateSchedules'
-
+import * as jsPDF from 'jspdf'
+import 'jspdf-autotable'
 import $ from 'jquery'
 
 const EMPTY_MATRIX = generateEmptyMatrix()
@@ -55,14 +55,16 @@ function Home() {
   const [localMatrixTemplate, setLocalMatrixTemplate] = useState(EMPTY_MATRIX)
   const [localCurrentSchedule, setLocalCurrentSchedule] = useState(DEFAULT_EMPTY_SCHEDULE)
 
-  const schedules = useMemo(() => generateSchedules(localSubjects, localMatrixTemplate, allowFullGroups),
-    [localSubjects, localMatrixTemplate, allowFullGroups])
+  const schedules = useMemo(
+    () => generateSchedules(localSubjects, localMatrixTemplate, allowFullGroups),
+    [localSubjects, localMatrixTemplate, allowFullGroups],
+  )
 
   useEffect(() => {
     loadSchedules()
   })
 
-  const handleSetLocalCurrentSchedule = (schedule) => {
+  const handleSetLocalCurrentSchedule = schedule => {
     setLocalCurrentSchedule(schedule)
     setCurrentPage(0)
   }
@@ -76,6 +78,7 @@ function Home() {
     if (!schedules.length && localCurrentSchedule.matrix !== null) {
       handleSetLocalCurrentSchedule(DEFAULT_EMPTY_SCHEDULE)
       setLocalSchedules([])
+      setIsLoading(false)
     }
   }
 
@@ -84,7 +87,7 @@ function Home() {
   })
 
   const [leftSide, setLeftSide] = useState({
-    active: true,
+    active: false,
   })
 
   const toggleModalHandler = () => {
@@ -104,16 +107,59 @@ function Home() {
     setLocalMatrixTemplate(EMPTY_MATRIX)
   }
 
-  const handleAllowGroups = (value) => {
+  const handleAllowGroups = value => {
     setAllowFullGroups(value)
   }
 
-  const handleOnStopSelecting = (matrix) => {
+  const handleOnStopSelecting = matrix => {
     setLocalMatrixTemplate(matrix)
   }
 
-  const handleSetCurrentSchedule = (index) => {
+  const handleSetCurrentSchedule = index => {
     setLocalCurrentSchedule(localSchedules[index])
+  }
+
+  const handleSavePDF = () => {
+    if (!localCurrentSchedule.groups.length) {
+      return
+    }
+    // const input = document.getElementById('tablePrint')
+    // html2canvas(input, {}).then(canvas => {
+    // const imgData = canvas.toDataURL('image/png')
+    console.log(localCurrentSchedule)
+    const pdf = new jsPDF('l', 'pt', [1000, 750])
+
+    pdf.autoTable({
+      html: '#tablePrint',
+      theme: 'grid',
+      pageBreak: 'avoid',
+      tableWidth: 'wrap',
+      styles: {
+        overflow: 'linebreak',
+        columnWidth: 'wrap',
+        halign: 'center',
+        cellWidth: 125,
+        fontSize: 7,
+        columnStyles: {
+          fontSize: 6,
+        },
+      },
+    })
+    // pdf.addHTML
+    // pdf.addImage(imgData, 'PNG', 50, 20)
+    const finalY = pdf.lastAutoTable.finalY
+    pdf.setFontSize(14)
+    localCurrentSchedule.groups.map((elem, index) => {
+      pdf.text(
+        40,
+        finalY + (30 + 30 * index),
+        `NRC: ${elem.nrc}, Profesor: ${elem.professors.join(',').substring(0, 40)}`,
+      )
+    })
+
+    // localCurrentSchedule.groups[0].
+    pdf.save(`linku2_${new Date().toLocaleDateString()}.pdf`)
+    // })
   }
 
   return (
@@ -131,7 +177,9 @@ function Home() {
         },
         updateGroupsStatus: (groupsNrcs, blocked) => {
           const newLocalSubjects = [...localSubjects]
-          const subject = newLocalSubjects.find((subject) => subject.groups.some(({ nrc }) => nrc === groupsNrcs[0]))
+          const subject = newLocalSubjects.find(subject =>
+            subject.groups.some(({ nrc }) => nrc === groupsNrcs[0]),
+          )
           if (subject) {
             Object.assign(subject, {
               groups: subject.groups.map(group => {
@@ -139,7 +187,7 @@ function Home() {
                   return Object.assign(group, { blocked })
                 }
                 return group
-              })
+              }),
             })
           }
           setLocalSubjects(newLocalSubjects)
@@ -154,7 +202,11 @@ function Home() {
       >
         <>
           <GlobalStyle />
-          {isLoading && <ProgressBar><div className="indeterminate" /></ProgressBar>}
+          {isLoading && (
+            <ProgressBar>
+              <div className="indeterminate" />
+            </ProgressBar>
+          )}
           <Modal onClose={toggleModalHandler} show={modal.open}>
             <ModalHeaderContainer>
               <Row>
@@ -170,7 +222,7 @@ function Home() {
               </Row>
               <Hint>
                 Si no quieres bloquear el profesor pero si un grupo dale click a ver grupos
-                  </Hint>
+              </Hint>
             </ModalHeaderContainer>
             <ModalBodyContainer>
               <Row style={{ width: '100%' }}>
@@ -215,30 +267,33 @@ function Home() {
                           limit={localSchedules.length}
                         />
                       </Col>
-                      <Col xs={2} sm={2} md={2} lg={2}>
+                      <Col xs={12} sm={12} md={2} lg={2}>
                         <Indicator>
                           <p>{`${localSchedules.length ? currentPage + 1 : currentPage} de ${
                             localSchedules.length
                             }`}</p>
                         </Indicator>
                       </Col>
-                      <Col xs={8} sm={8} md={8} lg={8}>
+                      <Col xs={12} sm={12} md={8} lg={8}>
                         <Row end="xs">
                           <Col xs={12} sm={12} md={12} lg={12}>
                             <AllowFullGroups>
                               <BlockCheckbox
+                                small={true}
+                                labelColor="rgba(0, 0, 0, .8)"
+                                labelTitle="Permitir cursos sin cupo"
                                 checked={allowFullGroups}
                                 onChange={({ target }) => handleAllowGroups(target.checked)}
                               />
-                              <span>Permitir cursos sin cupo</span>
+                              {/* <span>Permitir cursos sin cupo</span> */}
                             </AllowFullGroups>
-                            <LinkuButton
-                              onClick={handleReset}
-                              color="#DA8686"
-                            >
+                            <LinkuButton onClick={handleReset} color="#DA8686">
                               Limpiar filtro por horas
                             </LinkuButton>
-                            <LinkuButton color="#114188">
+                            <LinkuButton
+                              onClick={handleSavePDF}
+                              color="#114188"
+                            >
                               <i className="fas fa-save"></i>
                               Guardar como pdf
                             </LinkuButton>
@@ -250,7 +305,7 @@ function Home() {
                 </Row>
                 <Row>
                   <Col xs={12} sm={12} md={12} lg={12}>
-                    <Table onStopSelecting={handleOnStopSelecting} />
+                    <Table id="tablePrint" onStopSelecting={handleOnStopSelecting} />
                     <ServerStatus />
                   </Col>
                 </Row>
@@ -260,6 +315,7 @@ function Home() {
         </>
         )}
       </SchedulesContext.Provider>
+
       <Banner />
     </SubjectsContext.Provider>
   )

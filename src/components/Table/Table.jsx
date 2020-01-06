@@ -14,7 +14,7 @@ import 'jquery-ui/ui/core'
 import 'jquery-ui/ui/widgets/selectable'
 
 const Table = props => {
-  const { onStopSelecting } = props
+  const { onStopSelecting, id } = props
 
   useEffect(() => {
     $('#selectable').selectable({
@@ -51,7 +51,7 @@ const Table = props => {
             {new Array(6).fill(null).map((_, pos) => (
               <td key={pos} className="ui-widget">
                 {currentSchedule.matrix[pos][index] === null ||
-                  currentSchedule.matrix[pos][index] === 'blocked'
+                currentSchedule.matrix[pos][index] === 'blocked'
                   ? ''
                   : currentSchedule.matrix[pos][index]}
               </td>
@@ -79,7 +79,7 @@ const Table = props => {
       {({ currentSchedule }) => (
         <>
           <GlobalStyle />
-          <table>
+          <table id={id}>
             <tbody id="selectable">
               <tr>{renderTableHeader()}</tr>
               {currentSchedule.matrix ? renderTableData(currentSchedule) : renderTableData()}

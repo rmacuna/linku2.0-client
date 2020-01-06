@@ -77,5 +77,5 @@ export const CheckboxTitleMessage = styled.p`
   font-size: 14px;
   text-rendering: optimizeLegibility;
   margin: 0;
-  color: rgba(193, 208, 230, 11%);
+  color: ${props => (props.labelColor ? props.labelColor : 'rgba(193, 208, 230, 11%)')};
 `
