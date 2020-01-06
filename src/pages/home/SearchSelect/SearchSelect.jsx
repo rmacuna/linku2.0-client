@@ -68,9 +68,7 @@ function SearchSelect(props) {
                     subjectId: id,
                   })
                   // Temp fix parse NRC
-                  const groups = data.getSubjectGroups.map(group =>
-                    Object.assign(group, { nrc: group.nrc.substr(1) }),
-                  )
+                  const groups = data.getSubjectGroups
 
                   // Reduce schedule to first week
                   let daysSet, parsedSchedule
