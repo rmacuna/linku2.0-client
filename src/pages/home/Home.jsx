@@ -119,7 +119,10 @@ function Home() {
     setLocalCurrentSchedule(localSchedules[index])
   }
 
-  const handlePDFSave = schedules => {
+  const handleSavePDF = () => {
+    if (!localCurrentSchedule.groups.length) {
+      return
+    }
     // const input = document.getElementById('tablePrint')
     // html2canvas(input, {}).then(canvas => {
     // const imgData = canvas.toDataURL('image/png')
@@ -155,8 +158,7 @@ function Home() {
     })
 
     // localCurrentSchedule.groups[0].
-    pdf.save('Schedule.pdf')
-
+    pdf.save(`linku2_${new Date().toLocaleDateString()}.pdf`)
     // })
   }
 
@@ -269,7 +271,7 @@ function Home() {
                         <Indicator>
                           <p>{`${localSchedules.length ? currentPage + 1 : currentPage} de ${
                             localSchedules.length
-                          }`}</p>
+                            }`}</p>
                         </Indicator>
                       </Col>
                       <Col xs={12} sm={12} md={8} lg={8}>
@@ -289,7 +291,7 @@ function Home() {
                               Limpiar filtro por horas
                             </LinkuButton>
                             <LinkuButton
-                              onClick={() => handlePDFSave(localSchedules)}
+                              onClick={handleSavePDF}
                               color="#114188"
                             >
                               <i className="fas fa-save"></i>

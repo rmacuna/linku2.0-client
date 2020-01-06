@@ -67,10 +67,8 @@ function SearchSelect(props) {
                   const { data } = await getSubjectsQuery.refetch({
                     subjectId: id,
                   })
-                  // Temp fix
-                  let groups = data.getSubjectGroups
-
-                  groups = data.getSubjectGroups.map(group =>
+                  // Temp fix parse NRC
+                  const groups = groups = data.getSubjectGroups.map(group =>
                     Object.assign(group, { nrc: group.nrc.substr(1) }),
                   )
 

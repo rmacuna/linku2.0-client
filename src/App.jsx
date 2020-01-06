@@ -9,7 +9,6 @@ import { onError } from 'apollo-link-error'
 import { API_URI } from './environment'
 
 import Home from './pages/home/Home'
-import Conversor from './pages/home/Conversor/Conversor'
 
 const httpLink = createHttpLink({ uri: API_URI })
 
