@@ -105,6 +105,7 @@ export const ContentArea = styled.div`
   flex: 1;
   transition: all 0.3s ease-out;
   padding-left: ${props => (props.active ? '360px' : '85px')};
+  padding-top: 35px;
 `
 
 export const SearchSection = styled.section`
