@@ -15,6 +15,7 @@ import {
   LinkuButton,
   Hint,
   ProgressBar,
+  WhatsappButton,
   AllowFullGroups,
 } from './Home.styles'
 
@@ -38,6 +39,7 @@ import generateSchedules from '../../services/generateSchedules'
 import * as jsPDF from 'jspdf'
 import 'jspdf-autotable'
 import $ from 'jquery'
+import Navbar from '../../components/Navbar/Navbar'
 
 const EMPTY_MATRIX = generateEmptyMatrix()
 
@@ -241,6 +243,8 @@ function Home() {
             </ModalBodyContainer>
           </Modal>
           <FullWrapper>
+            <Navbar />
+
             <Sidenav
               show={leftSide.active}
               toggleLeftSide={toggleLeftSide}
@@ -313,7 +317,7 @@ function Home() {
         )}
       </SchedulesContext.Provider>
 
-      <Banner />
+      {/* <Banner /> */}
     </SubjectsContext.Provider>
   )
 }

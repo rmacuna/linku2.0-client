@@ -111,6 +111,18 @@ export const SearchSection = styled.section`
   padding: 14px;
 `
 
+export const WhatsappButton = styled.a`
+  background: rgba(111, 207, 151, 5%);
+  padding: 20px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  color: #105b2f;
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: none;
+`
+
 export const MenuSection = styled.div`
   position: relative;
   padding: 10px 20px;
