@@ -121,19 +121,25 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
       }
 
       // Search groups until complete a schedule
-      while (groupsToCompare.length && schedule.groups.length < minSubjectsLength) {
-        if (groupsToCompare[0].nrc !== group.nrc
-          && !groupsToCompare[0].blocked
-          && !subjectsIdsUsed.has(groupsToCompare[0].subject.id)
-          && (allowFullGroups || groupsToCompare[0].quota.free > 0)) {
-          newMatrix = addToScheduleMatrix(groupsToCompare[0], schedule.matrix, matrixTemplate)
+
+      let index = 0
+      while (groupsToCompare.length && index < groupsToCompare.length && schedule.groups.length < minSubjectsLength) {
+        if (groupsToCompare[index]
+          && subjectsIdsUsed.has(groupsToCompare[index].subject.id)) {
+          index++
+        } else if (groupsToCompare[index]
+          && groupsToCompare[index].nrc !== group.nrc
+          && !groupsToCompare[index].blocked
+          && (allowFullGroups || groupsToCompare[index].quota.free > 0)) {
+          newMatrix = addToScheduleMatrix(groupsToCompare[index], schedule.matrix, matrixTemplate)
           if (newMatrix) {
             schedule.matrix = newMatrix
-            schedule.groups.push(groupsToCompare[0])
-            subjectsIdsUsed.add(groupsToCompare[0].subject.id)
+            schedule.groups.push(groupsToCompare[index])
+            subjectsIdsUsed.add(groupsToCompare[index].subject.id)
           }
+          groupsToCompare.splice(index, 1)
         }
-        groupsToCompare.shift()
+
       }
 
       if (schedule.groups.length < minSubjectsLength) {
