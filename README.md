@@ -1,6 +1,6 @@
 # Linku 2.0 client
 
-> Build your Universidad del Norte schedule
+> Find your Uninorte schedule
 
 
 ## How to run?
@@ -23,6 +23,7 @@ Want to file a bug, contribute some code, or improve documentation? Excellent! C
   <tr>
     <td align="center"><a href="https://github.com/rmacuna"><img src="https://avatars.githubusercontent.com/u/25620714?s=400&v=4" width="100px;" alt="Roberto Acuña"/><br /><sub><b>Roberto Acuña</b></sub></a></td>
     <td align="center"><a href="https://github.com/sjdonado"><img src="https://avatars.githubusercontent.com/u/27580836?s=96&v=4" width="100px;" alt="Juan Rodriguez"/><br /><sub><b>Juan Rodriguez</b></sub></a></td>
+    <td align="center"><a href="https://github.com/Juanse11"><img src="https://avatars.githubusercontent.com/u/26317261?s=460&v=4" width="100px;" alt="Juan Estrada"/><br /><sub><b>Juan Estrada</b></sub></a></td>
   </tr>
 <table>
 
