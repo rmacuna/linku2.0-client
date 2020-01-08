@@ -290,7 +290,7 @@ function Home() {
                         <Indicator>
                           <p>{`${localSchedules.length ? currentPage + 1 : currentPage} de ${
                             localSchedules.length
-                          }`}</p>
+                            }`}</p>
                         </Indicator>
                       </Col>
                       <Col xs={12} sm={12} md={8} lg={8}>
