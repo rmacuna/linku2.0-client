@@ -6,12 +6,16 @@ import { dataHeaders, tableRows } from './constants'
 import { generateEmptyMatrix } from '../../library/utils'
 import SchedulesContext from '../../context/schedules-context'
 
-import $ from 'jquery'
+import * as $ from 'jquery'
 import 'jquery-ui/themes/base/core.css'
 import 'jquery-ui/themes/base/theme.css'
 import 'jquery-ui/themes/base/selectable.css'
 import 'jquery-ui/ui/core'
 import 'jquery-ui/ui/widgets/selectable'
+
+// Adds selectable in mobile
+window.jQuery = $
+require('jquery-ui-touch-punch')
 
 const Table = props => {
   const { onStopSelecting, id } = props

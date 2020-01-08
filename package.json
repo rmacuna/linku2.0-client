@@ -19,6 +19,7 @@
     "html2canvas": "^1.0.0-rc.5",
     "jquery": "^3.4.1",
     "jquery-ui": "^1.12.1",
+    "jquery-ui-touch-punch": "^0.2.3",
     "jspdf": "^1.5.3",
     "jspdf-autotable": "^3.2.11",
     "prop-types": "^15.7.2",

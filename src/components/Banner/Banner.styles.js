@@ -1,9 +1,6 @@
 import styled from 'styled-components'
 
 export const BannerWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
   margin: 15px;
   padding: 20px;
   border-radius: 20px;
