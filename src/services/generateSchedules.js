@@ -132,6 +132,12 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
             groupKeys.add(groupKey)
           }
         }
+<<<<<<< HEAD
+=======
+        index++
+
+      }
+>>>>>>> c57e97175b09993aa85d0e370c7df759f845a0bb
 
       } else {
 

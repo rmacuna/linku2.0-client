@@ -105,10 +105,23 @@ export const ContentArea = styled.div`
   flex: 1;
   transition: all 0.3s ease-out;
   padding-left: ${props => (props.active ? '360px' : '85px')};
+  padding-top: 35px;
 `
 
 export const SearchSection = styled.section`
   padding: 14px;
+`
+
+export const WhatsappButton = styled.a`
+  background: rgba(111, 207, 151, 5%);
+  padding: 20px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  color: #105b2f;
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: none;
 `
 
 export const MenuSection = styled.div`

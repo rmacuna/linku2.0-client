@@ -70,24 +70,30 @@ function SearchSelect(props) {
                   // Temp fix parse NRC
                   const groups = data.getSubjectGroups
 
-                  // Reduce schedule to first week
+                  // Reduce schedule to first week for medicine schedules
                   let daysSet, parsedSchedule
                   for (let group of groups) {
-                    daysSet = new Set()
-                    parsedSchedule = []
-                    for (let schedule of group.schedule) {
-                      if (!daysSet.has(schedule.day)) {
-                        parsedSchedule.push(schedule)
-                        daysSet.add(schedule.day)
+                    if (group.schedule.length > 6) {
+                      daysSet = new Set()
+                      parsedSchedule = []
+                      for (let schedule of group.schedule) {
+                        if (!daysSet.has(schedule.day)) {
+                          parsedSchedule.push(schedule)
+                          daysSet.add(schedule.day)
+                        }
+                        if (parsedSchedule.length === 6) {
+                          break
+                        }
                       }
-                      if (parsedSchedule.length === 6) {
-                        break
-                      }
+                      Object.assign(group, {
+                        blocked: false,
+                        schedule: parsedSchedule,
+                      })
+                    } else {
+                      Object.assign(group, {
+                        blocked: false,
+                      })
                     }
-                    Object.assign(group, {
-                      blocked: false,
-                      schedule: parsedSchedule,
-                    })
                   }
 
                   addSubject({

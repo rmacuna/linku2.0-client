@@ -14,7 +14,7 @@ export const LeftNavigation = styled.div`
   display: flex;
   left: 0;
   top: 0;
-  height: 100vh;
+  height: 100%;
   flex-direction: column;
   background-color: #114188;
   width: ${props => (props.active ? '310px' : '0')};
@@ -33,6 +33,7 @@ export const Hidder = styled.div`
 
 export const ScrollArea = styled.div`
   width: 100%;
+  height: 100%;
   margin-top: 30px;
   display: ${props => (props.active ? 'flex' : 'none')};
   flex-direction: column;
