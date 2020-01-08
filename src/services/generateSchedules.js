@@ -99,8 +99,8 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
   console.log(generateAllCombinations(subjects[0].groups, subjects).length)
   */
   // send current schedule as a input param 
-  let arr = []
-  let initArrToCompare = []
+  let initiSchedulesAcum = []
+  let initArrAcum = []
   for (const elem of subjects[0].groups) {
     if (!elem.blocked
       && (allowFullGroups || elem.quota.free > 0)) {
@@ -109,13 +109,13 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
       schedule.matrix = newMatrix
       if (schedule.matrix) {
         schedule.groups.push(elem)
-        arr.push(schedule)
-        initArrToCompare.push(elem)
+        initiSchedulesAcum.push(schedule)
+        initArrAcum.push(elem)
       }
     }
   }
 
-  function generateAllCombinations(arrAcum = [...initArrToCompare], index = 1, schedule = { matrix: generateEmptyMatrix(), groups: [], }, schedulesAcum = [...arr]) {
+  function generateAllCombinations(arrAcum = [...initArrAcum], index = 1, schedule = { matrix: generateEmptyMatrix(), groups: [], }, schedulesAcum = [...initiSchedulesAcum]) {
 
     if (subjects.length === 1) {
       return schedulesAcum;
