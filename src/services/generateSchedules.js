@@ -78,14 +78,13 @@ const addToScheduleMatrix = (group, matrix, matrixTemplate) => {
  * @returns {{ matrix: string[][], groups: Group }}
  */
 const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
-  let minSubjectsLength = subjects.length, group, schedule, newMatrix, arrToCompare,
-    newArrayToCompare, newSchedule, newSchedulesToCompare
+  let minSubjectsLength = subjects.length, schedule, newMatrix,
+    newSchedule, newSchedulesToCompare
 
-  const schedules = []
+  const schedules = [], initSchedulesAcum = []
+
   if (minSubjectsLength === 0) return schedules
 
-  const initiSchedulesAcum = []
-  const initSubjectsAcum = []
   for (const elem of subjects[0].groups) {
     if (!elem.blocked
       && (allowFullGroups || elem.quota.free > 0)) {
@@ -94,8 +93,7 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
       schedule.matrix = newMatrix
       if (schedule.matrix) {
         schedule.groups.push(elem)
-        initiSchedulesAcum.push(schedule)
-        initSubjectsAcum.push(elem)
+        initSchedulesAcum.push(schedule)
       }
     }
   }
@@ -103,23 +101,18 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
   // Compare each subject of initSubjectsAcum to the next subject groups
   // then store these combinations in a new subjectsAcum array
   function generateAllCombinations(
-    subjectsAcum = [...initSubjectsAcum],
-    index = 1,
-    schedule = { matrix: generateEmptyMatrix(), groups: [], },
-    schedulesAcum = [...initiSchedulesAcum]
+    schedulesAcum,
+    subjectsIdx,
+    schedule,
   ) {
-    if (subjects.length === 1 || index === subjects.length) {
+    if (subjects.length === 1 || subjectsIdx === subjects.length) {
       return schedulesAcum;
     }
 
-    arrToCompare = [...subjectsAcum]
-    newArrayToCompare = []
     newSchedulesToCompare = []
-
-    for (let i = 0; i < arrToCompare.length; i++) {
-      group = arrToCompare[i]
+    for (let i = 0; i < schedulesAcum.length; i++) {
       schedule = { ...schedulesAcum[i] }
-      for (let groupTwo of subjects[index].groups) {
+      for (let groupTwo of subjects[subjectsIdx].groups) {
         newSchedule = {}
         if (!groupTwo.blocked
           && (allowFullGroups || groupTwo.quota.free > 0)) {
@@ -128,15 +121,14 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
             newSchedule.matrix = newMatrix
             newSchedule.groups = [...schedule.groups, groupTwo]
             newSchedulesToCompare.push(newSchedule)
-            newArrayToCompare.push((group.nrc ? group.nrc : group) + '-' + groupTwo.nrc);
           }
         }
       }
     }
-    return generateAllCombinations(newArrayToCompare, index + 1, newSchedule, newSchedulesToCompare);
+    return generateAllCombinations(newSchedulesToCompare, subjectsIdx + 1, newSchedule);
   }
 
-  return generateAllCombinations()
+  return generateAllCombinations([...initSchedulesAcum], 1, { matrix: generateEmptyMatrix(), groups: [], })
 }
 
 export default generateSchedules;
