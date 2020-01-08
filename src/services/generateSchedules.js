@@ -91,8 +91,6 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
   // }
 
   const schedules = []
-  const groupKeys = new Set()
-  let newMatrix, groupKey, groupsToCompare, index
 
   if (minSubjectsLength === 0) return schedules
   /*
@@ -102,15 +100,19 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
   */
   // send current schedule as a input param 
   let arr = []
+  let initArrToCompare = []
   for (const elem of subjects[0].groups) {
     let schedule = { matrix: generateEmptyMatrix(), groups: [], }
     let newMatrix = addToScheduleMatrix(elem, schedule.matrix, matrixTemplate)
     schedule.matrix = newMatrix
-    schedule.groups.push(elem)
-    arr.push(schedule)
+    if (schedule.matrix) {
+      schedule.groups.push(elem)
+      arr.push(schedule)
+      initArrToCompare.push(elem)
+    }
   }
 
-  function generateAllCombinations(arrAcum, index = 1, schedule = { matrix: generateEmptyMatrix(), groups: [], }, schedulesAcum = [...arr]) {
+  function generateAllCombinations(arrAcum = [...initArrToCompare], index = 1, schedule = { matrix: generateEmptyMatrix(), groups: [], }, schedulesAcum = [...arr]) {
     if (subjects.length === 1) {
       return schedulesAcum;
     }
@@ -133,7 +135,7 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
         newSchedule = {}
         if (!groupTwo.blocked
           && (allowFullGroups || groupTwo.quota.free > 0)) {
-          newMatrix = addToScheduleMatrix(groupTwo, schedule.matrix, matrixTemplate)
+          const newMatrix = addToScheduleMatrix(groupTwo, schedule.matrix, matrixTemplate)
           if (newMatrix) {
             newSchedule.matrix = newMatrix
             newSchedule.groups = [...schedule.groups, groupTwo]
@@ -152,7 +154,7 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
   }
 
 
-  const a = generateAllCombinations(subjects[0].groups)
+  const a = generateAllCombinations()
 
 
   /// [1,2,3,3,4,5]
