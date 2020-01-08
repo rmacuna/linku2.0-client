@@ -15,7 +15,6 @@ import {
   LinkuButton,
   Hint,
   ProgressBar,
-  WhatsappButton,
   AllowFullGroups,
   Alert,
 } from './Home.styles'
@@ -33,7 +32,6 @@ import { generateEmptyMatrix } from '../../library/utils'
 
 import SubjectsContext from '../../context/subjects-context'
 import SchedulesContext from '../../context/schedules-context'
-import Banner from '../../components/Banner/Banner'
 import BlockCheckbox from '../../components/Checkbox/Checkbox'
 
 import generateSchedules from '../../services/generateSchedules'
@@ -50,7 +48,6 @@ const DEFAULT_EMPTY_SCHEDULE = {
 }
 
 function Home() {
-  const [showAlert, setShowAlert] = useState(true)
   const [currentPage, setCurrentPage] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const [localSubjects, setLocalSubjects] = useState([])
@@ -262,19 +259,6 @@ function Home() {
                 </Row>
               </SearchSection>
               <MenuSection>
-                {showAlert && (
-                  <Row>
-                    <Alert>
-                      <p>
-                        Debido a un problema algunos horarios no se estan generando a menos que
-                        bloquees ciertas casillas. Aplica filtros y los horarios que faltan
-                        apareceran. Estamos trabajando en ello
-                      </p>
-                      <i onClick={() => setShowAlert(false)} className="fas fa-times"></i>
-                    </Alert>
-                  </Row>
-                )}
-
                 <Row>
                   <Col xs={12} sm={12} md={12} lg={12}>
                     <Row middle="xs" start="xs">

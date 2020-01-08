@@ -2,7 +2,6 @@ import React from 'react'
 
 import {
   NavbarWrapper,
-  Navigation,
   NavigationContainer,
   NavigationItem,
   NavigationList,
