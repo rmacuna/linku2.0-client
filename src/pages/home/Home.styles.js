@@ -97,7 +97,26 @@ export const RightSide = styled.div`
   flex-basis: 70%;
   overflow-y: scroll;
 `
-
+export const Alert = styled.div`
+  width: 100%;
+  background-color: #fad3b1;
+  padding: 20px;
+  position: relative;
+  margin: 10px 0px;
+  p {
+    font-size: 14px;
+    color: #c65d00;
+    font-weight: 700;
+  }
+  i {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    margin: 10px 20px;
+    color: #c65d00;
+  }
+`
 export const ContentArea = styled.div`
   display: flex;
   flex-direction: column;
