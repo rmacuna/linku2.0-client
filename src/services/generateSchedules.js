@@ -102,20 +102,25 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
   let arr = []
   let initArrToCompare = []
   for (const elem of subjects[0].groups) {
-    let schedule = { matrix: generateEmptyMatrix(), groups: [], }
-    let newMatrix = addToScheduleMatrix(elem, schedule.matrix, matrixTemplate)
-    schedule.matrix = newMatrix
-    if (schedule.matrix) {
-      schedule.groups.push(elem)
-      arr.push(schedule)
-      initArrToCompare.push(elem)
+    if (!elem.blocked
+      && (allowFullGroups || elem.quota.free > 0)) {
+      let schedule = { matrix: generateEmptyMatrix(), groups: [], }
+      let newMatrix = addToScheduleMatrix(elem, schedule.matrix, matrixTemplate)
+      schedule.matrix = newMatrix
+      if (schedule.matrix) {
+        schedule.groups.push(elem)
+        arr.push(schedule)
+        initArrToCompare.push(elem)
+      }
     }
   }
 
   function generateAllCombinations(arrAcum = [...initArrToCompare], index = 1, schedule = { matrix: generateEmptyMatrix(), groups: [], }, schedulesAcum = [...arr]) {
+
     if (subjects.length === 1) {
       return schedulesAcum;
     }
+
     if (index === subjects.length) {
       // push to schedules
 
