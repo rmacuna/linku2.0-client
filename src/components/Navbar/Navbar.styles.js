@@ -38,9 +38,12 @@ export const NavigationItem = styled.li`
   align-items: center;
   font-weight: 600;
   list-style: none;
-  padding: 0 12px;
+  padding: 0;
   font-size: 16px;
   cursor: pointer;
+  :last-of-type {
+    padding-right: 12px;
+  }
 `
 
 export const NavigationList = styled.ul`

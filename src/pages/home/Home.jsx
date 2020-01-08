@@ -15,7 +15,6 @@ import {
   LinkuButton,
   Hint,
   ProgressBar,
-  WhatsappButton,
   AllowFullGroups,
   Alert,
 } from './Home.styles'
@@ -33,7 +32,6 @@ import { generateEmptyMatrix } from '../../library/utils'
 
 import SubjectsContext from '../../context/subjects-context'
 import SchedulesContext from '../../context/schedules-context'
-import Banner from '../../components/Banner/Banner'
 import BlockCheckbox from '../../components/Checkbox/Checkbox'
 
 import generateSchedules from '../../services/generateSchedules'
