@@ -88,71 +88,154 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
     groups = groups.concat(subject.groups)
   }
 
-  const schedules = []
-  const groupKeys = new Set()
-  let newMatrix, groupKey, groupsToCompare, index
 
-  for (let group of groups) {
-    if (group.blocked || (!allowFullGroups && group.quota.free === 0)) {
-      continue
+  function permutations(arr, len, repeat = true, allowFullGroups) {
+    const schedules = []
+    const groupKeys = new Set()
+    let newMatrix, groupKey
+    let subjectsIdsUsed = new Set()
+    let schedule = {
+      matrix: generateEmptyMatrix(),
+      groups: [],
     }
-    groupsToCompare = [...groups]
-    while (groupsToCompare.length) {
-      let subjectsIdsUsed = new Set()
-      let schedule = {
-        matrix: generateEmptyMatrix(),
-        groups: [],
-      }
+    len = len || arr.length;
+    if (len > arr.length) len = arr.length;
 
-      newMatrix = addToScheduleMatrix(group, schedule.matrix, matrixTemplate)
-      if (!newMatrix) {
-        break
-      }
-      schedule.matrix = newMatrix
-      schedule.groups.push(group)
-      subjectsIdsUsed.add(group.subject.id)
+    const results = [];
 
-      if (groupsToCompare[0].nrc === group.nrc) {
-        groupsToCompare.shift()
-      }
+    function eliminate(el, arr) {
+      let i = arr.indexOf(el);
+      arr.splice(i, 1);
+      return arr;
+    }
 
-      if (schedule.groups.length === minSubjectsLength) {
-        groupsToCompare = []
-      }
 
-      // Search groups until complete a schedule
-      index = 0
-      while (groupsToCompare.length && index < groupsToCompare.length && schedule.groups.length < minSubjectsLength) {
-        if (subjectsIdsUsed.has(groupsToCompare[index].subject.id)) {
-          index++
-        } else if (groupsToCompare[index].nrc !== group.nrc
-          && !groupsToCompare[index].blocked
-          && (allowFullGroups || groupsToCompare[index].quota.free > 0)) {
-          newMatrix = addToScheduleMatrix(groupsToCompare[index], schedule.matrix, matrixTemplate)
-          if (newMatrix) {
-            schedule.matrix = newMatrix
-            schedule.groups.push(groupsToCompare[index])
-            subjectsIdsUsed.add(groupsToCompare[index].subject.id)
+    let initialSchedule = {
+      matrix: generateEmptyMatrix(),
+      groups: [],
+    }
+
+    function perms(arr, len, prefix = [], allowFullGroups, schedule = { ...initialSchedule }, subjectsIdsUsed = new Set()) {
+
+      if (prefix.length && prefix.length === len) {
+        if (minSubjectsLength === 1) {
+          schedules.push(schedule)
+          results.push(prefix);
+
+        } else {
+          schedule.groups.sort((a, b) => Number(b.nrc) - Number(a.nrc))
+          groupKey = schedule.groups.reduce((a, b) => (a.nrc ? a.nrc : a) + b.nrc)
+
+          if (!groupKeys.has(groupKey)) {
+            schedules.push(schedule)
+            results.push(prefix);
+            groupKeys.add(groupKey)
           }
-          groupsToCompare.splice(index, 1)
+        }
+
+      } else {
+
+        for (let elem of arr) {
+          let newSchedule = Object.assign({ ...schedule }, { groups: [...schedule.groups] })
+          let newSubjectsIdsUsed = new Set(subjectsIdsUsed)
+          let newPrefix = [...prefix]
+
+          if (!elem.blocked
+            && (allowFullGroups || elem.quota.free > 0)
+            && !newSubjectsIdsUsed.has(elem.subject.id)) {
+            newMatrix = addToScheduleMatrix(elem, newSchedule.matrix, matrixTemplate)
+            if (newMatrix) {
+              newSchedule.matrix = newMatrix
+              newSchedule.groups.push(elem)
+              newSubjectsIdsUsed.add(elem.subject.id)
+              newPrefix.push(elem);
+            }
+          }
+
+          let newRest = null;
+
+          if (repeat) {
+            newRest = arr;
+          } else {
+            newRest = eliminate(elem, [...arr]);
+          }
+
+          perms(newRest, len, newPrefix, allowFullGroups, newSchedule, newSubjectsIdsUsed);
         }
       }
-
-      if (schedule.groups.length < minSubjectsLength) {
-        break
-      }
-
-      schedule.groups.sort((a, b) => Number(b.nrc) - Number(a.nrc))
-      groupKey = schedule.groups.reduce((a, b) => (a.nrc ? a.nrc : a) + b.nrc)
-
-      if (!groupKeys.has(groupKey)) {
-        schedules.push(schedule)
-        groupKeys.add(groupKey)
-      }
+      return;
     }
+    perms(arr, len);
+
+    console.log(results);
+
+    return schedules;
   }
+
+  // for (let group of groups) {
+  //   if (group.blocked || (!allowFullGroups && group.quota.free === 0)) {
+  //     continue
+  //   }
+  //   groupsToCompare = [...groups]
+  //   while (groupsToCompare.length) {
+  //     let subjectsIdsUsed = new Set()
+  //     let schedule = {
+  //       matrix: generateEmptyMatrix(),
+  //       groups: [],
+  //     }
+
+  //     newMatrix = addToScheduleMatrix(group, schedule.matrix, matrixTemplate)
+  //     if (!newMatrix) {
+  //       break
+  //     }
+  //     schedule.matrix = newMatrix
+  //     schedule.groups.push(group)
+  //     subjectsIdsUsed.add(group.subject.id)
+
+  //     if (groupsToCompare[0].nrc === group.nrc) {
+  //       groupsToCompare.shift()
+  //     }
+
+  //     if (schedule.groups.length === minSubjectsLength) {
+  //       groupsToCompare = []
+  //     }
+
+  //     // Search groups until complete a schedule
+  //     index = 0
+  //     while (groupsToCompare.length && index < groupsToCompare.length && schedule.groups.length < minSubjectsLength) {
+  //       if (subjectsIdsUsed.has(groupsToCompare[index].subject.id)) {
+  //         index++
+  //       } else if (groupsToCompare[index].nrc !== group.nrc
+  //         && !groupsToCompare[index].blocked
+  //         && (allowFullGroups || groupsToCompare[index].quota.free > 0)) {
+  //         newMatrix = addToScheduleMatrix(groupsToCompare[index], schedule.matrix, matrixTemplate)
+  //         if (newMatrix) {
+  //           schedule.matrix = newMatrix
+  //           schedule.groups.push(groupsToCompare[index])
+  //           subjectsIdsUsed.add(groupsToCompare[index].subject.id)
+  //         }
+  //         groupsToCompare.splice(index, 1)
+  //       }
+  //     }
+
+  //     if (schedule.groups.length < minSubjectsLength) {
+  //       break
+  //     }
+
+  //     schedule.groups.sort((a, b) => Number(b.nrc) - Number(a.nrc))
+  //     groupKey = schedule.groups.reduce((a, b) => (a.nrc ? a.nrc : a) + b.nrc)
+
+  //     if (!groupKeys.has(groupKey)) {
+  //       schedules.push(schedule)
+  //       groupKeys.add(groupKey)
+  //     }
+  //   }
+  // }
   // console.log('schedules', schedules.length)
-  return schedules
+
+  return permutations(groups, minSubjectsLength, false, allowFullGroups)
 }
+
+
 
 export default generateSchedules;
