@@ -16,7 +16,6 @@ import {
   Hint,
   ProgressBar,
   AllowFullGroups,
-  Alert,
 } from './Home.styles'
 
 import Modal from '../../components/Modal/Modal'
