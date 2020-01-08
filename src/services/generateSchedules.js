@@ -136,6 +136,8 @@ const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
           }
           groupsToCompare.splice(index, 1)
         }
+        index++
+
       }
 
       if (schedule.groups.length < minSubjectsLength) {
