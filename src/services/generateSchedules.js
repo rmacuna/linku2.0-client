@@ -77,13 +77,13 @@ const addToScheduleMatrix = (group, matrix, matrixTemplate) => {
  * @param {boolean} allowFullGroups 
  * @returns {{ matrix: string[][], groups: Group }}
  */
-const generateSchedules = (subjects, matrixTemplate, allowFullGroups) => {
-  let minSubjectsLength = subjects.length, schedule, newMatrix,
-    newSchedule, newSchedulesToCompare
-
+const generateSchedules = (subjectsInput, matrixTemplate, allowFullGroups) => {
+  let schedule, newMatrix, newSchedule, newSchedulesToCompare
   const schedules = [], initSchedulesAcum = []
 
-  if (minSubjectsLength === 0) return schedules
+  const subjects = subjectsInput.filter((subject) => !subject.groups.every(({ blocked }) => blocked))
+
+  if (subjects.length === 0) return schedules
 
   for (const elem of subjects[0].groups) {
     if (!elem.blocked
