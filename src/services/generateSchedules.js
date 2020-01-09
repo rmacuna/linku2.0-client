@@ -30,7 +30,7 @@ const parseDay = day => {
       return 3
     case 'F':
       return 4
-    case 'S':
+    case 'U':
       return 5
     default:
       return 6

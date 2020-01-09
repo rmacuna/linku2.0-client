@@ -2,6 +2,11 @@
 
 > Find your Uninorte schedule
 
+## Setup
+
+```shell
+  npm install
+```
 
 ## How to run?
 

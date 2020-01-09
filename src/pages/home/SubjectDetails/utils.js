@@ -21,7 +21,7 @@ export const dayInterpreter = (dayInput) => {
       case 'F':
         interpretedDay += 'Viernes'
         break
-      case 'S':
+      case 'U':
         interpretedDay += 'Sábado'
         break
       default:
