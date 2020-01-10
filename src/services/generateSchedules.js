@@ -75,15 +75,17 @@ const addToScheduleMatrix = (group, matrix, matrixTemplate) => {
  * @param {{ groups: Group }} subjects
  * @param {string[][]} matrixTemplate
  * @param {boolean} allowFullGroups 
- * @returns {{ matrix: string[][], groups: Group }}
+ * @returns {{ allCombinationsCount: number, schedules: [{ matrix: string[][], groups: Group }] }}
  */
 const generateSchedules = (subjectsInput, matrixTemplate, allowFullGroups) => {
-  let schedule, newMatrix, newSchedule, newSchedulesToCompare
+  let schedule, newMatrix, newSchedule, newSchedulesToCompare, allCombinationsCountInit
   const schedules = [], initSchedulesAcum = []
 
   const subjects = subjectsInput.filter((subject) => !subject.groups.every(({ blocked }) => blocked))
 
-  if (subjects.length === 0) return schedules
+  if (subjects.length === 0) return { allCombinationsCount: 0, schedules }
+
+  allCombinationsCountInit = subjectsInput.reduce((acum, subject) => acum + subject.groups.length, 0)
 
   for (const elem of subjects[0].groups) {
     if (!elem.blocked
@@ -104,9 +106,10 @@ const generateSchedules = (subjectsInput, matrixTemplate, allowFullGroups) => {
     schedulesAcum,
     subjectsIdx,
     schedule,
+    allCombinationsCount,
   ) {
     if (subjects.length === 1 || subjectsIdx === subjects.length) {
-      return schedulesAcum;
+      return { allCombinationsCount, schedules: schedulesAcum };
     }
 
     newSchedulesToCompare = []
@@ -123,12 +126,13 @@ const generateSchedules = (subjectsInput, matrixTemplate, allowFullGroups) => {
             newSchedulesToCompare.push(newSchedule)
           }
         }
+        allCombinationsCount += 1;
       }
     }
-    return generateAllCombinations(newSchedulesToCompare, subjectsIdx + 1, newSchedule);
+    return generateAllCombinations(newSchedulesToCompare, subjectsIdx + 1, newSchedule, allCombinationsCount)
   }
 
-  return generateAllCombinations([...initSchedulesAcum], 1, { matrix: generateEmptyMatrix(), groups: [], })
+  return generateAllCombinations([...initSchedulesAcum], 1, { matrix: generateEmptyMatrix(), groups: [] }, allCombinationsCountInit)
 }
 
 export default generateSchedules;

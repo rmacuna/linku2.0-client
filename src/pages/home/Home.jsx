@@ -55,7 +55,7 @@ function Home() {
   const [localMatrixTemplate, setLocalMatrixTemplate] = useState(EMPTY_MATRIX)
   const [localCurrentSchedule, setLocalCurrentSchedule] = useState(DEFAULT_EMPTY_SCHEDULE)
 
-  const schedules = useMemo(
+  const { allCombinationsCount, schedules } = useMemo(
     () => generateSchedules(localSubjects, localMatrixTemplate, allowFullGroups),
     [localSubjects, localMatrixTemplate, allowFullGroups],
   )
@@ -273,7 +273,7 @@ function Home() {
                         <Indicator>
                           <p>{`${localSchedules.length ? currentPage + 1 : currentPage} de ${
                             localSchedules.length
-                          }`}</p>
+                            } / ${allCombinationsCount}`}</p>
                         </Indicator>
                       </Col>
                       <Col xs={12} sm={12} md={8} lg={8}>
