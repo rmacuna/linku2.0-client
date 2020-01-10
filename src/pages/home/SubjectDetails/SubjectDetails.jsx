@@ -79,7 +79,7 @@ const SubjectDetails = props => {
                 {/* <ProfessorTitle>{`${nrc} - ${group}`}</ProfessorTitle> */}
                 <ActionsRow>
                   {professor.length > 1 ? (
-                    <ProfessorTitle>{professor.split(',').slice(0, 2)}</ProfessorTitle>
+                    <ProfessorTitle>{professor.split(',')[0]}</ProfessorTitle>
                   ) : (
                       <ProfessorTitle>{professor}</ProfessorTitle>
                     )}
