@@ -16,6 +16,7 @@ import {
   Hint,
   ProgressBar,
   AllowFullGroups,
+  Alert,
 } from './Home.styles'
 
 import Modal from '../../components/Modal/Modal'
@@ -273,7 +274,7 @@ function Home() {
                         <Indicator>
                           <p>{`${localSchedules.length ? currentPage + 1 : currentPage} de ${
                             localSchedules.length
-                            } / ${allCombinationsCount}`}</p>
+                          }`}</p>
                         </Indicator>
                       </Col>
                       <Col xs={12} sm={12} md={8} lg={8}>
@@ -305,6 +306,20 @@ function Home() {
                 <Row>
                   <Col xs={12} sm={12} md={12} lg={12}>
                     <Table id="tablePrint" onStopSelecting={handleOnStopSelecting} />
+                  </Col>
+                </Row>
+                <Row middle="xs" between="xs">
+                  <Col xs={12} sm={12} md lg>
+                    {localSubjects.length > 0 ? (
+                      <Alert info>
+                        <p>
+                          {`Generados ${allCombinationsCount} posibles horarios de los cuales ${localSchedules.length}
+                          cumplen con tus filtros `}
+                        </p>
+                      </Alert>
+                    ) : null}
+                  </Col>
+                  <Col xs={12} sm={12} md lg>
                     <ServerStatus />
                   </Col>
                 </Row>
