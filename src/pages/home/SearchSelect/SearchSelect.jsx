@@ -60,7 +60,6 @@ function SearchSelect(props) {
                 setIsLoading(true)
                 const { id, name, departmentName, mat } = item.value
                 if (subjects.some(subject => subject.id === id)) {
-                  setIsLoading(false)
                   return
                 }
                 try {
@@ -110,6 +109,7 @@ function SearchSelect(props) {
                     mat,
                     groups,
                   })
+                  setIsLoading(false)
                 } catch (err) {
                   console.log('err', err)
                 }
