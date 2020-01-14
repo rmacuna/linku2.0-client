@@ -93,10 +93,12 @@ function SearchSelect(props) {
                         blocked: false,
                       })
                       // Group schedule repeated time in the same day
-                      if (group.schedule.length > 1
-                        && group.schedule[0].day === group.schedule[1].day
-                        && group.schedule[0].time.start === group.schedule[1].time.start
-                        && group.schedule[0].time.end === group.schedule[1].time.end) {
+                      if (
+                        group.schedule.length > 1 &&
+                        group.schedule[0].day === group.schedule[1].day &&
+                        group.schedule[0].time.start === group.schedule[1].time.start &&
+                        group.schedule[0].time.end === group.schedule[1].time.end
+                      ) {
                         group.schedule.splice(0, 1)
                       }
                     }

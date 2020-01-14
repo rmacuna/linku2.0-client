@@ -99,14 +99,15 @@ export const RightSide = styled.div`
 `
 export const Alert = styled.div`
   width: 100%;
-  background-color: #fad3b1;
-  padding: 20px;
+  background-color: ${props => (props.info ? '#ACC5EB' : '#fad3b1')};
+  padding: 12px;
   position: relative;
   margin: 10px 0px;
   p {
     font-size: 14px;
-    color: #c65d00;
+    color: ${props => (props.info ? '#0B408E' : '#c65d00')};
     font-weight: 700;
+    margin: 2px;
   }
   i {
     position: absolute;
@@ -128,7 +129,7 @@ export const ContentArea = styled.div`
 `
 
 export const SearchSection = styled.section`
-  padding: 14px;
+  padding: 4px 14px;
 `
 
 export const WhatsappButton = styled.a`
@@ -151,7 +152,8 @@ export const MenuSection = styled.div`
 export const Indicator = styled.div`
   display: flex;
   justify-content: center;
-  width: 102px;
+  min-width: 102px;
+  max-width: 100%;
   height: 45px;
   align-items: center;
   border-radius: 6px;
