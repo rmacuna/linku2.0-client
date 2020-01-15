@@ -251,10 +251,22 @@ function Home() {
             />
             <ContentArea active={leftSide.active}>
               <SearchSection>
-                <Row>
+                <Row middle="xs">
                   <Col xs={12} sm={12} md={6} lg={6}>
                     <h1 className="search_title">Buscar</h1>
                     <SearchSelect setIsLoading={setIsLoading} />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12} sm={12} md={6} lg={6}>
+                    {localSubjects.length > 0 ? (
+                      <Alert info>
+                        <p>
+                          {`Generados ${allCombinationsCount} posibles horarios de los cuales ${localSchedules.length}
+                          cumplen con tus filtros `}
+                        </p>
+                      </Alert>
+                    ) : null}
                   </Col>
                 </Row>
               </SearchSection>
@@ -270,7 +282,7 @@ function Home() {
                           limit={localSchedules.length}
                         />
                       </Col>
-                      <Col xs={12} sm={12} md={2} lg={2}>
+                      <Col xs={2} sm={2} md={2} lg={2}>
                         <Indicator>
                           <p>{`${localSchedules.length ? currentPage + 1 : currentPage} de ${
                             localSchedules.length
@@ -308,8 +320,8 @@ function Home() {
                     <Table id="tablePrint" onStopSelecting={handleOnStopSelecting} />
                   </Col>
                 </Row>
-                <Row middle="xs" between="xs">
-                  <Col xs={12} sm={12} md lg>
+                <Row middle="xs" end="xs">
+                  {/* <Col xs={12} sm={12} md lg>
                     {localSubjects.length > 0 ? (
                       <Alert info>
                         <p>
@@ -318,7 +330,7 @@ function Home() {
                         </p>
                       </Alert>
                     ) : null}
-                  </Col>
+                  </Col> */}
                   <Col xs={12} sm={12} md lg>
                     <ServerStatus />
                   </Col>

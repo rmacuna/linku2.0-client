@@ -1,4 +1,4 @@
-export const dayInterpreter = (dayInput) => {
+export const dayInterpreter = dayInput => {
   let interpretedDay = ''
   const days = dayInput.split('')
   for (let day of days) {
@@ -21,7 +21,7 @@ export const dayInterpreter = (dayInput) => {
       case 'F':
         interpretedDay += 'Viernes'
         break
-      case 'U':
+      case 'S':
         interpretedDay += 'Sábado'
         break
       default:

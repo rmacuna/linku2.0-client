@@ -100,14 +100,14 @@ export const RightSide = styled.div`
 export const Alert = styled.div`
   width: 100%;
   background-color: ${props => (props.info ? '#ACC5EB' : '#fad3b1')};
-  padding: 12px;
+  padding: 8px;
   position: relative;
-  margin: 10px 0px;
   p {
-    font-size: 14px;
+    font-size: 12px;
     color: ${props => (props.info ? '#0B408E' : '#c65d00')};
     font-weight: 700;
     margin: 2px;
+    text-align: left;
   }
   i {
     position: absolute;
@@ -176,13 +176,13 @@ export const LinkuButton = styled.button`
 
   color: ${props => (props.textColor ? props.textColor : '#fff')};
 
-  padding: 17px 17px;
+  padding: 14px 12px;
 
   border-radius: 6px;
 
   font-weight: 600;
 
-  font-size: 14px;
+  font-size: 12px;
 
   transition: all 0.3s ease-out;
   &:hover {
