@@ -39,8 +39,11 @@ export const NavigationItem = styled.li`
   font-weight: 600;
   list-style: none;
   padding: 0;
-  font-size: 16px;
+  font-size: 12px;
   cursor: pointer;
+  a {
+    text-decoration: none;
+  }
   :last-of-type {
     padding-right: 12px;
   }

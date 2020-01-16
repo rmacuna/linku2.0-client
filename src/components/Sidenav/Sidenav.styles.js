@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle, css } from 'styled-components'
 
 export const GlobalStyles = createGlobalStyle`
   /* .scroll_nav::-webkit-scrollbar {
@@ -7,6 +7,12 @@ export const GlobalStyles = createGlobalStyle`
   .scroll_nav {
     -ms-overflow-style: none;
   } */
+  .mihorario {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: 12px;
+  }
 `
 
 export const LeftNavigation = styled.div`
@@ -77,30 +83,50 @@ export const RetriveButton = styled.button`
   }
 `
 
-export const ShowProfessorButton = styled.button`
+export const NavbuttonCSS = css`
   outline: none;
   border: none;
 
   width: 100%;
-  padding: 16px 12px;
+  padding: 14px 12px;
   color: #000;
-  background-color: #eee3ab;
-
   border-radius: 6px;
   margin: 2px 0;
 
   transition: all 0.3s ease-out;
   font-weight: 600;
 
-  font-size: 14px;
+  font-size: 12px;
 
   cursor: pointer;
+`
 
+export const ShowProfessorButton = styled.button`
+  ${NavbuttonCSS};
+  background-color: #eee3ab;
   &:hover {
     transform: scale(1.05);
   }
   &:active {
     background-color: #d2c892;
+  }
+`
+
+export const MihorarioButton = styled.a`
+  ${NavbuttonCSS};
+  text-align: center;
+  justify-content: center;
+  box-sizing: border-box;
+  display: flex;
+  text-decoration: none;
+  position: relative;
+
+  background-color: #fff;
+  &:hover {
+    transform: scale(1.05);
+  }
+  &:active {
+    background-color: #fff;
   }
 `
 

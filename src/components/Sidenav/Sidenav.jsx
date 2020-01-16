@@ -8,6 +8,7 @@ import {
   LeftSideTitle,
   Hidder,
   GlobalStyles,
+  MihorarioButton,
 } from './Sidenav.styles'
 import logo from '../../assets/logo.png'
 import { Row, Col } from 'react-flexbox-grid'
@@ -40,6 +41,12 @@ function Sidenav(props) {
               <Row>
                 <Col xs={12} sm={12} md={12} lg={12}>
                   <LeftSideTitle>Arma tu horario</LeftSideTitle>
+                  <p className="mihorario">
+                    Ahora cuando matricules puedes sincronizar tu horario con google
+                  </p>
+                  <MihorarioButton target="__blank" href="https://mihorarioun.web.app/">
+                    Sincronizar con google
+                  </MihorarioButton>
                   <ShowProfessorButton onClick={toggleModalHandler}>
                     Filtrar por grupos o profesores{' '}
                   </ShowProfessorButton>

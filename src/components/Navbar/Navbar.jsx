@@ -1,11 +1,6 @@
 import React from 'react'
 
-import {
-  NavbarWrapper,
-  NavigationContainer,
-  NavigationItem,
-  NavigationList,
-} from './Navbar.styles'
+import { NavbarWrapper, NavigationContainer, NavigationItem, NavigationList } from './Navbar.styles'
 import Banner from '../Banner/Banner'
 import { WhatsappButton } from '../../pages/home/Home.styles'
 
