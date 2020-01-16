@@ -42,10 +42,10 @@ function Sidenav(props) {
                 <Col xs={12} sm={12} md={12} lg={12}>
                   <LeftSideTitle>Arma tu horario</LeftSideTitle>
                   <p className="mihorario">
-                    Ahora cuando matricules puedes sincronizar tu horario con google
+                    Ahora después de matricular puedes sincronizar tu horario con el calendario de Google
                   </p>
                   <MihorarioButton target="__blank" href="https://mihorarioun.web.app/">
-                    Sincronizar con google
+                    Sincronizar con Google
                   </MihorarioButton>
                   <ShowProfessorButton onClick={toggleModalHandler}>
                     Filtrar por grupos o profesores{' '}
