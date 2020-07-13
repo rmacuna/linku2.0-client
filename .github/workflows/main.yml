@@ -1,39 +1,28 @@
-name: Build and Deploy
+name: Build and deploy prod to Firebase
 on:
   push:
     branches:
       - master
-
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    strategy:
+        matrix:
+          node-version: [12.x]
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
-      - name: Install Dependencies
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
         run: npm install
       - name: Build
         run: npm run build
-      - name: Archive Production Artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: build
-          path: build
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
-      - name: Download Artifact
-        uses: actions/download-artifact@master
-        with:
-          name: build
       - name: Deploy client to Firebase
         uses: w9jds/firebase-action@master
         with:
-          args: deploy
+          args: deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
